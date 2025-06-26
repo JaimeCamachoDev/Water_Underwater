@@ -3059,7 +3059,7 @@
     "m_ObjectId": "4e69247467dc4e99857ee7c1fc219dda",
     "m_Title": "Textura Espuma",
     "m_Position": {
-        "x": 1236.9998779296875,
+        "x": 1237.0,
         "y": 734.0
     }
 }
@@ -4158,8 +4158,8 @@
     "m_ObjectId": "70fa3ab113da44eba2cb69d5d73b35af",
     "m_Title": "Water Displacement",
     "m_Position": {
-        "x": 2553.999755859375,
-        "y": -407.0000305175781
+        "x": 2553.99951171875,
+        "y": -406.9999694824219
     }
 }
 
@@ -5804,8 +5804,8 @@
     "m_ObjectId": "bcfca5935df44bdb8279ca397bfadc3d",
     "m_Title": "bump olas",
     "m_Position": {
-        "x": 3123.0,
-        "y": 946.9999389648438
+        "x": 3122.99951171875,
+        "y": 947.0000610351563
     }
 }
 

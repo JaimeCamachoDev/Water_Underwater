@@ -1,0 +1,112 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8908005306652705735
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 9
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Water_Pool_Reversa
+  m_Shader: {fileID: -6465566751694194690, guid: 196e48de2f7a9aa448f2b735ca101219, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _RECEIVE_SHADOWS_OFF
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 2450
+  stringTagMap: {}
+  disabledShaderPasses:
+  - MOTIONVECTORS
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _CubemapAsset_24f02c2ec2784869b31fc5468bb730cc_Out_0_Cubemap:
+        m_Texture: {fileID: 8900000, guid: bfb8f0735ac8c9b43a2f0251aea88e11, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ReflectionProbe_0:
+        m_Texture: {fileID: 8900000, guid: 07fc3051f51a4784986805ab1190603e, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Refletion:
+        m_Texture: {fileID: 8900000, guid: 07fc3051f51a4784986805ab1190603e, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_bec3cb1d92ed4ff38a34f02924c0f654_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: ab8a73ed6d55ebc479b4b49e97fdebb1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_ee6108d52788430993bd89c23c79f1fb_Texture_1_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - Vector1_0ab2cb77550a45949bb9fe1e536998b9: 20
+    - Vector1_1: 1
+    - Vector1_2: 1
+    - _AlphaClip: 1
+    - _AlphaToMask: 1
+    - _Blend: 0
+    - _BlendModePreserveSpecular: 0
+    - _CastShadows: 0
+    - _Cull: 2
+    - _Depth: 0
+    - _Depth_Power: 1
+    - _Displacement: 0.05
+    - _DstBlend: 0
+    - _Fresnel_MAS: 1
+    - _Noise_Scale: 50
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _ReceiveShadows: 0
+    - _SrcBlend: 1
+    - _Surface: 0
+    - _TimeScale: 0.01
+    - _Timer_Scale: 1
+    - _WorkflowMode: 1
+    - _ZTest: 4
+    - _ZWrite: 1
+    - _ZWriteControl: 0
+    - _float: 0.6
+    - _float_1: 10
+    - _float_2: 0
+    m_Colors:
+    - Vector2_067218d8a15a41818610b38739afd75c: {r: 1, g: 1, b: 0, a: 0}
+    - _Color: {r: 0.3448736, g: 0.46867847, b: 0.4716981, a: 1}
+    - _Depth_Color: {r: 0, g: 0.94952226, b: 1, a: 0}
+    - _Noise_Scale: {r: 50, g: 50, b: 0, a: 0}
+    - _Noise_Scales: {r: 50, g: 50, b: 0, a: 0}
+    - _Vector3: {r: -1, g: 1, b: 1, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

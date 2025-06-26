@@ -1,0 +1,139 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-172669039233346941
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 9
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Water_Pool_Depth
+  m_Shader: {fileID: -6465566751694194690, guid: de4dc9d3196721644b19a3a332571bb2, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _ALPHATEST_ON
+  - _RECEIVE_SHADOWS_OFF
+  - _SURFACE_TYPE_TRANSPARENT
+  m_InvalidKeywords: []
+  m_LightmapFlags: 2
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 3000
+  stringTagMap:
+    RenderType: Transparent
+  disabledShaderPasses:
+  - MOTIONVECTORS
+  - SHADOWCASTER
+  - DepthOnly
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Texture2D_8652DE7B:
+        m_Texture: {fileID: 2800000, guid: 11154d936b05e66498f68fa178c5cfbb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _CubemapAsset_ea0fe3822e76428d9e414e7b0bb07fa4_Out_0_Cubemap:
+        m_Texture: {fileID: 8900000, guid: bfb8f0735ac8c9b43a2f0251aea88e11, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Foam_Height:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ReflectionProbe_0:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2DLOD_7c0c8e9b96924b19a2d5e7e0a19bdbec_Texture_1_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_2a747eaafbc3454eaf398f12a00e7e1d_Texture_1_Texture2D:
+        m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - Vector1_1: 0.1
+    - Vector1_17D914A4: 3
+    - Vector1_2: 50
+    - _Agua_Velocidad: 0.48
+    - _AlphaClip: 1
+    - _AlphaToMask: 0
+    - _Amplitud: 0.2
+    - _Ao: 1
+    - _Blend: 0
+    - _BlendModePreserveSpecular: 0
+    - _CastShadows: 0
+    - _Contrast: 0.73
+    - _Cull: 2
+    - _Densidad: 0.584
+    - _Depth: -13.38
+    - _Depth_Power: 0.006
+    - _Displacement: 0.002
+    - _DstBlend: 10
+    - _Edge: 1
+    - _Espuma_Velocidad: 1
+    - _Espuma_escala: 0
+    - _Espuma_escala_Noise: 0
+    - _Float: 1
+    - _Frecuencia: 0.5
+    - _Fresnel_AO: 0.48
+    - _Fresnel_MAS: 1
+    - _Fresnel_Metallic: 0.42
+    - _Fresnel_Smoothness: 0.45
+    - _Metal: 0
+    - _Metall: 0
+    - _Normal_Transparencia: 0.1
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _Radio: 2.4
+    - _ReceiveShadows: 0
+    - _Reflex: 1
+    - _Smooth: 0.3
+    - _SrcBlend: 5
+    - _Surface: 1
+    - _Waves_Speed: 0.1
+    - _WorkflowMode: 1
+    - _ZTest: 4
+    - _ZWrite: 0
+    - _ZWriteControl: 0
+    m_Colors:
+    - _Agua_Direccion_1: {r: 10, g: 20.5, b: 0, a: 0}
+    - _Agua_Direccion_2: {r: 3, g: 5.5, b: 0, a: 0}
+    - _Color: {r: 0, g: 1, b: 0.12640262, a: 1}
+    - _Color_Espuma: {r: 0, g: 0, b: 0, a: 0}
+    - _Depth_Color: {r: 0, g: 0.7474747, b: 1, a: 1}
+    - _Posicion: {r: 0, g: 0, b: 0, a: 0}
+    - _Punto_de_origen: {r: 0, g: 0, b: 0, a: 0}
+    - _Tama_o: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _Vector3: {r: 0, g: 0, b: 0, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

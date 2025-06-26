@@ -547,8 +547,8 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 1614.0001220703125,
-            "y": 1134.0001220703125,
+            "x": 1424.0,
+            "y": 1190.0,
             "width": 133.0,
             "height": 34.0
         }
@@ -613,10 +613,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 1747.0001220703125,
-            "y": 1252.0001220703125,
-            "width": 208.0001220703125,
-            "height": 302.0001220703125
+            "x": 1574.0,
+            "y": 1001.0,
+            "width": 208.0,
+            "height": 302.0
         }
     },
     "m_Slots": [
@@ -1249,8 +1249,8 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 1623.0001220703125,
-            "y": 945.0001220703125,
+            "x": 1433.0,
+            "y": 1001.0,
             "width": 124.0,
             "height": 173.0
         }
@@ -1583,8 +1583,8 @@
     "m_ObjectId": "70fa3ab113da44eba2cb69d5d73b35af",
     "m_Title": "Water Displacement",
     "m_Position": {
-        "x": 1589.0001220703125,
-        "y": 886.0000610351563
+        "x": 1399.0,
+        "y": 886.0
     }
 }
 
@@ -2020,7 +2020,7 @@
     "m_ObjectId": "94a7e061a0a845b2b367d4a70c2300db",
     "m_Title": "Albedo",
     "m_Position": {
-        "x": 2760.0,
+        "x": 2759.999755859375,
         "y": 382.0
     }
 }
