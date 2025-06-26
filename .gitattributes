@@ -1,0 +1,51 @@
+# ===============================================================
+# .gitattributes para proyectos Unity (Windows, GitHub, multiplataforma)
+# JaimeCamachoDev - Previene errores de saltos de línea y conflictos CRLF/LF
+# ===============================================================
+
+# Normalizar todos los archivos de texto a LF (estándar GitHub)
+* text=auto eol=lf
+
+# Forzar eol=lf explícitamente en archivos relevantes
+*.cs           text eol=lf diff=csharp
+*.shader       text eol=lf
+*.cginc        text eol=lf
+*.hlsl         text eol=lf
+*.compute      text eol=lf
+*.uxml         text eol=lf
+*.uss          text eol=lf
+*.asmdef       text eol=lf
+*.json         text eol=lf
+*.xml          text eol=lf
+*.yml          text eol=lf
+*.yaml         text eol=lf
+*.txt          text eol=lf
+*.md           text eol=lf
+*.meta         text eol=lf
+
+# Archivos específicos de Unity
+ProjectSettings/**      text eol=lf
+Assets/**/*.unity       text eol=lf
+Assets/**/*.prefab      text eol=lf
+Assets/**/*.asset       text eol=lf
+
+# Archivos binarios (sin conversión de texto)
+*.png          binary
+*.jpg          binary
+*.jpeg         binary
+*.psd          binary
+*.tga          binary
+*.exr          binary
+*.mp3          binary
+*.ogg          binary
+*.wav          binary
+*.dll          binary
+*.exe          binary
+*.fbx          binary
+*.anim         binary
+*.controller   binary
+*.mat          binary
+*.cubemap      binary
+
+# Archivos .lock con merge más flexible
+*.lock merge=union

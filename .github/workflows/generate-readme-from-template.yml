@@ -1,0 +1,50 @@
+name: Autogenerar README con nombre y limpiar plantilla
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'README_template.md'
+      - '.github/workflows/generate-readme-from-template.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  generate-readme:
+    if: github.event.head_commit.message == 'Initial commit'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Obtener datos del repositorio
+        id: repo_info
+        run: |
+          echo "name=$(basename $GITHUB_REPOSITORY)" >> $GITHUB_OUTPUT
+          curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${GITHUB_REPOSITORY} |
+            jq -r '.description' > repo_description.txt
+
+      - name: Generar README.md
+        run: |
+          REPO_NAME="${{ steps.repo_info.outputs.name }}"
+          REPO_DESCRIPTION=$(cat repo_description.txt)
+          sed "s|{{ repo-name }}|$REPO_NAME|g; s|{{ repo-description }}|$REPO_DESCRIPTION|g" README_template.md > README.md
+
+      - name: Limpiar archivos temporales
+        run: |
+          rm README_template.md
+          rm repo_description.txt
+          rm .github/workflows/generate-readme-from-template.yml || true
+          rmdir .github/workflows || true
+          rmdir .github || true
+
+      - name: Commit final
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "README generado y archivos de plantilla eliminados" || echo "Sin cambios"
+          git push
