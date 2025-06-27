@@ -39,7 +39,7 @@ Material:
   - MOTIONVECTORS
   - SHADOWCASTER
   - DepthOnly
-  m_LockedProperties: 
+  m_LockedProperties: _Depth_Color
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -83,7 +83,8 @@ Material:
     m_Floats:
     - Vector1_1: 0.05
     - Vector1_17D914A4: 3
-    - Vector1_2: 20
+    - Vector1_2: 0.2
+    - Vector1_3: 50
     - _Agua_Velocidad: 0.48
     - _AlphaClip: 1
     - _AlphaToMask: 0
@@ -109,7 +110,7 @@ Material:
     - _Float_2: 0.8
     - _Frecuencia: 0.5
     - _Fresnel_AO: 0.48
-    - _Fresnel_MAS: 1
+    - _Fresnel_MAS: 0.447
     - _Fresnel_Metallic: 0.42
     - _Fresnel_Smoothness: 0.45
     - _Metal: 0
@@ -123,7 +124,7 @@ Material:
     - _Smooth: 0.3
     - _SrcBlend: 5
     - _Surface: 1
-    - _Surface_Contrast: 0.8
+    - _Surface_Contrast: 0.713
     - _Time_Scale: 0.02
     - _Waves_Speed: 0.1
     - _WorkflowMode: 1
@@ -135,10 +136,10 @@ Material:
     - _Agua_Direccion_2: {r: 3, g: 5.5, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Color_Espuma: {r: 0, g: 0, b: 0, a: 0}
-    - _Depth_Color: {r: 0.14684941, g: 0.28533894, b: 0.41509432, a: 0}
+    - _Depth_Color: {r: 0, g: 0, b: 0, a: 0}
     - _Posicion: {r: 0, g: 0, b: 0, a: 0}
     - _Punto_de_origen: {r: 0, g: 0, b: 0, a: 0}
-    - _SurfaceColor: {r: 0.75, g: 0.9708049, b: 1, a: 0}
+    - _SurfaceColor: {r: 0.41438237, g: 0.85556936, b: 0.9056604, a: 0}
     - _Tama_o: {r: 0.5, g: 0.5, b: 0, a: 0}
     - _Vector3: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

@@ -84,6 +84,7 @@ Material:
     - Vector1_1: 0.0125
     - Vector1_17D914A4: 8.7
     - Vector1_2: 50
+    - _AO: 1
     - _Agua_Velocidad: 0.48
     - _AlphaClip: 1
     - _AlphaToMask: 0
@@ -127,7 +128,7 @@ Material:
     m_Colors:
     - _Agua_Direccion_1: {r: 10, g: 20.5, b: 0, a: 0}
     - _Agua_Direccion_2: {r: 3, g: 5.5, b: 0, a: 0}
-    - _Color: {r: 0.75, g: 0.9284314, b: 1, a: 1}
+    - _Color: {r: 0.19446424, g: 0.2885159, b: 0.3584906, a: 1}
     - _Color_Espuma: {r: 1, g: 1, b: 1, a: 0}
     - _Posicion: {r: 0, g: 0, b: 0, a: 0}
     - _Punto_de_origen: {r: 0, g: 0, b: 0, a: 0}
