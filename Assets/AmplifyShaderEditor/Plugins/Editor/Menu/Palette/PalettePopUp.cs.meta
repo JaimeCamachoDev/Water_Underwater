@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: bc4f137f15efe1d42b7bcbf984ec1545
+timeCreated: 1481126958
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/Menu/Palette/PalettePopUp.cs
+  uploadId: 763395

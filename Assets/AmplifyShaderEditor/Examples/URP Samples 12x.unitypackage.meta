@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 13ab599a7bda4e54fba3e92a13c9580a
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Examples/URP Samples 12x.unitypackage
+  uploadId: 763395

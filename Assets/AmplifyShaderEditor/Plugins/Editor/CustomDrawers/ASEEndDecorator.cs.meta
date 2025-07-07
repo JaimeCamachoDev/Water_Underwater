@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: fdf2e52babbbbf040b3b9f6df50243f3
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/CustomDrawers/ASEEndDecorator.cs
+  uploadId: 763395

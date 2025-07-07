@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 3f2c950b0ed192943b7484f6b551965f
+timeCreated: 1493906087
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/DoCreateFunction.cs
+  uploadId: 763395
