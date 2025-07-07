@@ -65,7 +65,7 @@ MonoBehaviour:
     matchType: 0
     match: Prefab
     iconSmall: {fileID: 2800000, guid: 842ab629c250c2549958583829a79f4b, type: 3}
-    iconLarge: {fileID: 2800000, guid: dc2a56600eb35584cb13c605e1dd1c6f, type: 3}
+    iconLarge: {fileID: 2800000, guid: 40984842534d5c240990447a93bf618d, type: 3}
     overlayIcon: {fileID: 2800000, guid: bd2507564dbf8424b9dce9572d7f108b, type: 3}
     previewSmall: {fileID: 0}
     previewLarge: {fileID: 0}
@@ -77,7 +77,7 @@ MonoBehaviour:
     matchType: 0
     match: Script
     iconSmall: {fileID: 2800000, guid: b65555f9b8baaea4092785b03f8f163a, type: 3}
-    iconLarge: {fileID: 2800000, guid: cb3f64fedbec84347956ba68b009f061, type: 3}
+    iconLarge: {fileID: 2800000, guid: d645c4493e9d22c469ffb13a607590ee, type: 3}
     overlayIcon: {fileID: 0}
     previewSmall: {fileID: 0}
     previewLarge: {fileID: 0}
@@ -89,7 +89,7 @@ MonoBehaviour:
     matchType: 0
     match: Shader
     iconSmall: {fileID: 2800000, guid: 360cc34802588104aa0519adcdf25c0f, type: 3}
-    iconLarge: {fileID: 2800000, guid: bded6eeb8cdac7643abe5958fbb8ac0f, type: 3}
+    iconLarge: {fileID: 2800000, guid: 051159673f0f54c4e8058c8016841416, type: 3}
     overlayIcon: {fileID: 0}
     previewSmall: {fileID: 0}
     previewLarge: {fileID: 0}
@@ -101,7 +101,7 @@ MonoBehaviour:
     matchType: 0
     match: VFX
     iconSmall: {fileID: 2800000, guid: 16704869c6f1c494d8f43b534acbe991, type: 3}
-    iconLarge: {fileID: 2800000, guid: 9233b5dbcd77c1c4e9df97eb879ab4a5, type: 3}
+    iconLarge: {fileID: 2800000, guid: e58d8ba5113fbda4ea5d8dfd54403e9e, type: 3}
     overlayIcon: {fileID: 0}
     previewSmall: {fileID: 0}
     previewLarge: {fileID: 0}
@@ -113,7 +113,7 @@ MonoBehaviour:
     matchType: 0
     match: 1-Programming
     iconSmall: {fileID: 2800000, guid: a8f5f1db100089e468652b69315844a8, type: 3}
-    iconLarge: {fileID: 2800000, guid: a1fe900e9548b454894bbe9b9b2adcda, type: 3}
+    iconLarge: {fileID: 2800000, guid: 953ec446bae5ebb4db8d4167b08e3f2a, type: 3}
     overlayIcon: {fileID: 0}
     previewSmall: {fileID: 0}
     previewLarge: {fileID: 0}
@@ -125,7 +125,7 @@ MonoBehaviour:
     matchType: 0
     match: 2-Art
     iconSmall: {fileID: 2800000, guid: b24ecf3dbc8cf664283c7ff17ae8c3e5, type: 3}
-    iconLarge: {fileID: 2800000, guid: 7c8de8575b8bcf543a53aa39da52bf57, type: 3}
+    iconLarge: {fileID: 2800000, guid: 43275ebfa90334a4594848ab666ba39f, type: 3}
     overlayIcon: {fileID: 2800000, guid: 9d757f0792521c44dbbecb9bbbb88a72, type: 3}
     previewSmall: {fileID: 0}
     previewLarge: {fileID: 0}
@@ -137,7 +137,7 @@ MonoBehaviour:
     matchType: 0
     match: 3-Scenes
     iconSmall: {fileID: 2800000, guid: 91b72c2f152a9474f99a02cdad9bb70e, type: 3}
-    iconLarge: {fileID: 2800000, guid: b843d38f41ab3bc4c88e2a59302ac3b2, type: 3}
+    iconLarge: {fileID: 2800000, guid: bd9e39018c3f8e44caed64b8ec3e2eae, type: 3}
     overlayIcon: {fileID: 2800000, guid: edfd475806c51234eab645ab587bbee0, type: 3}
     previewSmall: {fileID: 0}
     previewLarge: {fileID: 0}
@@ -149,7 +149,7 @@ MonoBehaviour:
     matchType: 0
     match: 4-Presets
     iconSmall: {fileID: 2800000, guid: f835f1656dc8cec40a8b7453acba8ba2, type: 3}
-    iconLarge: {fileID: 2800000, guid: fa6f9d15f0db42f4a86c73d6b842f5d0, type: 3}
+    iconLarge: {fileID: 2800000, guid: 7bc9297a306a6d84fa3ed1e041635fc9, type: 3}
     overlayIcon: {fileID: 0}
     previewSmall: {fileID: 0}
     previewLarge: {fileID: 0}
@@ -161,7 +161,7 @@ MonoBehaviour:
     matchType: 0
     match: 5-Settings
     iconSmall: {fileID: 2800000, guid: a66c54ffa6ed9ac4394c18e08aea2841, type: 3}
-    iconLarge: {fileID: 2800000, guid: 75edfcfa691bf9f4e897dc8ee2328a45, type: 3}
+    iconLarge: {fileID: 2800000, guid: eb67fabf9aef8a14d9da2d15eb6f7bf9, type: 3}
     overlayIcon: {fileID: 0}
     previewSmall: {fileID: 0}
     previewLarge: {fileID: 0}
@@ -172,8 +172,8 @@ MonoBehaviour:
   - ruleName: holii0
     matchType: 0
     match: 1-3D
-    iconSmall: {fileID: 0}
-    iconLarge: {fileID: 2800000, guid: 75edfcfa691bf9f4e897dc8ee2328a45, type: 3}
+    iconSmall: {fileID: 2800000, guid: 0dd7de69177d576459c01397f6ac64bb, type: 3}
+    iconLarge: {fileID: 2800000, guid: 6a2cdb56511072546849d2d16f62c960, type: 3}
     overlayIcon: {fileID: 0}
     previewSmall: {fileID: 0}
     previewLarge: {fileID: 0}
@@ -185,11 +185,11 @@ MonoBehaviour:
     matchType: 0
     match: 2-VFX
     iconSmall: {fileID: 2800000, guid: e61fe83ae7d0e404992ad3f424865ec8, type: 3}
-    iconLarge: {fileID: 2800000, guid: 87f868b8f093b0e41b1fdd35d89210ba, type: 3}
+    iconLarge: {fileID: 2800000, guid: 4be31e94ec4207d44b7e25bcfe08c499, type: 3}
     overlayIcon: {fileID: 0}
     previewSmall: {fileID: 0}
-    previewLarge: {fileID: 2800000, guid: 87f868b8f093b0e41b1fdd35d89210ba, type: 3}
-    background: {r: 1, g: 1, b: 1, a: 0.5019608}
+    previewLarge: {fileID: 0}
+    background: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0.5019608}
     enabled: 1
     eraseDefault: 1
     priority: 2
@@ -197,10 +197,10 @@ MonoBehaviour:
     matchType: 0
     match: 3-SFX
     iconSmall: {fileID: 2800000, guid: 1b05c9d2225b3b94d9d4050f5ac33ce3, type: 3}
-    iconLarge: {fileID: 2800000, guid: 1b05c9d2225b3b94d9d4050f5ac33ce3, type: 3}
+    iconLarge: {fileID: 2800000, guid: 85d9bbef9d99e564e84f6abd95da5d4d, type: 3}
     overlayIcon: {fileID: 0}
-    previewSmall: {fileID: 2800000, guid: 1b05c9d2225b3b94d9d4050f5ac33ce3, type: 3}
-    previewLarge: {fileID: 2800000, guid: 1b05c9d2225b3b94d9d4050f5ac33ce3, type: 3}
+    previewSmall: {fileID: 0}
+    previewLarge: {fileID: 0}
     background: {r: 1, g: 1, b: 1, a: 0.5019608}
     enabled: 1
     eraseDefault: 1
@@ -209,21 +209,21 @@ MonoBehaviour:
     matchType: 0
     match: 4-Directors
     iconSmall: {fileID: 2800000, guid: cb886b2e28cb89b49983bea881129e67, type: 3}
-    iconLarge: {fileID: 2800000, guid: cb886b2e28cb89b49983bea881129e67, type: 3}
+    iconLarge: {fileID: 2800000, guid: 49a2b7879e95ef04ea5ce0541fdf252f, type: 3}
     overlayIcon: {fileID: 0}
-    previewSmall: {fileID: 2800000, guid: cb886b2e28cb89b49983bea881129e67, type: 3}
-    previewLarge: {fileID: 2800000, guid: cb886b2e28cb89b49983bea881129e67, type: 3}
-    background: {r: 1, g: 1, b: 1, a: 0.5019608}
+    previewSmall: {fileID: 0}
+    previewLarge: {fileID: 0}
+    background: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0.5019608}
     enabled: 1
     eraseDefault: 1
     priority: 2
   - ruleName: holii0
     matchType: 0
-    match: 5-Skyboxes
+    match: 5-Skybox
     iconSmall: {fileID: 2800000, guid: 127d6c63313b8bb458a6b04d9c7cdf28, type: 3}
-    iconLarge: {fileID: 2800000, guid: 75edfcfa691bf9f4e897dc8ee2328a45, type: 3}
+    iconLarge: {fileID: 2800000, guid: 61124c9e00288c5439192f1e02898736, type: 3}
     overlayIcon: {fileID: 0}
-    previewSmall: {fileID: 2800000, guid: 127d6c63313b8bb458a6b04d9c7cdf28, type: 3}
+    previewSmall: {fileID: 0}
     previewLarge: {fileID: 0}
     background: {r: 1, g: 1, b: 1, a: 0.5019608}
     enabled: 1
@@ -233,11 +233,11 @@ MonoBehaviour:
     matchType: 0
     match: 6-Videos
     iconSmall: {fileID: 2800000, guid: 3b33efb9f12a13e4291d27f3a33b3593, type: 3}
-    iconLarge: {fileID: 2800000, guid: 75edfcfa691bf9f4e897dc8ee2328a45, type: 3}
+    iconLarge: {fileID: 2800000, guid: c46cdaa592fcf024a8bc69dca72113a5, type: 3}
     overlayIcon: {fileID: 0}
-    previewSmall: {fileID: 2800000, guid: 3b33efb9f12a13e4291d27f3a33b3593, type: 3}
+    previewSmall: {fileID: 0}
     previewLarge: {fileID: 0}
-    background: {r: 1, g: 1, b: 1, a: 0.5019608}
+    background: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0.5019608}
     enabled: 1
     eraseDefault: 1
     priority: 2
@@ -245,9 +245,9 @@ MonoBehaviour:
     matchType: 0
     match: 7-SolidMats
     iconSmall: {fileID: 2800000, guid: bb1528be7ff5cc54cb225a6f807dddd7, type: 3}
-    iconLarge: {fileID: 2800000, guid: 75edfcfa691bf9f4e897dc8ee2328a45, type: 3}
+    iconLarge: {fileID: 2800000, guid: ec20af3c4b1b4704caf556e0c55f1be1, type: 3}
     overlayIcon: {fileID: 0}
-    previewSmall: {fileID: 2800000, guid: bb1528be7ff5cc54cb225a6f807dddd7, type: 3}
+    previewSmall: {fileID: 0}
     previewLarge: {fileID: 0}
     background: {r: 1, g: 1, b: 1, a: 0.5019608}
     enabled: 1
@@ -257,21 +257,21 @@ MonoBehaviour:
     matchType: 0
     match: 8-PostProcessing
     iconSmall: {fileID: 2800000, guid: ffc7e695a37cd204ba59329601933fdd, type: 3}
-    iconLarge: {fileID: 2800000, guid: 75edfcfa691bf9f4e897dc8ee2328a45, type: 3}
+    iconLarge: {fileID: 2800000, guid: f3190f403be6b88488ad0e3b6ae2d0b0, type: 3}
     overlayIcon: {fileID: 0}
-    previewSmall: {fileID: 2800000, guid: ffc7e695a37cd204ba59329601933fdd, type: 3}
+    previewSmall: {fileID: 0}
     previewLarge: {fileID: 0}
-    background: {r: 1, g: 1, b: 1, a: 0.5019608}
+    background: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0.5019608}
     enabled: 1
     eraseDefault: 1
     priority: 2
   - ruleName: holii0
     matchType: 0
     match: 9-UI
-    iconSmall: {fileID: 2800000, guid: 3b33efb9f12a13e4291d27f3a33b3593, type: 3}
-    iconLarge: {fileID: 2800000, guid: 75edfcfa691bf9f4e897dc8ee2328a45, type: 3}
+    iconSmall: {fileID: 2800000, guid: 29eb2642fd8e8ae408dd7393c940c029, type: 3}
+    iconLarge: {fileID: 2800000, guid: 8226319035de953478906c88a8fbad95, type: 3}
     overlayIcon: {fileID: 0}
-    previewSmall: {fileID: 2800000, guid: 3b33efb9f12a13e4291d27f3a33b3593, type: 3}
+    previewSmall: {fileID: 0}
     previewLarge: {fileID: 0}
     background: {r: 1, g: 1, b: 1, a: 0.5019608}
     enabled: 1
@@ -281,11 +281,11 @@ MonoBehaviour:
     matchType: 0
     match: 10-Lighting
     iconSmall: {fileID: 2800000, guid: 8f9b6f0678ea7344db0d7dd305a39d45, type: 3}
-    iconLarge: {fileID: 2800000, guid: 75edfcfa691bf9f4e897dc8ee2328a45, type: 3}
+    iconLarge: {fileID: 2800000, guid: c99bfc3dd9f88ac4287e3a2b09101db2, type: 3}
     overlayIcon: {fileID: 0}
-    previewSmall: {fileID: 2800000, guid: 8f9b6f0678ea7344db0d7dd305a39d45, type: 3}
+    previewSmall: {fileID: 0}
     previewLarge: {fileID: 0}
-    background: {r: 1, g: 1, b: 1, a: 0.5019608}
+    background: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0.5019608}
     enabled: 1
     eraseDefault: 1
     priority: 2
