@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: f36e4491ee33fe74fa51cfb5ad450c6e
+timeCreated: 1481126959
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/Nodes/Constants/ShaderVariables/Time/SimpleTimeNode.cs
+  uploadId: 763395

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 8d76799413f9f0547ac9b1de7ba798f1
+timeCreated: 1515421907
+licenseType: Store
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/EditorResources/Previews/Preview_SimpleContrastNode.shader
+  uploadId: 763395

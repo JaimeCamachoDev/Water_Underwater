@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 3ba94b7b3cfd5f447befde8107c04d52
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/EditorResources/ShaderFunctions/Ellipse.asset
+  uploadId: 763395

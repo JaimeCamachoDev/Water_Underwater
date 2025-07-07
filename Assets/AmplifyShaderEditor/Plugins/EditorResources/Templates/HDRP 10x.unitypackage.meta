@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 2243c8b4e1ab6914995699133f67ab5a
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/EditorResources/Templates/HDRP 10x.unitypackage
+  uploadId: 763395

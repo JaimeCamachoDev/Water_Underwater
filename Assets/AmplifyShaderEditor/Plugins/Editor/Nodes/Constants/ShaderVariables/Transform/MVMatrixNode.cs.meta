@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 30c7936db4e6fe5488076d799841f857
+timeCreated: 1481126954
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/Nodes/Constants/ShaderVariables/Transform/MVMatrixNode.cs
+  uploadId: 763395

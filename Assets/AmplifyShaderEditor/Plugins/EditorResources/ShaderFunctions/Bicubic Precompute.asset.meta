@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 818835145cc522e4da1f9915d8b8a984
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/EditorResources/ShaderFunctions/Bicubic
+    Precompute.asset
+  uploadId: 763395

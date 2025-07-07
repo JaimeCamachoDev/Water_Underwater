@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: c2f0572db8612644b8e7fc2bcd16312b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/Nodes/Vertex/BlendIndicesNode.cs
+  uploadId: 763395

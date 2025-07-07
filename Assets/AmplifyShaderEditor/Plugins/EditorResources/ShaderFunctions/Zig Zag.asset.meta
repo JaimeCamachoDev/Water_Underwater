@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 8cd734fbcae021148a58931ed7d68679
+timeCreated: 1586786476
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/EditorResources/ShaderFunctions/Zig
+    Zag.asset
+  uploadId: 763395

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: cb9d9029b584a7645a3d4aa2b45e34ab
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/Nodes/Vertex/BlendWeightsNode.cs
+  uploadId: 763395

@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 04aad5172ee1d4d4795e20bfae0ff64d
+timeCreated: 1481126953
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/Nodes/Constants/ShaderVariables/Transform/TransformVariables.cs
+  uploadId: 763395

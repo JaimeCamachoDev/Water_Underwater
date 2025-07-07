@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: b03340e569366ae4dbd502e14c62e225
+timeCreated: 1493904667
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/Templates/TemplateData.cs
+  uploadId: 763395

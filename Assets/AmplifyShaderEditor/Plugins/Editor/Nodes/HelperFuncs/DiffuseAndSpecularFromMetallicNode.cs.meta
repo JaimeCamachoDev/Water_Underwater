@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: a792f114a5433af499dce78ebe05a9e6
+timeCreated: 1534266498
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/Nodes/HelperFuncs/DiffuseAndSpecularFromMetallicNode.cs
+  uploadId: 763395

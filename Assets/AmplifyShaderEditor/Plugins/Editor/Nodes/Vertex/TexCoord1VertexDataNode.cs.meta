@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: ebd7eb3a7f6149e4e9dacbcda2d8089f
+timeCreated: 1481126960
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/Nodes/Vertex/TexCoord1VertexDataNode.cs
+  uploadId: 763395

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 9be9b95d80559e74dac059ac0a4060cf
+timeCreated: 1510331168
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/EditorResources/ShaderFunctions/Lambert
+    Light.asset
+  uploadId: 763395

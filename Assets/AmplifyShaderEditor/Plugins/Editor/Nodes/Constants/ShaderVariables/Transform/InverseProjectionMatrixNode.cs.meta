@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 0fdbc380972c44b489c5f948a40b8e69
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/Nodes/Constants/ShaderVariables/Transform/InverseProjectionMatrixNode.cs
+  uploadId: 763395

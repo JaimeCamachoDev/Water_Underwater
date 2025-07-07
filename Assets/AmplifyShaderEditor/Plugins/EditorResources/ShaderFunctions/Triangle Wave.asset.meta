@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 51ec3c8d117f3ec4fa3742c3e00d535b
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/EditorResources/ShaderFunctions/Triangle
+    Wave.asset
+  uploadId: 763395

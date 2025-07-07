@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 83b7d6fe57585b74d80c429aef719200
+timeCreated: 1481126957
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/Nodes/HelperFuncs/ParallaxOffsetHlpNode.cs
+  uploadId: 763395

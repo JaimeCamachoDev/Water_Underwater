@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: ed95fe726fd7b4644bb42f4d1ddd2bcd
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/EditorResources/Templates/Legacy/Lit.shader
+  uploadId: 763395

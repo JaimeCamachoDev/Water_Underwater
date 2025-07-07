@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 32139be9c1eb75640a847f011acf3bcf
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/EditorResources/Templates/Legacy/PPStack.shader
+  uploadId: 763395

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 1942fe2c5f1a1f94881a33d532e4afeb
+timeCreated: 1575458539
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/EditorResources/ShaderFunctions/Normal
+    From Height.asset
+  uploadId: 763395

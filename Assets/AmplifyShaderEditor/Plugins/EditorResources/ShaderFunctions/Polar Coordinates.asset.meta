@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 7dab8e02884cf104ebefaa2e788e4162
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/EditorResources/ShaderFunctions/Polar
+    Coordinates.asset
+  uploadId: 763395

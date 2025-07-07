@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: cf814dba44d007a4e958d2ddd5813da6
+timeCreated: 1510331168
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/EditorResources/ShaderFunctions/Blinn-Phong
+    Light.asset
+  uploadId: 763395

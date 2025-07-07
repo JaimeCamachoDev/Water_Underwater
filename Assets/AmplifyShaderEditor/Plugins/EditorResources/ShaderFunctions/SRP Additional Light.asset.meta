@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 6c86746ad131a0a408ca599df5f40861
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/EditorResources/ShaderFunctions/SRP
+    Additional Light.asset
+  uploadId: 763395

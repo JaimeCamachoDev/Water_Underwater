@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 7a47d8101acb2e94d95016b69a1c2e41
+timeCreated: 1481126957
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/Nodes/Master/CodeGenerationData.cs
+  uploadId: 763395

@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 3deb719c04d269e49bcd2a2c365da6fb
+timeCreated: 1486405023
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/Nodes/LogicalOperators/ConditionalIfNode.cs
+  uploadId: 763395

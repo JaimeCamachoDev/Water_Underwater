@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: faabe9efdf44b9648a523f1742abdfd3
+timeCreated: 1515421907
+licenseType: Store
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/EditorResources/Previews/Preview_DesaturateNode.shader
+  uploadId: 763395

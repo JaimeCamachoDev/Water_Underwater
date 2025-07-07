@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 1340693b71fe44846bb72eb1035f138d
+timeCreated: 1542731803
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/Templates/TemplatePassSelectorHelper.cs
+  uploadId: 763395

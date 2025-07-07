@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: b4e28cbcd41f3b04ca36fc1b34d2c10f
+timeCreated: 1481126958
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/PreMadeShaders.cs
+  uploadId: 763395

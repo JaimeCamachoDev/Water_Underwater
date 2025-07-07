@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: c71b815458d61e24184a60dbce19573d
+timeCreated: 1481126959
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/Utils/InvalidDataChecker.cs
+  uploadId: 763395

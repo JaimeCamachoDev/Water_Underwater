@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 97be7adea7b8ae44c9bebb753277e0c2
+timeCreated: 1481126957
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/Nodes/Operators/VariablePortTypeOpNode.cs
+  uploadId: 763395

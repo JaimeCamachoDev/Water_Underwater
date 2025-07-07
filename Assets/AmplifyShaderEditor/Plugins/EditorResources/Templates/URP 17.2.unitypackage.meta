@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: f4990f6ace6142c4bbbf41cdd80b0bd3
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/EditorResources/Templates/URP 17.2.unitypackage
+  uploadId: 763395

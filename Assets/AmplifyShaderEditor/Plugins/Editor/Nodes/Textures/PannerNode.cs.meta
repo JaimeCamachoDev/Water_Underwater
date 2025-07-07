@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 08ddf1dd61719944b9e50d4bc87c0413
+timeCreated: 1481126953
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/Nodes/Textures/PannerNode.cs
+  uploadId: 763395

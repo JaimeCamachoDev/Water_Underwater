@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 1b2d5cde00ee97c46b03020eb630dc2d
+timeCreated: 1481127071
+licenseType: Store
+TextScriptImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Readme.txt
+  uploadId: 763395

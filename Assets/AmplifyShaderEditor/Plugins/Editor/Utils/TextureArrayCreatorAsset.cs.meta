@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 47f91343d4ad12542b3eb9511e2b310c
+timeCreated: 1596799060
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/Utils/TextureArrayCreatorAsset.cs
+  uploadId: 763395

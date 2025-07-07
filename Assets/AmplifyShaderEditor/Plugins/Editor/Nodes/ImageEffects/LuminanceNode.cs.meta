@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: c5f40d01acf184946b8660599f33109f
+timeCreated: 1574935849
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 68570
+  packageName: Amplify Shader Editor
+  packageVersion: 1.9.9.1
+  assetPath: Assets/AmplifyShaderEditor/Plugins/Editor/Nodes/ImageEffects/LuminanceNode.cs
+  uploadId: 763395
