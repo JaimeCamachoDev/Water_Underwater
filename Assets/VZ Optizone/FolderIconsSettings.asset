@@ -1,0 +1,292 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d7e1e9c1cb5623408935e6e25e3256a, type: 3}
+  m_Name: FolderIconsSettings
+  m_EditorClassIdentifier: 
+  rules:
+  - ruleName: holii0
+    matchType: 0
+    match: Animation
+    iconSmall: {fileID: 2800000, guid: 93cae9bb2074d714c92cd2ea52507162, type: 3}
+    iconLarge: {fileID: 2800000, guid: 5858a92f756607f40836db9fba1bcda2, type: 3}
+    overlayIcon: {fileID: 0}
+    previewSmall: {fileID: 0}
+    previewLarge: {fileID: 0}
+    background: {r: 0.36695924, g: 0.35933605, b: 0.8962264, a: 0.5019608}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: Audio
+    iconSmall: {fileID: 2800000, guid: eadc7b0c40efffe4fa303e51862f4862, type: 3}
+    iconLarge: {fileID: 2800000, guid: 2824fb414891ca345b4fdb3c43caa03d, type: 3}
+    overlayIcon: {fileID: 2800000, guid: 96c8504ba8d9ed54e9ea8e94ac3f7680, type: 3}
+    previewSmall: {fileID: 0}
+    previewLarge: {fileID: 0}
+    background: {r: 0.1490196, g: 0.5803899, b: 1, a: 0.5019608}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: Material
+    iconSmall: {fileID: 2800000, guid: 414b5b69cf5c502469acc0ca6a43f62f, type: 3}
+    iconLarge: {fileID: 2800000, guid: 97b0df50260f03d439f05178d5cff186, type: 3}
+    overlayIcon: {fileID: 2800000, guid: 8415f9789be67ba4fa10561dd058a45e, type: 3}
+    previewSmall: {fileID: 0}
+    previewLarge: {fileID: 0}
+    background: {r: 0.38823533, g: 0.8862745, b: 0.80073756, a: 0.5019608}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: Mesh
+    iconSmall: {fileID: 2800000, guid: 9151529e08ab58e4d93bb5dbab2c0779, type: 3}
+    iconLarge: {fileID: 2800000, guid: ecde4de817a8f564e9bce32b53a71497, type: 3}
+    overlayIcon: {fileID: 0}
+    previewSmall: {fileID: 0}
+    previewLarge: {fileID: 0}
+    background: {r: 0.5426914, g: 0.9254902, b: 0.40392154, a: 0.5019608}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: Prefab
+    iconSmall: {fileID: 2800000, guid: 842ab629c250c2549958583829a79f4b, type: 3}
+    iconLarge: {fileID: 2800000, guid: dc2a56600eb35584cb13c605e1dd1c6f, type: 3}
+    overlayIcon: {fileID: 2800000, guid: bd2507564dbf8424b9dce9572d7f108b, type: 3}
+    previewSmall: {fileID: 0}
+    previewLarge: {fileID: 0}
+    background: {r: 0.95578957, g: 0.9607843, b: 0.37647057, a: 0.5019608}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: Script
+    iconSmall: {fileID: 2800000, guid: b65555f9b8baaea4092785b03f8f163a, type: 3}
+    iconLarge: {fileID: 2800000, guid: cb3f64fedbec84347956ba68b009f061, type: 3}
+    overlayIcon: {fileID: 0}
+    previewSmall: {fileID: 0}
+    previewLarge: {fileID: 0}
+    background: {r: 0.85882354, g: 0.6131161, b: 0.24705881, a: 0.5019608}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: Shader
+    iconSmall: {fileID: 2800000, guid: 360cc34802588104aa0519adcdf25c0f, type: 3}
+    iconLarge: {fileID: 2800000, guid: bded6eeb8cdac7643abe5958fbb8ac0f, type: 3}
+    overlayIcon: {fileID: 0}
+    previewSmall: {fileID: 0}
+    previewLarge: {fileID: 0}
+    background: {r: 0.8867924, g: 0.4308473, b: 0.51635396, a: 0.5019608}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: VFX
+    iconSmall: {fileID: 2800000, guid: 16704869c6f1c494d8f43b534acbe991, type: 3}
+    iconLarge: {fileID: 2800000, guid: 9233b5dbcd77c1c4e9df97eb879ab4a5, type: 3}
+    overlayIcon: {fileID: 0}
+    previewSmall: {fileID: 0}
+    previewLarge: {fileID: 0}
+    background: {r: 0.71922296, g: 0.44918123, b: 0.9245283, a: 0.5019608}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: 1-Programming
+    iconSmall: {fileID: 2800000, guid: a8f5f1db100089e468652b69315844a8, type: 3}
+    iconLarge: {fileID: 2800000, guid: a1fe900e9548b454894bbe9b9b2adcda, type: 3}
+    overlayIcon: {fileID: 0}
+    previewSmall: {fileID: 0}
+    previewLarge: {fileID: 0}
+    background: {r: 0.18039216, g: 0.36078432, b: 0.8117648, a: 1}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: 2-Art
+    iconSmall: {fileID: 2800000, guid: b24ecf3dbc8cf664283c7ff17ae8c3e5, type: 3}
+    iconLarge: {fileID: 2800000, guid: 7c8de8575b8bcf543a53aa39da52bf57, type: 3}
+    overlayIcon: {fileID: 2800000, guid: 9d757f0792521c44dbbecb9bbbb88a72, type: 3}
+    previewSmall: {fileID: 0}
+    previewLarge: {fileID: 0}
+    background: {r: 0.38431376, g: 0.8117648, b: 0.40784317, a: 1}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: 3-Scenes
+    iconSmall: {fileID: 2800000, guid: 91b72c2f152a9474f99a02cdad9bb70e, type: 3}
+    iconLarge: {fileID: 2800000, guid: b843d38f41ab3bc4c88e2a59302ac3b2, type: 3}
+    overlayIcon: {fileID: 2800000, guid: edfd475806c51234eab645ab587bbee0, type: 3}
+    previewSmall: {fileID: 0}
+    previewLarge: {fileID: 0}
+    background: {r: 0.854902, g: 0.48235297, b: 0.18039216, a: 1}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: 4-Presets
+    iconSmall: {fileID: 2800000, guid: f835f1656dc8cec40a8b7453acba8ba2, type: 3}
+    iconLarge: {fileID: 2800000, guid: fa6f9d15f0db42f4a86c73d6b842f5d0, type: 3}
+    overlayIcon: {fileID: 0}
+    previewSmall: {fileID: 0}
+    previewLarge: {fileID: 0}
+    background: {r: 0.8117648, g: 0.18039216, b: 0.24705884, a: 1}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: 5-Settings
+    iconSmall: {fileID: 2800000, guid: a66c54ffa6ed9ac4394c18e08aea2841, type: 3}
+    iconLarge: {fileID: 2800000, guid: 75edfcfa691bf9f4e897dc8ee2328a45, type: 3}
+    overlayIcon: {fileID: 0}
+    previewSmall: {fileID: 0}
+    previewLarge: {fileID: 0}
+    background: {r: 0.88465935, g: 0.4475792, b: 0.8867924, a: 0.5019608}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: 1-3D
+    iconSmall: {fileID: 0}
+    iconLarge: {fileID: 2800000, guid: 75edfcfa691bf9f4e897dc8ee2328a45, type: 3}
+    overlayIcon: {fileID: 0}
+    previewSmall: {fileID: 0}
+    previewLarge: {fileID: 0}
+    background: {r: 1, g: 1, b: 1, a: 0.5019608}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: 2-VFX
+    iconSmall: {fileID: 2800000, guid: e61fe83ae7d0e404992ad3f424865ec8, type: 3}
+    iconLarge: {fileID: 2800000, guid: 87f868b8f093b0e41b1fdd35d89210ba, type: 3}
+    overlayIcon: {fileID: 0}
+    previewSmall: {fileID: 0}
+    previewLarge: {fileID: 2800000, guid: 87f868b8f093b0e41b1fdd35d89210ba, type: 3}
+    background: {r: 1, g: 1, b: 1, a: 0.5019608}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: 3-SFX
+    iconSmall: {fileID: 2800000, guid: 1b05c9d2225b3b94d9d4050f5ac33ce3, type: 3}
+    iconLarge: {fileID: 2800000, guid: 1b05c9d2225b3b94d9d4050f5ac33ce3, type: 3}
+    overlayIcon: {fileID: 0}
+    previewSmall: {fileID: 2800000, guid: 1b05c9d2225b3b94d9d4050f5ac33ce3, type: 3}
+    previewLarge: {fileID: 2800000, guid: 1b05c9d2225b3b94d9d4050f5ac33ce3, type: 3}
+    background: {r: 1, g: 1, b: 1, a: 0.5019608}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: 4-Directors
+    iconSmall: {fileID: 2800000, guid: cb886b2e28cb89b49983bea881129e67, type: 3}
+    iconLarge: {fileID: 2800000, guid: cb886b2e28cb89b49983bea881129e67, type: 3}
+    overlayIcon: {fileID: 0}
+    previewSmall: {fileID: 2800000, guid: cb886b2e28cb89b49983bea881129e67, type: 3}
+    previewLarge: {fileID: 2800000, guid: cb886b2e28cb89b49983bea881129e67, type: 3}
+    background: {r: 1, g: 1, b: 1, a: 0.5019608}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: 5-Skyboxes
+    iconSmall: {fileID: 2800000, guid: 127d6c63313b8bb458a6b04d9c7cdf28, type: 3}
+    iconLarge: {fileID: 2800000, guid: 75edfcfa691bf9f4e897dc8ee2328a45, type: 3}
+    overlayIcon: {fileID: 0}
+    previewSmall: {fileID: 2800000, guid: 127d6c63313b8bb458a6b04d9c7cdf28, type: 3}
+    previewLarge: {fileID: 0}
+    background: {r: 1, g: 1, b: 1, a: 0.5019608}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: 6-Videos
+    iconSmall: {fileID: 2800000, guid: 3b33efb9f12a13e4291d27f3a33b3593, type: 3}
+    iconLarge: {fileID: 2800000, guid: 75edfcfa691bf9f4e897dc8ee2328a45, type: 3}
+    overlayIcon: {fileID: 0}
+    previewSmall: {fileID: 2800000, guid: 3b33efb9f12a13e4291d27f3a33b3593, type: 3}
+    previewLarge: {fileID: 0}
+    background: {r: 1, g: 1, b: 1, a: 0.5019608}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: 7-SolidMats
+    iconSmall: {fileID: 2800000, guid: bb1528be7ff5cc54cb225a6f807dddd7, type: 3}
+    iconLarge: {fileID: 2800000, guid: 75edfcfa691bf9f4e897dc8ee2328a45, type: 3}
+    overlayIcon: {fileID: 0}
+    previewSmall: {fileID: 2800000, guid: bb1528be7ff5cc54cb225a6f807dddd7, type: 3}
+    previewLarge: {fileID: 0}
+    background: {r: 1, g: 1, b: 1, a: 0.5019608}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: 8-PostProcessing
+    iconSmall: {fileID: 2800000, guid: ffc7e695a37cd204ba59329601933fdd, type: 3}
+    iconLarge: {fileID: 2800000, guid: 75edfcfa691bf9f4e897dc8ee2328a45, type: 3}
+    overlayIcon: {fileID: 0}
+    previewSmall: {fileID: 2800000, guid: ffc7e695a37cd204ba59329601933fdd, type: 3}
+    previewLarge: {fileID: 0}
+    background: {r: 1, g: 1, b: 1, a: 0.5019608}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: 9-UI
+    iconSmall: {fileID: 2800000, guid: 3b33efb9f12a13e4291d27f3a33b3593, type: 3}
+    iconLarge: {fileID: 2800000, guid: 75edfcfa691bf9f4e897dc8ee2328a45, type: 3}
+    overlayIcon: {fileID: 0}
+    previewSmall: {fileID: 2800000, guid: 3b33efb9f12a13e4291d27f3a33b3593, type: 3}
+    previewLarge: {fileID: 0}
+    background: {r: 1, g: 1, b: 1, a: 0.5019608}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  - ruleName: holii0
+    matchType: 0
+    match: 10-Lighting
+    iconSmall: {fileID: 2800000, guid: 8f9b6f0678ea7344db0d7dd305a39d45, type: 3}
+    iconLarge: {fileID: 2800000, guid: 75edfcfa691bf9f4e897dc8ee2328a45, type: 3}
+    overlayIcon: {fileID: 0}
+    previewSmall: {fileID: 2800000, guid: 8f9b6f0678ea7344db0d7dd305a39d45, type: 3}
+    previewLarge: {fileID: 0}
+    background: {r: 1, g: 1, b: 1, a: 0.5019608}
+    enabled: 1
+    eraseDefault: 1
+    priority: 2
+  showPreview: 1

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.jaimecamacho.unityfolders": "1.0.3",
     "com.unity.render-pipelines.universal": "17.0.4",
     "jp.keijiro.klutter-tools": "2.1.0"
   },
@@ -10,6 +11,14 @@
       "scopes": [
         "jp.keijiro"
       ]
+    },
+    {
+      "name": "JaimeCamachoDev",
+      "url": "https://registry.npmjs.org",
+      "scopes": [
+        "com.jaimecamacho"
+      ],
+      "overrideBuiltIns": false
     }
   ]
 }
