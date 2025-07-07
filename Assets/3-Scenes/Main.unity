@@ -1470,7 +1470,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1286300644
 Transform:
   m_ObjectHideFlags: 0
@@ -1932,6 +1932,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ripples 1
       objectReference: {fileID: 0}
+    - target: {fileID: 607922437897136951, guid: 139aaa43c178bb04780802615cfeec01, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1952,7 +1956,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2068956819
 Transform:
   m_ObjectHideFlags: 0
