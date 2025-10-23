@@ -1081,7 +1081,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &739370117
 Transform:
   m_ObjectHideFlags: 0
@@ -1756,7 +1756,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1674685023
 Transform:
   m_ObjectHideFlags: 0
@@ -1767,7 +1767,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.1683311, y: -0.8611956, z: 5.8629336}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.03799378, y: 0.03799378, z: 0.03799378}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 991398907}
@@ -1921,7 +1921,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1746735508
 Transform:
   m_ObjectHideFlags: 0
@@ -2002,6 +2002,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 139aaa43c178bb04780802615cfeec01, type: 3}
+--- !u!1001 &1979024808
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1928567686329856043, guid: cc12c32b927da45c0b072b1ccc10e04c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6.65
+      objectReference: {fileID: 0}
+    - target: {fileID: 1928567686329856043, guid: cc12c32b927da45c0b072b1ccc10e04c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -4.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 1928567686329856043, guid: cc12c32b927da45c0b072b1ccc10e04c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -6.53
+      objectReference: {fileID: 0}
+    - target: {fileID: 1928567686329856043, guid: cc12c32b927da45c0b072b1ccc10e04c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.96810937
+      objectReference: {fileID: 0}
+    - target: {fileID: 1928567686329856043, guid: cc12c32b927da45c0b072b1ccc10e04c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1928567686329856043, guid: cc12c32b927da45c0b072b1ccc10e04c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.25052804
+      objectReference: {fileID: 0}
+    - target: {fileID: 1928567686329856043, guid: cc12c32b927da45c0b072b1ccc10e04c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1928567686329856043, guid: cc12c32b927da45c0b072b1ccc10e04c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1928567686329856043, guid: cc12c32b927da45c0b072b1ccc10e04c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -29.018
+      objectReference: {fileID: 0}
+    - target: {fileID: 1928567686329856043, guid: cc12c32b927da45c0b072b1ccc10e04c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3377503523583007885, guid: cc12c32b927da45c0b072b1ccc10e04c, type: 3}
+      propertyPath: m_Name
+      value: Water Oasis_Prefab
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cc12c32b927da45c0b072b1ccc10e04c, type: 3}
 --- !u!1 &2068956818
 GameObject:
   m_ObjectHideFlags: 0
@@ -2017,7 +2074,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2068956819
 Transform:
   m_ObjectHideFlags: 0
@@ -2476,3 +2533,4 @@ SceneRoots:
   - {fileID: 2068956819}
   - {fileID: 1286300644}
   - {fileID: 555877913}
+  - {fileID: 1979024808}

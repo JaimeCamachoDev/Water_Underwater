@@ -53,7 +53,7 @@ Material:
     - _Float: 0
     - _LOD: 0
     - _Offset: 0.29999956
-    - _OffsetX: -1
+    - _OffsetX: 0
     - _OffsetY: 0
     - _Tiling: 1
     m_Colors:
