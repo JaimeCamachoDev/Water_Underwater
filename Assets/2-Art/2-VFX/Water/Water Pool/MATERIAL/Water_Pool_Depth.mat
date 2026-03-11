@@ -102,6 +102,7 @@ Material:
     - _Depth_Power: 0.02
     - _Displacement: 0.1
     - _DstBlend: 10
+    - _DstBlendAlpha: 10
     - _Edge: 1
     - _Espuma_Velocidad: 1
     - _Espuma_escala: 0
@@ -124,6 +125,7 @@ Material:
     - _Reflex: 1
     - _Smooth: 0.3
     - _SrcBlend: 5
+    - _SrcBlendAlpha: 1
     - _Surface: 1
     - _Surface_Contrast: 0.713
     - _Time_Scale: 0.02

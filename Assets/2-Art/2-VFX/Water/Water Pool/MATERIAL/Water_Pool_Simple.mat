@@ -98,6 +98,7 @@ Material:
     - _Densidad: 0.584
     - _Displacement: 0.1
     - _DstBlend: 10
+    - _DstBlendAlpha: 10
     - _Edge: 1
     - _Espuma_Velocidad: 1
     - _Espuma_escala: 0
@@ -119,6 +120,7 @@ Material:
     - _Reflex: 1
     - _Smooth: 1
     - _SrcBlend: 5
+    - _SrcBlendAlpha: 1
     - _Surface: 1
     - _Time_Scale: 0.042
     - _Waves_Speed: 0.1

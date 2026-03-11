@@ -104,7 +104,7 @@ Material:
     m_Colors:
     - _Color: {r: 0, g: 0.5159313, b: 0.5943396, a: 1}
     - _Color_1: {r: 1, g: 1, b: 1, a: 0}
-    - _Position: {r: 0.48480016, g: 0.3909999, b: 0, a: 0}
+    - _Position: {r: 0.49816346, g: 0.46694222, b: 0, a: 0}
     - _Vector2: {r: 0, g: 0.7, b: 0, a: 0}
     - _Vector2_1: {r: -1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []

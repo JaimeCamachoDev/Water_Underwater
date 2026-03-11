@@ -1,9 +1,12 @@
 {
   "dependencies": {
     "com.jaimecamacho.unityfolders": "1.2.4",
-    "com.unity.render-pipelines.universal": "17.0.4",
+    "com.unity.render-pipelines.universal": "17.3.0",
+    "com.unity.visualeffectgraph": "17.3.0",
     "jp.keijiro.klutter-tools": "2.1.0",
-    "com.unity.modules.particlesystem": "1.0.0"
+    "com.unity.modules.adaptiveperformance": "1.0.0",
+    "com.unity.modules.particlesystem": "1.0.0",
+    "com.unity.modules.vectorgraphics": "1.0.0"
   },
   "scopedRegistries": [
     {
