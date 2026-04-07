@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.jaimecamacho.unityfolders": "1.2.4",
+    "com.unity.recorder": "5.1.6",
     "com.unity.render-pipelines.universal": "17.3.0",
     "com.unity.visualeffectgraph": "17.3.0",
     "jp.keijiro.klutter-tools": "2.1.0",
