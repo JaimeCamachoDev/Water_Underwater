@@ -190,7 +190,7 @@ namespace AmplifyShaderEditor
 				port.GetOutputNode().ActivateNode( m_activeNode, m_activePort, m_activeType );
 			}
 
-			OnNodeChange();
+			OnNodeChange( new NodeUpdateCache() );
 			SetSaveIsDirty();
 
 			m_inputPorts[ portId ].MatchPortToConnection();
@@ -348,17 +348,6 @@ namespace AmplifyShaderEditor
 			m_refOptionLabel = string.Empty;
 			m_refSelectedInput = -1;
 
-			for( int i = 0; i < MaxAllowedAmount; i++ )
-			{
-				m_inputPorts[ i ].Visible = ( i < m_maxAmountInputs );
-				m_inputPorts[ i ].Name = m_optionNames[ i ];
-			}
-
-			if( m_currentSelectedInput >= m_maxAmountInputs )
-			{
-				m_currentSelectedInput = m_maxAmountInputs - 1;
-			}
-
 			UpdateLabels();
 			m_sizeIsDirty = true;
 		}
@@ -449,41 +438,8 @@ namespace AmplifyShaderEditor
 				m_toggleMode = EditorGUILayoutToggle( "Toggle Mode", m_toggleMode );
 				if( EditorGUI.EndChangeCheck() )
 				{
-					if( m_toggleMode )
-					{
-						m_inputPorts[ 0 ].Name = ToggleFalseStr;
-						m_inputPorts[ 1 ].Name = ToggleTrueStr;
-
-						for( int i = 0; i < MaxAllowedAmount; i++ )
-						{
-							m_inputPorts[ i ].Visible = ( i < 2 );
-						}
-
-						if( m_currentSelectedInput >= 2 )
-						{
-							m_currentSelectedInput = 1;
-						}
-						UpdateLabels();
-						m_sizeIsDirty = true;
-					}
-					else
-					{
-						m_inputPorts[ 0 ].Name = m_optionNames[ 0 ];
-						m_inputPorts[ 1 ].Name = m_optionNames[ 1 ];
-
-						for( int i = 0; i < MaxAllowedAmount; i++ )
-						{
-							m_inputPorts[ i ].Visible = ( i < m_maxAmountInputs );
-						}
-
-						if( m_currentSelectedInput >= m_maxAmountInputs )
-						{
-							m_currentSelectedInput = m_maxAmountInputs - 1;
-						}
-
-						UpdateLabels();
-						m_sizeIsDirty = true;
-					}
+					UpdateLabels();
+					m_sizeIsDirty = true;
 				}
 
 				if( !m_toggleMode )
@@ -492,16 +448,6 @@ namespace AmplifyShaderEditor
 					m_maxAmountInputs = EditorGUILayoutIntSlider( MaxAmountStr, m_maxAmountInputs, 2, MaxAllowedAmount );
 					if( EditorGUI.EndChangeCheck() )
 					{
-						for( int i = 0; i < MaxAllowedAmount; i++ )
-						{
-							m_inputPorts[ i ].Visible = ( i < m_maxAmountInputs );
-						}
-
-						if( m_currentSelectedInput >= m_maxAmountInputs )
-						{
-							m_currentSelectedInput = m_maxAmountInputs - 1;
-						}
-
 						UpdateLabels();
 						m_sizeIsDirty = true;
 					}
@@ -572,18 +518,48 @@ namespace AmplifyShaderEditor
 			SetCurrentSelectedInput( m_currentSelectedInput, m_previousSelectedInput );
 		}
 
+		public override void ReconnectClipboardReferences( Clipboard clipboard )
+		{
+			// validate node first
+			int newId = clipboard.GeNewNodeId( m_referenceUniqueId );
+			if ( ContainerGraph.GetNode( newId ) != null )
+			{
+				m_referenceUniqueId = newId;
+			}
+			RefreshExternalReferences();
+		}
+
 		public void UpdateLabels()
 		{
-			int maxinputs = m_maxAmountInputs;
-			if( m_validReference )
-				maxinputs = m_functionSwitchReference.MaxAmountInputs;
-
-			AvailableInputsLabels = new string[ maxinputs ];
-			AvailableInputsValues = new int[ maxinputs ];
-
-			for( int i = 0; i < maxinputs; i++ )
+			if ( ToggleMode )
 			{
-				AvailableInputsLabels[ i ] = m_optionNames[ i ];
+				m_inputPorts[ 0 ].Name = ToggleFalseStr;
+				m_inputPorts[ 1 ].Name = ToggleTrueStr;
+			}
+			else
+			{
+				for ( int i = 0; i < MaxAllowedAmount; i++ )
+				{
+					m_inputPorts[ i ].Name = OptionNames[ i ];
+				}
+			}
+
+			for ( int i = 0; i < MaxAllowedAmount; i++ )
+			{
+				m_inputPorts[ i ].Visible = ( i < MaxAmountInputs );
+			}
+
+			if ( m_currentSelectedInput >= MaxAmountInputs )
+			{
+				m_currentSelectedInput = MaxAmountInputs - 1;
+			}
+
+			AvailableInputsLabels = new string[ MaxAmountInputs ];
+			AvailableInputsValues = new int[ MaxAmountInputs ];
+
+			for ( int i = 0; i < MaxAmountInputs; i++ )
+			{
+				AvailableInputsLabels[ i ] = OptionNames[ i ];
 				AvailableInputsValues[ i ] = i;
 			}
 		}
@@ -596,7 +572,7 @@ namespace AmplifyShaderEditor
 				m_dirtySettings = false;
 		}
 
-		public override void OnNodeLayout( DrawInfo drawInfo )
+		public override void OnNodeLayout( DrawInfo drawInfo, NodeUpdateCache cache )
 		{
 			float finalSize = 0;
 			if( !m_toggleMode )
@@ -614,7 +590,7 @@ namespace AmplifyShaderEditor
 				}
 			}
 
-			base.OnNodeLayout( drawInfo );
+			base.OnNodeLayout( drawInfo, cache );
 
 			bool toggleMode = m_toggleMode;
 			if( m_validReference )
@@ -796,26 +772,9 @@ namespace AmplifyShaderEditor
 			m_maxAmountInputs = Convert.ToInt32( GetCurrentParam( ref nodeParams ) );
 			m_orderIndex = Convert.ToInt32( GetCurrentParam( ref nodeParams ) );
 
-			for( int i = 0; i < MaxAllowedAmount; i++ )
-			{
-				m_inputPorts[ i ].Visible = ( i < m_maxAmountInputs );
-			}
-
-			if( m_currentSelectedInput >= m_maxAmountInputs )
-			{
-				m_currentSelectedInput = m_maxAmountInputs - 1;
-			}
-
 			for( int i = 0; i < m_maxAmountInputs; i++ )
 			{
 				m_optionNames[ i ] = GetCurrentParam( ref nodeParams );
-				m_inputPorts[ i ].Name = m_optionNames[ i ];
-			}
-
-			if( m_toggleMode )
-			{
-				m_inputPorts[ 0 ].Name = ToggleFalseStr;
-				m_inputPorts[ 1 ].Name = ToggleTrueStr;
 			}
 
 			UpdateLabels();
@@ -879,7 +838,15 @@ namespace AmplifyShaderEditor
 		public override string DataToArray { get { return m_optionLabel; } }
 		public int MaxAmountInputs
 		{
-			get { return m_maxAmountInputs; }
+			get { return m_validReference ? m_functionSwitchReference.MaxAmountInputs : ( m_toggleMode ? 2 : m_maxAmountInputs ); }
+		}
+		public bool ToggleMode
+		{
+			get { return m_validReference ? m_functionSwitchReference.ToggleMode : m_toggleMode; }
+		}
+		public string[] OptionNames
+		{
+			get { return m_validReference ? m_functionSwitchReference.OptionNames : m_optionNames; }
 		}
 		public bool DirtySettings { get { return m_dirtySettings; } }
 	}

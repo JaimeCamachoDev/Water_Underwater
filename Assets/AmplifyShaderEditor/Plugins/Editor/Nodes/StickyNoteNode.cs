@@ -129,7 +129,7 @@ namespace AmplifyShaderEditor
 			EditorGUILayout.HelpBox( WarningText, MessageType.Warning );
 		}
 
-		public override void OnNodeLayout( DrawInfo drawInfo )
+		public override void OnNodeLayout( DrawInfo drawInfo, NodeUpdateCache cache )
 		{
 			//base.OnLayout( drawInfo );
 			CalculatePositionAndVisibility( drawInfo );

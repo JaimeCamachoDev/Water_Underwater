@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -28,8 +29,8 @@ namespace AmplifyShaderEditor
 		WORLD_POS,
 		WORLD_REFL,
 		WORLD_NORMAL,
-		FRONT_FACING,
-		FRONT_FACING_VFACE,
+		FRONT_FACE,
+		FRONT_FACE_VFACE,
 		INTERNALDATA
 	}
 
@@ -667,8 +668,8 @@ namespace AmplifyShaderEditor
 			{ SurfaceInputs.WORLD_POS, "{0}3 worldPos"},
 			{ SurfaceInputs.WORLD_REFL, "{0}3 worldRefl"},
 			{ SurfaceInputs.WORLD_NORMAL,"{0}3 worldNormal"},
-			{ SurfaceInputs.FRONT_FACING, Constants.IsFrontFacingInput},
-			{ SurfaceInputs.FRONT_FACING_VFACE, Constants.IsFrontFacingInputVFACE},
+			{ SurfaceInputs.FRONT_FACE, Constants.IsFrontFaceInput},
+			{ SurfaceInputs.FRONT_FACE_VFACE, Constants.IsFrontFaceInput},
 			{ SurfaceInputs.INTERNALDATA, Constants.InternalData}
 		};
 
@@ -683,7 +684,7 @@ namespace AmplifyShaderEditor
 			{ SurfaceInputs.WORLD_POS, "worldPos"},
 			{ SurfaceInputs.WORLD_REFL, "worldRefl"},
 			{ SurfaceInputs.WORLD_NORMAL, "worldNormal"},
-			{ SurfaceInputs.FRONT_FACING, Constants.IsFrontFacingVariable},
+			{ SurfaceInputs.FRONT_FACE, Constants.IsFrontFaceVariable},
 		};
 
 		private static Dictionary<PrecisionType , string> m_precisionTypeToCg = new Dictionary<PrecisionType , string>()
@@ -845,11 +846,11 @@ namespace AmplifyShaderEditor
 		private static RectOffset SwitchNodeOverflow;
 		private static RectOffset SwitchNodePadding;
 
-		private static RenderTexture m_dummyPreviewRT;
+		private static RenderTexture m_previewDisabledRT;
+
 		public static void ForceExampleShaderCompilation()
 		{
 			CurrentWindow.ForceMaterialsToUpdate( ref m_exampleMaterialIDs );
-
 		}
 
 		public static void Destroy()
@@ -867,12 +868,7 @@ namespace AmplifyShaderEditor
 
 			Initialized = false;
 
-			if( m_dummyPreviewRT != null )
-				m_dummyPreviewRT.Release();
-
-			ScriptableObject.DestroyImmediate( m_dummyPreviewRT );
-
-			m_dummyPreviewRT = null;
+			m_previewDisabledRT = null;
 			PlusStyle = null;
 			MinusStyle = null;
 			m_textInfo = null;
@@ -1070,12 +1066,15 @@ namespace AmplifyShaderEditor
 
 			BoldErrorStyle = new GUIStyle( (GUIStyle)"BoldLabel" );
 			BoldErrorStyle.normal.textColor = Color.red;
+			BoldErrorStyle.hover.textColor = Color.red;
 			BoldErrorStyle.alignment = TextAnchor.MiddleCenter;
 			BoldWarningStyle = new GUIStyle( (GUIStyle)"BoldLabel" );
 			BoldWarningStyle.normal.textColor = Color.yellow;
+			BoldWarningStyle.hover.textColor = Color.yellow;
 			BoldWarningStyle.alignment = TextAnchor.MiddleCenter;
 			BoldInfoStyle = new GUIStyle( (GUIStyle)"BoldLabel" );
 			BoldInfoStyle.normal.textColor = Color.white;
+			BoldInfoStyle.hover.textColor = Color.white;
 			BoldInfoStyle.alignment = TextAnchor.MiddleCenter;
 
 			ToolbarMainTitle = new GUIStyle( MainSkin.customStyles[ (int)CustomStyle.MainCanvasTitle ] );
@@ -2390,6 +2389,14 @@ namespace AmplifyShaderEditor
 			EditorGUIUtility.labelWidth = labelWidth;
 		}
 
+		public static void DrawInt( UndoParentNode owner , ref Rect propertyDrawPos , ref int value , float newLabelWidth = 8 )
+		{
+			float labelWidth = EditorGUIUtility.labelWidth;
+			EditorGUIUtility.labelWidth = newLabelWidth;
+			value = owner.EditorGUIIntField( propertyDrawPos , "  " , value , UIUtils.MainSkin.textField );
+			EditorGUIUtility.labelWidth = labelWidth;
+		}
+
 		public static GUIStyle GetCustomStyle( CustomStyle style )
 		{
 			return ( Initialized ) ? MainSkin.customStyles[ (int)style ] : null;
@@ -3150,19 +3157,20 @@ namespace AmplifyShaderEditor
 			return body;
 		}
 
-		public static RenderTexture DummyRT
+		public static RenderTexture PreviewDisabledRT
 		{
 			get
 			{
-				if( m_dummyPreviewRT == null )
+				if( m_previewDisabledRT == null )
 				{
-					m_dummyPreviewRT = new RenderTexture( 128 , 128 , 0 , RenderTextureFormat.ARGB32 );
+					Texture2D previewDisabledTex = AssetDatabase.LoadAssetAtPath<Texture2D>( AssetDatabase.GUIDToAssetPath( "ecc13992716d1174aa27e126e4e9b66e" ) );
+					m_previewDisabledRT = new RenderTexture( 128 , 128 , 0 , RenderTextureFormat.ARGB32 );
 					RenderTexture temp = RenderTexture.active;
-					RenderTexture.active = m_dummyPreviewRT;
-					Graphics.Blit( Texture2D.blackTexture , m_dummyPreviewRT );
+					RenderTexture.active = m_previewDisabledRT;
+					Graphics.Blit( previewDisabledTex, m_previewDisabledRT );
 					RenderTexture.active = temp;
 				}
-				return m_dummyPreviewRT;
+				return m_previewDisabledRT;
 			}
 		}
 
@@ -3194,5 +3202,145 @@ namespace AmplifyShaderEditor
 			}
 		}
 
+		private static void AddShaderPassesToList( string shaderName, List<string> list )
+		{
+			Shader shader = Shader.Find( shaderName );
+			if ( shader != null )
+			{
+				ShaderData shaderData = ShaderUtil.GetShaderData( shader );
+				var passes = new HashSet<string>();
+
+				for ( int s = 0; s < shaderData.SubshaderCount; s++ )
+				{
+					ShaderData.Subshader subShader = shaderData.GetSubshader( s );
+					if ( subShader != null )
+					{
+						for ( int p = 0; p < subShader.PassCount; p++ )
+						{
+							ShaderData.Pass pass = subShader.GetPass( p );
+							if ( pass != null )
+							{
+								passes.Add( shaderName + "/" + pass.Name.ToUpper() );
+							}
+						}
+					}
+				}
+
+				list.AddRange( passes );
+			}
+		}
+
+		private static List<string> ReplaceShaderNamesWithPassNames( List<string> list )
+		{
+			var newList = new List<string>();
+			foreach ( var shaderName in list )
+			{
+				if ( shaderName == "-" ) // separator
+				{
+					newList.Add( shaderName );
+
+				}
+				else
+				{
+					AddShaderPassesToList( shaderName, newList );
+				}
+			}
+			return newList;
+		}
+
+		private static List<string> BuildShaderSelectionList()
+		{
+			ShaderInfo[] shaders = UnityEditor.ShaderUtil.GetAllShaderInfo();
+
+			var final = new List<string>();
+			var legacy = new List<string>();
+			var unsupported = new List<string>();
+			var failed = new List<string>();
+
+			foreach ( var shader in shaders )
+			{
+				if ( shader.name.StartsWith( "Deprecated" ) || shader.name.StartsWith( "Hidden" ) )
+				{
+					continue;
+				}
+				if ( shader.hasErrors )
+				{
+					failed?.Add( shader.name );
+					continue;
+				}
+				if ( !shader.supported )
+				{
+					unsupported?.Add( shader.name );
+					continue;
+				}
+				if ( shader.name.StartsWith( "Legacy Shaders/" ) )
+				{
+					legacy?.Add( shader.name );
+					continue;
+				}
+				final.Add( shader.name );
+			}
+
+			var unnested = final.Where( s => s.Count( c => c == '/' ) == 0 ).ToList();
+			var nested = final.Where( s => s.Count( c => c == '/' ) > 0 ).ToList();
+
+			unnested.Sort();
+			nested.Sort();
+
+			final.Clear();
+			final.AddRange( nested );
+			final.AddRange( unnested );
+
+			legacy.Sort();
+			unsupported.Sort();
+			failed.Sort();
+
+			final.Add( "-" );
+
+			legacy.ForEach( s => final.Add( s ) );
+			unsupported.ForEach( s => final.Add( "Not supported/" + s ) );
+			failed.ForEach( s => final.Add( "Failed to compile/" + s ) );
+
+			return final;
+		}
+
+		private static GenericMenu BuildShaderSelectionMenu( List<string> list, GenericMenu.MenuFunction2 onSelected, Func<string,string> displayNameFormatter )
+		{
+			var menu = new GenericMenu();
+			foreach ( var name in list )
+			{
+				if ( name == "-" )
+				{
+					menu.AddSeparator( string.Empty );
+				}
+				else
+				{
+					menu.AddItem( new GUIContent( displayNameFormatter( name ) ), false, onSelected, name );
+				}
+			}
+			return menu;
+		}
+
+		public static GenericMenu BuildShaderSelectionMenu( GenericMenu.MenuFunction2 onSelected )
+		{
+			return BuildShaderSelectionMenu( BuildShaderSelectionList(), onSelected, name =>
+			{
+				var parts = name.Split( '/' );
+				for ( int i = 0; i < parts.Length - 1; i++ )
+					parts[ i ] = $"<{parts[ i ]}>";
+				return string.Join( "/", parts );
+			} );
+		}
+
+		public static GenericMenu BuildShaderPassSelectionMenu( GenericMenu.MenuFunction2 onSelected )
+		{
+			return BuildShaderSelectionMenu( ReplaceShaderNamesWithPassNames( BuildShaderSelectionList() ), onSelected, name =>
+			{
+				var parts = name.Split( '/' );
+				for ( int i = 0; i < parts.Length - 2; i++ )
+					parts[ i ] = $"<{parts[ i ]}>";
+				return string.Join( "/", parts );
+			} );
+		}
 	}
 }

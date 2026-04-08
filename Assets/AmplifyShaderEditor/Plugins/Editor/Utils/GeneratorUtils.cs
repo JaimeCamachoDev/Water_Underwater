@@ -348,14 +348,36 @@ namespace AmplifyShaderEditor
 		}
 
 		// WORLD NORMAL
-		static public string GenerateWorldNormal( ref MasterNodeDataCollector dataCollector, int uniqueId, PrecisionType precisionType, string normal, string outputId )
+		static public string GenerateWorldNormal( ref MasterNodeDataCollector dataCollector, int uniqueId, PrecisionType precisionType, string normal, string outputId,
+			ViewSpace normalSpace = ViewSpace.Tangent )
 		{
 			if ( dataCollector.IsTemplate )
-				return dataCollector.TemplateDataCollectorInstance.GetWorldNormal( uniqueId, precisionType, normal, outputId );
+			{
+				return dataCollector.TemplateDataCollectorInstance.GetWorldNormal( uniqueId, precisionType, normal, outputId, normalSpace );
+			}
 
-			string tanToWorld = GenerateTangentToWorldMatrixFast( ref dataCollector, uniqueId, precisionType );
-			return string.Format( "mul({0},{1})", tanToWorld, normal );
-
+			if ( normalSpace == ViewSpace.Tangent )
+			{
+				string tanToWorld = GenerateTangentToWorldMatrixFast( ref dataCollector, uniqueId, precisionType );
+				return string.Format( "mul( {0}, {1} )", tanToWorld, normal );
+			}
+			else if ( normalSpace == ViewSpace.World )
+			{
+				return normal;
+			}
+			else if ( normalSpace == ViewSpace.Object )
+			{
+				return string.Format( "UnityObjectToWorldNormal( {0} )", normal );
+			}
+			else if ( normalSpace == ViewSpace.View )
+			{
+				return string.Format( "mul( ( float3x3 )UNITY_MATRIX_I_V, {0} )", normal );
+			}
+			else
+			{
+				// unsupported
+				return "float3( 0, 0, 0 )";
+			}
 		}
 		static public string GenerateWorldNormal( ref MasterNodeDataCollector dataCollector, int uniqueId, bool normalize = false )
 		{
@@ -756,6 +778,11 @@ namespace AmplifyShaderEditor
 			//	sizeDif = "3";
 			//else if( maxSize == WirePortDataType.FLOAT4 )
 			//	sizeDif = "4";
+
+			if ( !dataCollector.IsTemplate && ( size == WirePortDataType.FLOAT3 || size == WirePortDataType.FLOAT4 ) )
+			{
+				dataCollector.UsingHigherSizeTexcoords = true;
+			}
 
 			if ( !dataCollector.IsTemplate && index > 3 )
 			{
@@ -1460,7 +1487,7 @@ namespace AmplifyShaderEditor
 			if ( !dataCollector.HasLocalVariableByName( varName ) )
 			{
 				string worldPos = GenerateWorldPosition( ref dataCollector, uniqueId );
-				string viewVectorWS = "( _WorldSpaceCameraPos.xyz - " + worldPos + " )";
+				string viewVectorWS = string.Format( "( ( unity_OrthoParams.w == 0 ) ? _WorldSpaceCameraPos - {0} : UNITY_MATRIX_V[ 2 ].xyz )", worldPos );
 
 				string viewDir;
 				if ( space == ViewSpace.Tangent )

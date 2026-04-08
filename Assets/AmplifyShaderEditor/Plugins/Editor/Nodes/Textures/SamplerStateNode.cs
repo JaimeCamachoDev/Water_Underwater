@@ -64,10 +64,10 @@ namespace AmplifyShaderEditor
 
 		private readonly string[] m_wrapModeStr = {
 			"Repeat",
-			"Clamp", 
+			"Clamp",
 			"Mirror",
 			"Mirror Once",
-			"Per-axis" 
+			"Per-axis"
 		};
 
 		protected override void CommonInit( int uniqueId )
@@ -372,6 +372,17 @@ namespace AmplifyShaderEditor
 			m_referenceNode = UIUtils.GetNode( m_referenceNodeId ) as TexturePropertyNode;
 			m_referenceSamplerId = UIUtils.GetTexturePropertyNodeRegisterId( m_referenceNodeId );
 			UpdateTitle();
+		}
+
+		public override void ReconnectClipboardReferences( Clipboard clipboard )
+		{
+			// validate node first
+			int newId = clipboard.GeNewNodeId( m_referenceNodeId );
+			if ( ContainerGraph.GetNode( newId ) != null )
+			{
+				m_referenceNodeId = newId;
+			}
+			RefreshExternalReferences();
 		}
 
 		public override void ReadFromString( ref string[] nodeParams )

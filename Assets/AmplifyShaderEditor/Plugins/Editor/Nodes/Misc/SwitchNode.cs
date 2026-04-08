@@ -100,9 +100,9 @@ namespace AmplifyShaderEditor
 		//	m_sizeIsDirty = true;
 		//}
 
-		public override void OnNodeLayout( DrawInfo drawInfo )
+		public override void OnNodeLayout( DrawInfo drawInfo, NodeUpdateCache cache )
 		{
-			base.OnNodeLayout( drawInfo );
+			base.OnNodeLayout( drawInfo, cache );
 
 			m_varRect = m_remainingBox;
 			m_varRect.width = 50 * drawInfo.InvertedZoom;

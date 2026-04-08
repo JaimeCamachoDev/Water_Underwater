@@ -23,7 +23,8 @@ namespace AmplifyShaderEditor
 			new Tuple<string, int>( "16.x", 160000 ),
 			new Tuple<string, int>( "17.0", 170000 ),
 			new Tuple<string, int>( "17.1", 170100 ),
-			new Tuple<string, int>( "17.2", 170200 )
+			new Tuple<string, int>( "17.2", 170200 ),
+			new Tuple<string, int>( "17.3", 170300 )
 		};
 
 		private static readonly string[] SRPTypeNames =

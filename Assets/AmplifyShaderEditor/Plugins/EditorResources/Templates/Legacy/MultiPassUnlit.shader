@@ -13,6 +13,7 @@ Shader /*ase_name*/ "Hidden/Built-In/Multi Pass Unlit" /*end*/
 		Cull Off
 		CGINCLUDE
 		#pragma target 3.5
+		#pragma exclude_renderers d3d9 // ensure rendering platforms toggle list is visible
 		ENDCG
 
 		/*ase_pass*/

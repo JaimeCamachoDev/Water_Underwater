@@ -73,6 +73,7 @@ namespace AmplifyShaderEditor
 
 		public override void OnDirtyProperty()
 		{
+			base.OnDirtyProperty();
 			UIUtils.UpdateFloatIntDataNode( UniqueId, PropertyInspectorName );
 		}
 
@@ -172,9 +173,9 @@ namespace AmplifyShaderEditor
 				PreviewMaterial.SetFloat( m_cachedPropertyId, m_defaultValue );
 		}
 
-		public override void OnNodeLayout( DrawInfo drawInfo )
+		public override void OnNodeLayout( DrawInfo drawInfo, NodeUpdateCache cache )
 		{
-			base.OnNodeLayout( drawInfo );
+			base.OnNodeLayout( drawInfo, cache );
 
 			if ( m_floatMode )
 			{
@@ -447,6 +448,11 @@ namespace AmplifyShaderEditor
 				return PropertyAttributes + PropertyAttributesSeparator + m_propertyName + "( \"" + m_propertyInspectorName +
 					"\", Range( " + min + ", " + max + " ) ) = " + value;
 			}
+		}
+
+		public override string GetDefaultValue()
+		{
+			return UIUtils.PropertyFloatToString( m_defaultValue );
 		}
 
 		public override void UpdateMaterial( Material mat )

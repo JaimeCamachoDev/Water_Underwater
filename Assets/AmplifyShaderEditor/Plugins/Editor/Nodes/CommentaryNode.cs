@@ -26,7 +26,7 @@ namespace AmplifyShaderEditor
 		private const float MIN_SIZE_X = 100;
 		private const float MIN_SIZE_Y = 100;
 		private const float COMMENTARY_BOX_HEIGHT = 30;
-		
+
 		private readonly Vector2 ResizeButtonPos = new Vector2( 1, 1 );
 
 		[SerializeField]
@@ -232,7 +232,7 @@ namespace AmplifyShaderEditor
 							other.RemoveNode( node );
 							addToNode = true;
 						}
-						
+
 					}
 				}
 
@@ -250,7 +250,7 @@ namespace AmplifyShaderEditor
 				}
 			}
 		}
-		
+
 		public override void DrawProperties()
 		{
 			base.DrawProperties();
@@ -274,7 +274,7 @@ namespace AmplifyShaderEditor
 			EditorGUILayout.HelpBox( InfoText, MessageType.Info );
 		}
 
-		public override void OnNodeLayout( DrawInfo drawInfo )
+		public override void OnNodeLayout( DrawInfo drawInfo, NodeUpdateCache cache )
 		{
 			if ( m_nodesIds.Count > 0 )
 			{
@@ -335,7 +335,7 @@ namespace AmplifyShaderEditor
 			m_resizeRightIconCoords.x = m_globalPosition.x + m_globalPosition.width - 1 - ( m_resizeIconTex.width + ResizeButtonPos.x ) * drawInfo.InvertedZoom;
 			m_resizeRightIconCoords.y = m_globalPosition.y + m_globalPosition.height - 2 - ( m_resizeIconTex.height + ResizeButtonPos.y ) * drawInfo.InvertedZoom;
 			m_resizeRightIconCoords.width = m_resizeIconTex.width * drawInfo.InvertedZoom;
-			m_resizeRightIconCoords.height = m_resizeIconTex.height * drawInfo.InvertedZoom;			
+			m_resizeRightIconCoords.height = m_resizeIconTex.height * drawInfo.InvertedZoom;
 		}
 
 		public override void OnNodeRepaint( DrawInfo drawInfo )
@@ -347,7 +347,7 @@ namespace AmplifyShaderEditor
 			// Background
 			GUI.color = Constants.NodeBodyColor * m_frameColor;
 			GUI.Label( m_globalPosition, string.Empty, UIUtils.GetCustomStyle( CustomStyle.CommentaryBackground ) );
-			
+
 			// Header
 			GUI.color = m_headerColor * m_headerColorModifier * m_frameColor;
 			GUI.Label( m_headerPosition, string.Empty, UIUtils.GetCustomStyle( CustomStyle.NodeHeader ) );
@@ -382,7 +382,7 @@ namespace AmplifyShaderEditor
 				GUI.Label( titleRect, m_titleText, UIUtils.GetCustomStyle( CustomStyle.CommentarySuperTitle ) );
 			}
 		}
-		
+
 		public override void Draw( DrawInfo drawInfo )
 		{
 			base.Draw( drawInfo );

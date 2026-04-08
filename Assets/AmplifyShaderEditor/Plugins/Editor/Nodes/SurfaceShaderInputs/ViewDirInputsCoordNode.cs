@@ -15,7 +15,7 @@ namespace AmplifyShaderEditor
 	}
 
 	[Serializable]
-	[NodeAttributes( "View Dir", "Camera And Screen", "Normalized View Direction vector.", tags: "camera vector" )]
+	[NodeAttributes( "View Direction", "Camera And Screen", "Normalized View Direction vector.", tags: "camera vector" )]
 	public sealed class ViewDirInputsCoordNode : SurfaceShaderINParentNode
 	{
 		private const string SpaceStr = "Space";

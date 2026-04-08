@@ -415,9 +415,9 @@ namespace AmplifyShaderEditor
 			}
 		}
 
-		public override void OnNodeLayout( DrawInfo drawInfo )
+		public override void OnNodeLayout( DrawInfo drawInfo, NodeUpdateCache cache )
 		{
-			base.OnNodeLayout( drawInfo );
+			base.OnNodeLayout( drawInfo, cache );
 			m_titleClickArea = m_titlePos;
 			m_titleClickArea.height = Constants.NODE_HEADER_HEIGHT;
 		}
@@ -1882,6 +1882,21 @@ namespace AmplifyShaderEditor
 			{
 				m_outputPorts[ 0 ].ChangeType( m_inputPorts[ 0 ].DataType , false );
 			}
+		}
+
+		public override void ReconnectClipboardReferences( Clipboard clipboard )
+		{
+			int dependencyCount = m_dependencies.Count;
+			for ( int i = 0; i < dependencyCount; i++ )
+			{
+				// validate node first
+				int newId = clipboard.GeNewNodeId( m_dependencies[ i ].DependencyNodeId );
+				if ( ContainerGraph.GetNode( newId ) != null )
+				{
+					m_dependencies[ i ].DependencyNodeId = newId;
+				}
+			}
+			RefreshExternalReferences();
 		}
 
 		public override void FireTimedUpdate()

@@ -45,7 +45,7 @@ namespace AmplifyShaderEditor
 		{
 			if( outputId > 0 && dataCollector.IsTemplate )
 			{
-				if( dataCollector.TemplateDataCollectorInstance.IsHDRP || dataCollector.TemplateDataCollectorInstance.IsLWRP )
+				if( dataCollector.TemplateDataCollectorInstance.IsHDRP || dataCollector.TemplateDataCollectorInstance.IsURP )
 					return SRPTime[ outputId - 1 ];
 			}
 

@@ -2,6 +2,7 @@
 // Copyright (c) Amplify Creations, Lda <info@amplify.pt>
 
 using System;
+using UnityEngine;
 
 namespace AmplifyShaderEditor
 {
@@ -12,6 +13,7 @@ namespace AmplifyShaderEditor
 		public string PropertyName;
 		public WirePortDataType PropertyDataType;
 		public PropertyType PropertyType;
+		public PrecisionType PrecisionType;
 
 		public int Index;
 		public string FullValue;
@@ -23,7 +25,7 @@ namespace AmplifyShaderEditor
 		public int SubShaderId;
 		public int PassId;
 
-		public TemplateShaderPropertyData( int index, string fullValue, string identation, string propertyInspectorName, string propertyName, WirePortDataType propertyDataType, PropertyType propertyType,int subShaderId, int passId, bool isMacro = false )
+		public TemplateShaderPropertyData( int index, string fullValue, string identation, string propertyInspectorName, string propertyName, WirePortDataType propertyDataType, PropertyType propertyType,int subShaderId, int passId, bool isMacro = false, PrecisionType precisionType = PrecisionType.Float )
 		{
 			Index = index;
 			FullValue = fullValue;
@@ -37,6 +39,7 @@ namespace AmplifyShaderEditor
 			IsMacro = isMacro;
 			SubShaderId = subShaderId;
 			PassId = passId;
+			PrecisionType = precisionType;
 		}
 
 		public string CreatePropertyForValue( string value )

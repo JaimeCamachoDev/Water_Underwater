@@ -13,6 +13,7 @@ namespace AmplifyShaderEditor
 	{
 		private const string ZWriteFormatter = "ZWrite {0}\n";
 		private const string ZTestFormatter = "ZTest {0}\n";
+		private const string ZClipFormatter = "ZClip {0}\n";
 
 		[SerializeField]
 		private bool m_validZTest = false;
@@ -25,6 +26,12 @@ namespace AmplifyShaderEditor
 
 		[SerializeField]
 		private InlineProperty m_zWriteMode = new InlineProperty( 0 );
+
+		[SerializeField]
+		private bool m_validZClip = false;
+
+		[SerializeField]
+		private InlineProperty m_zClipMode = new InlineProperty( 0 );
 
 		[SerializeField]
 		private InlineProperty m_offsetFactor = new InlineProperty( 0 );
@@ -47,11 +54,13 @@ namespace AmplifyShaderEditor
 				m_independentModule = other.IndependentModule;
 				m_validZTest = other.ValidZTest;
 				m_validZWrite = other.ValidZWrite;
+				m_validZClip = other.ValidZClip;
 				m_validOffset = other.ValidOffset;
 			}
 
 			m_zTestMode.CopyFrom( other.ZTestMode );
 			m_zWriteMode.CopyFrom( other.ZWriteMode );
+			m_zClipMode.CopyFrom( other.ZClipMode );
 			m_offsetFactor.CopyFrom( other.OffsetFactor );
 			m_offsetUnits.CopyFrom( other.OffsetUnits );
 			m_offsetEnabled = other.OffsetEnabled;
@@ -73,8 +82,6 @@ namespace AmplifyShaderEditor
 				}
 			}
 
-
-
 			if( depthData.ValidZWrite && m_validZWrite != depthData.ValidZWrite )
 			{
 				if( string.IsNullOrEmpty( depthData.ZWriteInlineValue ) )
@@ -85,6 +92,19 @@ namespace AmplifyShaderEditor
 				else
 				{
 					m_zWriteMode.SetInlineByName( depthData.ZWriteInlineValue );
+				}
+			}
+
+			if( depthData.ValidZClip && m_validZClip != depthData.ValidZClip )
+			{
+				if( string.IsNullOrEmpty( depthData.ZClipInlineValue ) )
+				{
+					m_zClipMode.IntValue = ZBufferOpHelper.ZClipModeDict[ depthData.ZClipModeValue ];
+					m_zClipMode.ResetProperty();
+				}
+				else
+				{
+					m_zClipMode.SetInlineByName( depthData.ZClipInlineValue );
 				}
 			}
 
@@ -114,8 +134,9 @@ namespace AmplifyShaderEditor
 
 			m_validZTest = depthData.ValidZTest;
 			m_validZWrite = depthData.ValidZWrite;
+			m_validZClip = depthData.ValidZClip;
 			m_validOffset = depthData.ValidOffset;
-			m_validData = m_validZTest || m_validZWrite || m_validOffset;
+			m_validData = m_validZTest || m_validZWrite || m_validZClip || m_validOffset;
 		}
 
 		public override void ShowUnreadableDataMessage( ParentNode owner )
@@ -166,6 +187,8 @@ namespace AmplifyShaderEditor
 			if( m_validZTest )
 				m_zTestMode.EnumTypePopup( ref owner, ZBufferOpHelper.ZTestModeStr, ZBufferOpHelper.ZTestModeLabels );
 
+			if( m_validZClip )
+				m_zClipMode.EnumTypePopup( ref owner, ZBufferOpHelper.ZClipModeStr, ZBufferOpHelper.ZClipModeValues );
 
 			if( m_validOffset )
 			{
@@ -206,6 +229,20 @@ namespace AmplifyShaderEditor
 				{
 					m_zWriteMode.ReadFromString( ref index, ref nodeParams );
 				}
+			}
+		}
+
+		public void ReadZClipFromString( ref uint index, ref string[] nodeParams )
+		{
+			bool validDataOnMeta = m_validZClip;
+			if( UIUtils.CurrentShaderVersion() > TemplatesManager.MPShaderVersion )
+			{
+				validDataOnMeta = Convert.ToBoolean( nodeParams[ index++ ] );
+			}
+
+			if( validDataOnMeta )
+			{
+				m_zClipMode.ReadFromString( ref index, ref nodeParams );
 			}
 		}
 
@@ -260,6 +297,11 @@ namespace AmplifyShaderEditor
 			ReadZWriteFromString( ref index, ref nodeParams );
 			ReadZTestFromString( ref index, ref nodeParams );
 			ReadOffsetFromString( ref index, ref nodeParams );
+
+			if ( UIUtils.CurrentShaderVersion() >= 19906 )
+			{
+				ReadZClipFromString( ref index, ref nodeParams );
+			}
 		}
 
 		public void WriteZWriteToString( ref string nodeInfo )
@@ -268,6 +310,13 @@ namespace AmplifyShaderEditor
 			IOUtils.AddFieldValueToString( ref nodeInfo, m_validZWrite );
 			if( m_validZWrite )
 				m_zWriteMode.WriteToString( ref nodeInfo );
+		}
+
+		public void WriteZClipToString( ref string nodeInfo )
+		{
+			IOUtils.AddFieldValueToString( ref nodeInfo, m_validZClip );
+			if( m_validZClip )
+				m_zClipMode.WriteToString( ref nodeInfo );
 		}
 
 		public void WriteZTestToString( ref string nodeInfo )
@@ -293,9 +342,11 @@ namespace AmplifyShaderEditor
 			WriteZWriteToString( ref nodeInfo );
 			WriteZTestToString( ref nodeInfo );
 			WriteOffsetToString( ref nodeInfo );
+			WriteZClipToString( ref nodeInfo );
 		}
 
-		public bool IsActive { get { return ( m_zTestMode.IsValid || m_zTestMode.IntValue != 0 ) || ( m_zWriteMode.IsValid || m_zWriteMode.IntValue != 0 ) || m_offsetEnabled; } }
+		public bool IsActive { get { return	( m_zTestMode.IsValid || m_zTestMode.IntValue != 0 ) || ( m_zWriteMode.IsValid || m_zWriteMode.IntValue != 0 ) || ( m_zClipMode.IsValid || m_zClipMode.IntValue != 0 ) || m_offsetEnabled; } }
+
 		public string CurrentZWriteMode
 		{
 			get
@@ -309,6 +360,21 @@ namespace AmplifyShaderEditor
 				return string.Format( ZWriteFormatter, ZBufferOpHelper.ZWriteModeValues[ finalZWrite ] ); ;
 			}
 		}
+
+		public string CurrentZClipMode
+		{
+			get
+			{
+				if( m_zClipMode.IsValid )
+				{
+					return string.Format( ZClipFormatter, m_zClipMode.GetValueOrProperty() ); ;
+				}
+
+				int finalZClip = ( m_zClipMode.IntValue == 0 ) ? 1 : m_zClipMode.IntValue;
+				return string.Format( ZClipFormatter, ZBufferOpHelper.ZClipModeValues[ finalZClip ] ); ;
+			}
+		}
+
 		public string CurrentZTestMode
 		{
 			get
@@ -334,13 +400,14 @@ namespace AmplifyShaderEditor
 
 		public bool ValidZTest { get { return m_validZTest; } }
 		public bool ValidZWrite { get { return m_validZWrite; } }
+		public bool ValidZClip { get { return m_validZClip; } }
 		public bool ValidOffset { get { return m_validOffset; } }
 		public InlineProperty ZTestMode { get { return m_zTestMode; } }
 		public InlineProperty ZWriteMode { get { return m_zWriteMode; } }
+		public InlineProperty ZClipMode { get { return m_zClipMode; } }
 		public InlineProperty OffsetFactor { get { return m_offsetFactor; } }
 		public InlineProperty OffsetUnits { get { return m_offsetUnits; } }
 		public bool OffsetEnabled { get { return m_offsetEnabled; } }
-
 
 		public ZTestMode ZTestModeValue
 		{
@@ -366,6 +433,18 @@ namespace AmplifyShaderEditor
 				return (ZWriteMode)( m_zWriteMode.IntValue - 1 );
 			}
 		}
+		public ZClipMode ZClipModeValue
+		{
+			set
+			{
+				m_zClipMode.IntValue = ZBufferOpHelper.ZClipModeDict[ value ];
+				m_zClipMode.Active = false;
+			}
+			get
+			{
+				return (ZClipMode)( m_zClipMode.IntValue - 1 );
+			}
+		}
 		public float OffsetFactorValue
 		{
 			set
@@ -379,7 +458,6 @@ namespace AmplifyShaderEditor
 				return m_offsetFactor.FloatValue;
 			}
 		}
-
 		public float OffsetUnitsValue
 		{
 			set

@@ -36,22 +36,22 @@ Shader "Hidden/SamplerNode"
 
 			float4 frag( v2f_img i ) : SV_Target
 			{
-				const float3 white = float3( 1, 1, 1 );
-				const float3 black = float3( 0, 0, 0 );
-				const float3 grey = GammaToLinearSpace( 127.0 / 255.0 ).xxx;
-				const float3 bump = float3( 0.5, 0.5, 1 );
-				const float3 linearGrey = ( 127.0 / 255.0 ).xxx;
-				const float3 red = float3( 1, 0, 0 );
+				const float4 white = float4( 1, 1, 1, 1 );
+				const float4 black = float4( 0, 0, 0, 0 );
+				const float4 grey = float4( 0.214, 0.214, 0.214, 0.5 ); // sRGB gray
+				const float4 bump = float4( 0.5, 0.5, 1, 1 );
+				const float4 linearGrey = float4( 0.5, 0.5, 0.5, 0.5 );
+				const float4 red = float4( 1, 0, 0, 0 );
 
-				float4 result = float4( 0, 0, 0, 1 );
+				float4 result = 1;
 				switch ( _Default )
 				{
-					case 1: result.rgb = white; break;
-					case 2: result.rgb = black; break;
-					case 3: result.rgb = grey; break;
-					case 4: result.rgb = ( _Unpack == 1 ) ? UnpackScaleNormal( bump.xxyy, tex2D( _F, i.uv ).r ) : bump; break;
-					case 5: result.rgb = linearGrey; break;
-					case 6: result.rgb = red; break;
+					case 1: result = white; break;
+					case 2: result = black; break;
+					case 3: result = grey; break;
+					case 4: result = ( _Unpack == 1 ) ? float4( UnpackScaleNormal( bump, tex2D( _F, i.uv ).r ), bump.a ) : bump; break;
+					case 5: result = linearGrey; break;
+					case 6: result = red; break;
 				}
 				return result;
 			}
@@ -124,7 +124,7 @@ Shader "Hidden/SamplerNode"
 						c = tex2D (_Sampler, uvs);
 					}
 
-					if (_Unpack == 1) 
+					if (_Unpack == 1)
 					{
 						float nscale = tex2D (_F, i.uv).r;
 						c.rgb = UnpackScaleNormal (c, nscale);

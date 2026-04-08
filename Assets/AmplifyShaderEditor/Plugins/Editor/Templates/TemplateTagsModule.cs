@@ -58,7 +58,7 @@ namespace AmplifyShaderEditor
 				int count = tagsData.Tags.Count;
 				for( int i = 0; i < count; i++ )
 				{
-					CustomTagData tagData = new CustomTagData( tagsData.Tags[ i ].Name, tagsData.Tags[ i ].Value, i );
+					CustomTagData tagData = new CustomTagData( tagsData.Tags[ i ].Name, tagsData.Tags[ i ].Value, tagsData.Tags[ i ].Immutable, i );
 					m_availableTags.Add( tagData );
 					m_availableTagsDict.Add( tagsData.Tags[ i ].Name, tagData );
 				}
@@ -279,7 +279,6 @@ namespace AmplifyShaderEditor
 						}
 						case TemplateSpecialTags.Queue:
 						{
-							
 							m_availableTags[ i ].RenderQueue = TemplateHelperFunctions.StringToRenderQueue[ item.ActionData ];
 							m_availableTags[ i ].RenderQueueOffset = item.ActionDataIdx;
 							m_availableTags[ i ].BuildQueueTagValue();
@@ -333,7 +332,7 @@ namespace AmplifyShaderEditor
 					m_availableTags.Add( tagData );
 					m_availableTagsDict.Add( name, tagData );
 				}
-				else
+				else if ( !m_availableTagsDict[ name ].TagImmutable )
 				{
 					if( m_availableTagsDict[ name ].TagId > -1 &&
 						m_availableTagsDict[ name ].TagId < m_availableTags.Count )
@@ -346,7 +345,6 @@ namespace AmplifyShaderEditor
 						{
 							m_availableTags[ m_availableTagsDict[ name ].TagId ].SetTagValue( value );
 						}
-
 					}
 					else
 					{
@@ -437,6 +435,18 @@ namespace AmplifyShaderEditor
 		}
 
 		public List<CustomTagData> AvailableTags { get { return m_availableTags; } }
+
+		public bool HasTag( string tagName, string tagValue = "" )
+		{
+			foreach ( var tag in m_availableTags )
+			{
+				if ( tag.TagName.Equals( tagName ) )
+				{
+					return string.IsNullOrEmpty( tagValue ) ? true : tag.TagValue.Equals( tagValue );
+				}
+			}
+			return false;
+		}
 
 		public bool HasRenderInfo( ref RenderType renderType, ref RenderQueue renderQueue )
 		{

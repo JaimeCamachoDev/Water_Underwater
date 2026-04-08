@@ -5,9 +5,11 @@ using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEditor;
+using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -35,16 +37,17 @@ namespace AmplifyShaderEditor
 	public enum ASESRPBaseline
 	{
 		ASE_SRP_INVALID = 0,
-		ASE_SRP_10_0 = 100000,
-		ASE_SRP_11_0 = 110000,
-		ASE_SRP_12_0 = 120000,
-		ASE_SRP_13_0 = 130000,
-		ASE_SRP_14_0 = 140000,
-		ASE_SRP_15_0 = 150000,
-		ASE_SRP_16_0 = 160000,
+		ASE_SRP_10_X = 100000,
+		ASE_SRP_11_X = 110000,
+		ASE_SRP_12_X = 120000,
+		ASE_SRP_13_X = 130000,
+		ASE_SRP_14_X = 140000,
+		ASE_SRP_15_X = 150000,
+		ASE_SRP_16_X = 160000,
 		ASE_SRP_17_0 = 170000,
 		ASE_SRP_17_1 = 170100,
-		ASE_SRP_17_2 = 170200
+		ASE_SRP_17_2 = 170200,
+		ASE_SRP_17_3 = 170300
 	}
 
 	public class ASESRPPackageDesc
@@ -65,28 +68,29 @@ namespace AmplifyShaderEditor
 	[InitializeOnLoad]
 	public static class ASEPackageManagerHelper
 	{
-		private static string URPPackageId  = "com.unity.render-pipelines.universal";
-		private static string HDRPPackageId = "com.unity.render-pipelines.high-definition";
+		public static readonly string URPPackageId  = "com.unity.render-pipelines.universal";
+		public static readonly string HDRPPackageId = "com.unity.render-pipelines.high-definition";
 
-		private static string NewVersionDetectedFormat = "A new {0} version {1} was detected and new templates are being imported.\nPlease hit the Update button on your ASE canvas to recompile your shader under the newest version.";
-		private static string PackageBaseFormat = "ASE_PkgBase_{0}_{1}";
-		private static string PackageCRCFormat = "ASE_PkgCRC_{0}_{1}";
+		private static readonly string NewVersionDetectedFormat = "A new {0} version {1} was detected and new templates are being imported.\nPlease hit the Update button on your ASE canvas to recompile your shader under the newest version.";
+		private static readonly string PackageBaseFormat = "ASE_PkgBase_{0}_{1}";
+		private static readonly string PackageCRCFormat = "ASE_PkgCRC_{0}_{1}";
 
-		private static string SRPKeywordFormat = "ASE_SRP_VERSION {0}";
-		private static string ASEVersionKeywordFormat = "ASE_VERSION {0}";
+		private static readonly string SRPKeywordFormat = "ASE_SRP_VERSION {0}";
+		private static readonly string ASEVersionKeywordFormat = "ASE_VERSION {0}";
 
-		private static Dictionary<int, ASESRPPackageDesc> m_srpPackageSupport = new Dictionary<int,ASESRPPackageDesc>()
+		public static readonly Dictionary<int, ASESRPPackageDesc> SRPPackageSupport = new Dictionary<int,ASESRPPackageDesc>()
 		{
-			{ ( int )ASESRPBaseline.ASE_SRP_10_0, new ASESRPPackageDesc( ASESRPBaseline.ASE_SRP_10_0, "b460b52e6c1feae45b70b7ddc2c45bd6", "2243c8b4e1ab6914995699133f67ab5a" ) },
-			{ ( int )ASESRPBaseline.ASE_SRP_11_0, new ASESRPPackageDesc( ASESRPBaseline.ASE_SRP_11_0, "b460b52e6c1feae45b70b7ddc2c45bd6", "2243c8b4e1ab6914995699133f67ab5a" ) },
-			{ ( int )ASESRPBaseline.ASE_SRP_12_0, new ASESRPPackageDesc( ASESRPBaseline.ASE_SRP_12_0, "57fcea0ed8b5eb347923c4c21fa31b57", "9a5e61a8b3421b944863d0946e32da0a" ) },
-			{ ( int )ASESRPBaseline.ASE_SRP_13_0, new ASESRPPackageDesc( ASESRPBaseline.ASE_SRP_13_0, "57fcea0ed8b5eb347923c4c21fa31b57", "9a5e61a8b3421b944863d0946e32da0a" ) },
-			{ ( int )ASESRPBaseline.ASE_SRP_14_0, new ASESRPPackageDesc( ASESRPBaseline.ASE_SRP_14_0, "2e9da72e7e3196146bf7d27450013734", "89f0b84148d149d4d96b838d7ef60e92" ) },
-			{ ( int )ASESRPBaseline.ASE_SRP_15_0, new ASESRPPackageDesc( ASESRPBaseline.ASE_SRP_15_0, "0904cdf24ddcd5042b024326476220d5", "19939ee2cdb76e0489b1b8cd4bed7f3d" ) },
-			{ ( int )ASESRPBaseline.ASE_SRP_16_0, new ASESRPPackageDesc( ASESRPBaseline.ASE_SRP_16_0, "929783250050f8a448821b6ca1f2c578", "70777e8ce9f3c8d4a8182ca2f965cdb2" ) },
-			{ ( int )ASESRPBaseline.ASE_SRP_17_0, new ASESRPPackageDesc( ASESRPBaseline.ASE_SRP_17_0, "89da50d95d149b744bf10bd27babcf79", "daf511a6dae20e641a9d69d025f023e4" ) },
+			{ ( int )ASESRPBaseline.ASE_SRP_10_X, new ASESRPPackageDesc( ASESRPBaseline.ASE_SRP_10_X, "b460b52e6c1feae45b70b7ddc2c45bd6", "2243c8b4e1ab6914995699133f67ab5a" ) },
+			{ ( int )ASESRPBaseline.ASE_SRP_11_X, new ASESRPPackageDesc( ASESRPBaseline.ASE_SRP_11_X, "b460b52e6c1feae45b70b7ddc2c45bd6", "2243c8b4e1ab6914995699133f67ab5a" ) },
+			{ ( int )ASESRPBaseline.ASE_SRP_12_X, new ASESRPPackageDesc( ASESRPBaseline.ASE_SRP_12_X, "57fcea0ed8b5eb347923c4c21fa31b57", "9a5e61a8b3421b944863d0946e32da0a" ) },
+			{ ( int )ASESRPBaseline.ASE_SRP_13_X, new ASESRPPackageDesc( ASESRPBaseline.ASE_SRP_13_X, "57fcea0ed8b5eb347923c4c21fa31b57", "9a5e61a8b3421b944863d0946e32da0a" ) },
+			{ ( int )ASESRPBaseline.ASE_SRP_14_X, new ASESRPPackageDesc( ASESRPBaseline.ASE_SRP_14_X, "2e9da72e7e3196146bf7d27450013734", "89f0b84148d149d4d96b838d7ef60e92" ) },
+			{ ( int )ASESRPBaseline.ASE_SRP_15_X, new ASESRPPackageDesc( ASESRPBaseline.ASE_SRP_15_X, "0904cdf24ddcd5042b024326476220d5", "19939ee2cdb76e0489b1b8cd4bed7f3d" ) },
+			{ ( int )ASESRPBaseline.ASE_SRP_16_X, new ASESRPPackageDesc( ASESRPBaseline.ASE_SRP_16_X, "929783250050f8a448821b6ca1f2c578", "70777e8ce9f3c8d4a8182ca2f965cdb2" ) },
+			{ ( int )ASESRPBaseline.ASE_SRP_17_0, new ASESRPPackageDesc( ASESRPBaseline.ASE_SRP_17_0, "fcc4d2eb0af82e546ae75506872cf092", "ba281a1a00c8ac54c914e0763299f637" ) },
 			{ ( int )ASESRPBaseline.ASE_SRP_17_1, new ASESRPPackageDesc( ASESRPBaseline.ASE_SRP_17_1, "cd0a0171c5157b748afe763b89f71211", "e6fc8948257acee42b666d0bfe1d782c" ) },
 			{ ( int )ASESRPBaseline.ASE_SRP_17_2, new ASESRPPackageDesc( ASESRPBaseline.ASE_SRP_17_2, "f4990f6ace6142c4bbbf41cdd80b0bd3", "4b5cb8698f2d9c14fadf8e2383441d37" ) },
+			{ ( int )ASESRPBaseline.ASE_SRP_17_3, new ASESRPPackageDesc( ASESRPBaseline.ASE_SRP_17_3, "b688bec486aafb24fa0e3dc57afaedb2", "5a07a5a188dd6fa42a63eb43dac1ad38" ) },
 		};
 
 		private static Shader m_lateShader;
@@ -134,14 +138,17 @@ namespace AmplifyShaderEditor
 			}
 		}
 
-		static ASEPackageManagerHelper()
+		public static void Initialize()
 		{
-			RequestInfo( true );
+			if ( !RequestInfoNow() )
+			{
+				RequestInfo( true );
+			}
 		}
 
 		static void WaitForPackageListBeforeUpdating()
 		{
-			if ( m_packageListRequest.IsCompleted )
+			if ( !Application.isPlaying && m_packageListRequest.IsCompleted && m_packageListRequest.Status == StatusCode.Success )
 			{
 				Update();
 				EditorApplication.update -= WaitForPackageListBeforeUpdating;
@@ -150,7 +157,7 @@ namespace AmplifyShaderEditor
 
 		public static void RequestInfo( bool updateWhileWaiting = false )
 		{
-			if ( !m_requireUpdateList && m_importingPackage == ASEImportFlags.None )
+			if ( !Application.isPlaying && !m_requireUpdateList && m_importingPackage == ASEImportFlags.None )
 			{
 				m_requireUpdateList = true;
 				m_packageListRequest = UnityEditor.PackageManager.Client.List( true );
@@ -159,6 +166,33 @@ namespace AmplifyShaderEditor
 					EditorApplication.update += WaitForPackageListBeforeUpdating;
 				}
 			}
+		}
+
+		public static bool RequestInfoNow()
+		{
+			UnityEditor.PackageManager.PackageInfo[] packages = null;
+			bool succeeded = true;
+
+		#if UNITY_2021_1_OR_NEWER
+			packages = UnityEditor.PackageManager.PackageInfo.GetAllRegisteredPackages();
+		#else
+			var request = UnityEditor.PackageManager.Client.List( true );
+			while ( !request.IsCompleted && request.Status == StatusCode.InProgress )
+			{
+			}
+			if ( request.Status == StatusCode.Success )
+			{
+				succeeded = ( request.Status == StatusCode.Success );
+				packages = request.Result.ToArray();
+			}
+		#endif
+
+			if ( succeeded )
+			{
+				UpdateNow( packages );
+			}
+
+			return succeeded;
 		}
 
 		static void FailedPackageImport( string packageName, string errorMessage )
@@ -318,7 +352,7 @@ namespace AmplifyShaderEditor
 
 		private static readonly string SemVerPattern = @"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$";
 
-		private static int PackageVersionStringToCode( string version, out int major, out int minor, out int patch )
+		public static int PackageVersionStringToCode( string version, out int major, out int minor, out int patch )
 		{
 			MatchCollection matches = Regex.Matches( version, SemVerPattern, RegexOptions.Multiline );
 
@@ -334,14 +368,14 @@ namespace AmplifyShaderEditor
 			return versionCode;
 		}
 
-		private static void CodeToPackageVersionElements( int versionCode, out int major, out int minor, out int patch )
+		public static void CodeToPackageVersionElements( int versionCode, out int major, out int minor, out int patch )
 		{
 			major = versionCode / 10000;
 			minor = versionCode / 100 - major * 100;
 			patch = versionCode - ( versionCode / 100 ) * 100;
 		}
 
-		private static int PackageVersionElementsToCode( int major, int minor, int patch )
+		public static int PackageVersionElementsToCode( int major, int minor, int patch )
 		{
 			return major * 10000 + minor * 100 + patch;
 		}
@@ -398,45 +432,58 @@ namespace AmplifyShaderEditor
 			}
 		}
 
+		private static void CheckPackage( UnityEditor.PackageManager.PackageInfo package )
+		{
+			int version = PackageVersionStringToCode( package.version, out int major, out int minor, out int patch );
+
+			int baselineMajor = major;
+			int baselineMinor = ( major >= 17 ) ? minor: 0; // from 17+ baseline includes minor version
+			int baseline = PackageVersionElementsToCode( baselineMajor, baselineMinor, 0 );
+
+			ASESRPPackageDesc match;
+
+			if ( package.name.Equals( URPPackageId ) && SRPPackageSupport.TryGetValue( baseline, out match ) )
+			{
+				// Universal Rendering Pipeline
+				m_currentURPBaseline = match.baseline;
+				m_packageURPVersion = version;
+				m_urpPackageInfo = package;
+
+				CheckPackageImport( ASEImportFlags.URP, match.baseline, match.guidURP, package.version );
+			}
+			else if ( package.name.Equals( HDRPPackageId ) && SRPPackageSupport.TryGetValue( baseline, out match ) )
+			{
+				// High-Definition Rendering Pipeline
+				m_currentHDRPBaseline = match.baseline;
+				m_packageHDRPVersion = version;
+				m_hdrpPackageInfo = package;
+
+				CheckPackageImport( ASEImportFlags.HDRP, match.baseline, match.guidHDRP, package.version );
+			}
+		}
+
 		public static void Update()
 		{
 			CheckLatePackageImport();
 
-			if ( m_requireUpdateList && m_importingPackage == ASEImportFlags.None )
+			if ( !Application.isPlaying && m_requireUpdateList && m_importingPackage == ASEImportFlags.None )
 			{
-				if ( m_packageListRequest != null && m_packageListRequest.IsCompleted && m_packageListRequest.Result != null )
+				if ( m_packageListRequest != null && m_packageListRequest.IsCompleted && m_packageListRequest.Status == StatusCode.Success && m_packageListRequest.Result != null )
 				{
 					m_requireUpdateList = false;
-					foreach ( UnityEditor.PackageManager.PackageInfo pi in m_packageListRequest.Result )
+					foreach ( UnityEditor.PackageManager.PackageInfo package in m_packageListRequest.Result )
 					{
-						int version = PackageVersionStringToCode( pi.version, out int major, out int minor, out int patch );
-
-						int baselineMajor = major;
-						int baselineMinor = ( major >= 17 ) ? minor: 0; // from 17+ baseline includes minor version
-						int baseline = PackageVersionElementsToCode( baselineMajor, baselineMinor, 0 );
-
-						ASESRPPackageDesc match;
-
-						if ( pi.name.Equals( URPPackageId ) && m_srpPackageSupport.TryGetValue( baseline, out match ) )
-						{
-							// Universal Rendering Pipeline
-							m_currentURPBaseline = match.baseline;
-							m_packageURPVersion = version;
-							m_urpPackageInfo = pi;
-
-							CheckPackageImport( ASEImportFlags.URP, match.baseline, match.guidURP, pi.version );
-						}
-						else if ( pi.name.Equals( HDRPPackageId ) && m_srpPackageSupport.TryGetValue( baseline, out match ) )
-						{
-							// High-Definition Rendering Pipeline
-							m_currentHDRPBaseline = match.baseline;
-							m_packageHDRPVersion = version;
-							m_hdrpPackageInfo = pi;
-
-							CheckPackageImport( ASEImportFlags.HDRP, match.baseline, match.guidHDRP, pi.version );
-						}
+						CheckPackage( package );
 					}
 				}
+			}
+		}
+
+		public static void UpdateNow( UnityEditor.PackageManager.PackageInfo[] packages )
+		{
+			foreach ( UnityEditor.PackageManager.PackageInfo package in packages )
+			{
+				CheckPackage( package );
 			}
 		}
 

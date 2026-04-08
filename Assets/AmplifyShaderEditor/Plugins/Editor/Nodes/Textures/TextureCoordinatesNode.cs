@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace AmplifyShaderEditor
 {
 	[Serializable]
-	[NodeAttributes( "Texture Coordinates", "UV Coordinates", "Texture UV coordinates set, if <b>Tex</b> is connected to a texture object it will use that texture scale factors, otherwise uses <b>Tilling</b> and <b>Offset</b> port values", null, KeyCode.U, tags: "uv" )]
+	[NodeAttributes( "Texture Coordinates", "UV Coordinates", "Texture UV coordinates set, if <b>Tex</b> is connected to a texture object it will use that texture scale factors, otherwise uses <b>Tilling</b> and <b>Offset</b> port values", null, KeyCode.U, tags: "uv texcoord" )]
 	public sealed class TextureCoordinatesNode : ParentNode
 	{
 
@@ -345,14 +345,19 @@ namespace AmplifyShaderEditor
 			}
 		}
 
+		public override void ReconnectClipboardReferences( Clipboard clipboard )
+		{
+			// validate node first
+			int newId = clipboard.GeNewNodeId( m_referenceNodeId );
+			if ( ContainerGraph.GetNode( newId ) != null )
+			{
+				m_referenceNodeId = newId;
+			}
+			RefreshExternalReferences();
+		}
+
 		public override void PropagateNodeData( NodeData nodeData, ref MasterNodeDataCollector dataCollector )
 		{
-			if( dataCollector != null && dataCollector.TesselationActive )
-			{
-				base.PropagateNodeData( nodeData, ref dataCollector );
-				return;
-			}
-
 			if( dataCollector.IsTemplate )
 			{
 				dataCollector.TemplateDataCollectorInstance.SetUVUsage( m_textureCoordChannel , m_texcoordSize );
@@ -427,17 +432,19 @@ namespace AmplifyShaderEditor
 			string tiling = string.Empty;
 			string offset = string.Empty;
 
+			TexturePropertyNode textureProperty = null;
 			string portProperty = string.Empty;
 			if( m_texPort.IsConnected )
 			{
+				textureProperty = m_texPort.GetOutputNodeWhichIsNotRelay( 0 ) as TexturePropertyNode;
 				portProperty = m_texPort.GeneratePortInstructions( ref dataCollector );
 			}
 			else if( m_referenceArrayId > -1 )
 			{
-				TexturePropertyNode temp = UIUtils.GetTexturePropertyNode( m_referenceArrayId );
-				if( temp != null )
+				textureProperty = UIUtils.GetTexturePropertyNode( m_referenceArrayId );
+				if( textureProperty != null )
 				{
-					portProperty = temp.BaseGenerateShaderForOutput( outputId, ref dataCollector, ignoreLocalVar );
+					portProperty = textureProperty.BaseGenerateShaderForOutput( outputId, ref dataCollector, ignoreLocalVar );
 				}
 			}
 
@@ -484,17 +491,11 @@ namespace AmplifyShaderEditor
 						m_texCoordsHelper.ContainerGraph = ContainerGraph;
 						m_texCoordsHelper.SetBaseUniqueId( UniqueId, true );
 						m_texCoordsHelper.RegisterPropertyOnInstancing = false;
-						m_texCoordsHelper.AddGlobalToSRPBatcher = true;
 					}
 
-					if( UIUtils.CurrentWindow.OutsideGraph.IsInstancedShader )
-					{
-						m_texCoordsHelper.CurrentParameterType = PropertyType.InstancedProperty;
-					}
-					else
-					{
-						m_texCoordsHelper.CurrentParameterType = PropertyType.Global;
-					}
+					m_texCoordsHelper.AddGlobalToSRPBatcher = ( textureProperty != null ) ? ( textureProperty.CurrentParameterType != PropertyType.Global ) : true;
+					m_texCoordsHelper.CurrentParameterType = PropertyType.Global;
+
 					m_texCoordsHelper.ResetOutputLocals();
 					m_texCoordsHelper.SetRawPropertyName( dummyPropertyTexcoords );
 					dummyPropertyTexcoords = m_texCoordsHelper.GenerateShaderForOutput( 0, ref dataCollector, false );

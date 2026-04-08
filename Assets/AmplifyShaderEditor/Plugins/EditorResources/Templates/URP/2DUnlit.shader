@@ -1,8 +1,9 @@
-Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
+Shader /*ase_name*/ "Hidden/Universal/Sprite Unlit" /*end*/
 {
 	Properties
 	{
 		/*ase_props*/
+
 		[HideInInspector][NoScaleOffset] unity_Lightmaps("unity_Lightmaps", 2DArray) = "" {}
         [HideInInspector][NoScaleOffset] unity_LightmapsInd("unity_LightmapsInd", 2DArray) = "" {}
         [HideInInspector][NoScaleOffset] unity_ShadowMasks("unity_ShadowMasks", 2DArray) = "" {}
@@ -11,24 +12,44 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 	SubShader
 	{
 		/*ase_subshader_options:Name=Additional Options
+			Option:Alpha Clipping:false,true:false
+				true:SetDefine:ALPHA_CLIP_THRESHOLD
+				true:ShowPort:Alpha Clip Threshold
+				false,disable:RemoveDefine:ALPHA_CLIP_THRESHOLD
+				false,disable:HidePort:Alpha Clip Threshold
+			Option:Disable Color Tint:false,true:true
+				true:SetDefine:_DISABLE_COLOR_TINT
+				false,disable:RemoveDefine:_DISABLE_COLOR_TINT
 			Option:Vertex Position:Absolute,Relative:Relative
 				Absolute:SetDefine:ASE_ABSOLUTE_VERTEX_POS 1
-				Absolute:SetPortName:Sprite Unlit:3,Vertex Position
+				Absolute:SetPortName:_Vertex,Vertex Position
 				Relative:RemoveDefine:ASE_ABSOLUTE_VERTEX_POS 1
-				Relative:SetPortName:Sprite Unlit:3,Vertex Offset
-			Option:Debug Display:false,true:false
-				true:SetDefine:pragma multi_compile _ DEBUG_DISPLAY
-				false,disable:RemoveDefine:pragma multi_compile _ DEBUG_DISPLAY
+				Relative:SetPortName:_Vertex,Vertex Offset
 			Option:External Alpha:false,true:false
 				true:SetDefine:pragma multi_compile _ ETC1_EXTERNAL_ALPHA
 				false,disable:RemoveDefine:pragma multi_compile _ ETC1_EXTERNAL_ALPHA
 		*/
+
+		/*ase_unity_cond_begin:<=10000000*/
+			// A list of master node input port IDs; will be excluded from generated shaders.
+			//  0 => Frag: Color
+			// .1 => Frag: Alpha
+			//  2 => Frag: Mask
+			//  3 => Frag: Normal
+			//  4 => Vert: Vertex Offset
+			//  5 => Vert: Vertex Normal
+			//  6 => Vert: Vertex Tangent
+			//  7 => Frag: Alpha Clip Threshold
+		/*ase_unity_cond_end*/
 
 		Tags
 		{
 			"RenderPipeline" = "UniversalPipeline"
 			"RenderType" = "Transparent"
 			"Queue" = "Transparent+0"
+			"UniversalMaterialType" = "Unlit"
+			"ShaderGraphShader"="true"
+			"ShaderGraphTargetId"=""
 		}
 
 		Cull Off
@@ -57,14 +78,18 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 			ZWrite Off
 			Offset 0,0
 			ColorMask RGBA
+
 			/*ase_stencil*/
 
 			HLSLPROGRAM
 
+			#pragma multi_compile_instancing
+
 			#pragma vertex vert
 			#pragma fragment frag
 
-			#pragma multi_compile _ DEBUG_DISPLAY SKINNED_SPRITE
+			#pragma multi_compile_fragment _ DEBUG_DISPLAY
+			#pragma multi_compile_vertex _ SKINNED_SPRITE
 
             #define _SURFACE_TYPE_TRANSPARENT 1
             #define ATTRIBUTES_NEED_NORMAL
@@ -80,6 +105,7 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 
 			#define SHADERPASS SHADERPASS_SPRITEUNLIT
 
+			#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Fog.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Texture.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
@@ -97,6 +123,8 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Debug/Debugging2D.hlsl"
 
 			/*ase_pragma*/
+
+			half4 _RendererColor;
 
 			/*ase_globals*/
 
@@ -118,7 +146,7 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 				float4 texCoord0 : TEXCOORD0;
 				float4 color : TEXCOORD1;
 				float3 positionWS : TEXCOORD2;
-				/*ase_interp(3,):sp=sp;uv0=tc0;c=tc1*/
+				/*ase_interp(3,):sp=sp;uv0=tc0;c=tc1;wp=tc2*/
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
@@ -137,31 +165,32 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 				UNITY_SETUP_INSTANCE_ID(v);
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-				UNITY_SKINNED_VERTEX_COMPUTE( v );
+				UNITY_SKINNED_VERTEX_COMPUTE(v);
 
 				v.positionOS = UnityFlipSprite( v.positionOS, unity_SpriteProps.xy );
 
 				/*ase_vert_code:v=VertexInput;o=VertexOutput*/
+
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.positionOS;
 				#else
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
-				float3 vertexValue = /*ase_vert_out:Vertex Offset;Float3;3;-1;_Vertex*/defaultVertexValue/*end*/;
+				float3 vertexValue = /*ase_vert_out:Vertex Offset;Float3;4;-1;_Vertex*/defaultVertexValue/*end*/;
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.positionOS = vertexValue;
 				#else
 					v.positionOS += vertexValue;
 				#endif
-				v.normal = /*ase_vert_out:Vertex Normal;Float3;4;-1;_VNormal*/v.normal/*end*/;
-				v.tangent.xyz = /*ase_vert_out:Vertex Tangent;Float3;5;-1;_VTangent*/v.tangent.xyz/*end*/;
+				v.normal = /*ase_vert_out:Vertex Normal;Float3;5;-1;_VNormal*/v.normal/*end*/;
+				v.tangent.xyz = /*ase_vert_out:Vertex Tangent;Float3;6;-1;_VTangent*/v.tangent.xyz/*end*/;
 
 				VertexPositionInputs vertexInput = GetVertexPositionInputs(v.positionOS);
 
 				o.positionCS = vertexInput.positionCS;
 				o.positionWS = vertexInput.positionWS;
 				o.texCoord0 = v.uv0;
-				o.color = v.color;
+				o.color = v.color * _RendererColor * unity_SpriteColor;
 				return o;
 			}
 
@@ -174,14 +203,15 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 				/*ase_local_var:wp*/float3 positionWS = IN.positionWS;
 
 				/*ase_frag_code:IN=VertexOutput*/
-				float4 Color = /*ase_frag_out:Color;Float4;1;-1;_Color*/float4( 1, 1, 1, 1 )/*end*/;
 
-				#if ETC1_EXTERNAL_ALPHA
-					float4 alpha = SAMPLE_TEXTURE2D(_AlphaTex, sampler_AlphaTex, IN.texCoord0.xy);
-					Color.a = lerp( Color.a, alpha.r, _EnableAlphaTexture);
-				#endif
+				float4 Color = /*ase_frag_out:Color;Float4;0;-1;_Color*/float4( 1, 1, 1, 1 )/*end*/;
+				float AlphaClipThreshold = /*ase_frag_out:Alpha Clip Threshold;Float;7;-1;_AlphaClip*/0.5/*end*/;
 
-				#if defined(DEBUG_DISPLAY)
+			#if defined( ALPHA_CLIP_THRESHOLD )
+				clip( Color.a - AlphaClipThreshold );
+			#endif
+
+			#if defined(DEBUG_DISPLAY)
 				SurfaceData2D surfaceData;
 				InitializeSurfaceData(Color.rgb, Color.a, surfaceData);
 				InputData2D inputData;
@@ -194,9 +224,17 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 				{
 					return debugColor;
 				}
-				#endif
+			#endif
 
-				Color *= IN.color * unity_SpriteColor;
+			#if ETC1_EXTERNAL_ALPHA
+				float4 alpha = SAMPLE_TEXTURE2D(_AlphaTex, sampler_AlphaTex, IN.texCoord0.xy);
+				Color.a = lerp( Color.a, alpha.r, _EnableAlphaTexture);
+			#endif
+
+			#if !defined( _DISABLE_COLOR_TINT )
+				Color *= IN.color;
+			#endif
+
 				return Color;
 			}
 
@@ -218,14 +256,18 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 			ZWrite Off
 			Offset 0,0
 			ColorMask RGBA
+
 			/*ase_stencil*/
 
 			HLSLPROGRAM
 
+			#pragma multi_compile_instancing
+
 			#pragma vertex vert
 			#pragma fragment frag
 
-			#pragma multi_compile _ DEBUG_DISPLAY SKINNED_SPRITE
+			#pragma multi_compile_fragment _ DEBUG_DISPLAY
+			#pragma multi_compile_vertex _ SKINNED_SPRITE
 
             #define _SURFACE_TYPE_TRANSPARENT 1
             #define ATTRIBUTES_NEED_NORMAL
@@ -241,6 +283,7 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 
 			#define SHADERPASS SHADERPASS_SPRITEFORWARD
 
+			#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Fog.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Texture.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
@@ -258,6 +301,8 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Debug/Debugging2D.hlsl"
 
 			/*ase_pragma*/
+
+			half4 _RendererColor;
 
 			/*ase_globals*/
 
@@ -279,7 +324,7 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 				float4 texCoord0 : TEXCOORD0;
 				float4 color : TEXCOORD1;
 				float3 positionWS : TEXCOORD2;
-				/*ase_interp(3,):sp=sp;uv0=tc0;c=tc1*/
+				/*ase_interp(3,):sp=sp;uv0=tc0;c=tc1;wp=tc2*/
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
@@ -297,32 +342,32 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 				UNITY_SETUP_INSTANCE_ID(v);
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-				UNITY_SKINNED_VERTEX_COMPUTE( v );
+				UNITY_SKINNED_VERTEX_COMPUTE(v);
 
 				v.positionOS = UnityFlipSprite( v.positionOS, unity_SpriteProps.xy );
 
 				/*ase_vert_code:v=VertexInput;o=VertexOutput*/
+
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.positionOS;
 				#else
 					float3 defaultVertexValue = float3( 0, 0, 0 );
 				#endif
-				float3 vertexValue = /*ase_vert_out:Vertex Offset;Float3;3;-1;_Vertex*/defaultVertexValue/*end*/;
+				float3 vertexValue = /*ase_vert_out:Vertex Offset;Float3;4;-1;_Vertex*/defaultVertexValue/*end*/;
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.positionOS = vertexValue;
 				#else
 					v.positionOS += vertexValue;
 				#endif
-				v.normal = /*ase_vert_out:Vertex Normal;Float3;4;-1;_VNormal*/v.normal/*end*/;
-				v.tangent.xyz = /*ase_vert_out:Vertex Tangent;Float3;5;-1;_VTangent*/v.tangent.xyz/*end*/;
+				v.normal = /*ase_vert_out:Vertex Normal;Float3;5;-1;_VNormal*/v.normal/*end*/;
+				v.tangent.xyz = /*ase_vert_out:Vertex Tangent;Float3;6;-1;_VTangent*/v.tangent.xyz/*end*/;
 
 				VertexPositionInputs vertexInput = GetVertexPositionInputs(v.positionOS);
 
 				o.positionCS = vertexInput.positionCS;
 				o.positionWS = vertexInput.positionWS;
 				o.texCoord0 = v.uv0;
-				o.color = v.color;
-
+				o.color = v.color * _RendererColor * unity_SpriteColor;
 				return o;
 			}
 
@@ -335,35 +380,44 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 				/*ase_local_var:wp*/float3 positionWS = IN.positionWS;
 
 				/*ase_frag_code:IN=VertexOutput*/
-				float4 Color = /*ase_frag_out:Color;Float4;1;-1;_Color*/float4( 1, 1, 1, 1 )/*end*/;
 
-				#if ETC1_EXTERNAL_ALPHA
-					float4 alpha = SAMPLE_TEXTURE2D( _AlphaTex, sampler_AlphaTex, IN.texCoord0.xy );
-					Color.a = lerp( Color.a, alpha.r, _EnableAlphaTexture );
-				#endif
+				float4 Color = /*ase_frag_out:Color;Float4;0;-1;_Color*/float4( 1, 1, 1, 1 )/*end*/;
+				float AlphaClipThreshold = /*ase_frag_out:Alpha Clip Threshold;Float;7;-1;_AlphaClip*/0.5/*end*/;
 
+			#if defined( ALPHA_CLIP_THRESHOLD )
+				clip( Color.a - AlphaClipThreshold );
+			#endif
 
-				#if defined(DEBUG_DISPLAY)
-					SurfaceData2D surfaceData;
-					InitializeSurfaceData(Color.rgb, Color.a, surfaceData);
-					InputData2D inputData;
-					InitializeInputData(positionWS.xy, half2(IN.texCoord0.xy), inputData);
-					half4 debugColor = 0;
+			#if defined(DEBUG_DISPLAY)
+				SurfaceData2D surfaceData;
+				InitializeSurfaceData(Color.rgb, Color.a, surfaceData);
+				InputData2D inputData;
+				InitializeInputData(positionWS.xy, half2(IN.texCoord0.xy), inputData);
+				half4 debugColor = 0;
 
-					SETUP_DEBUG_DATA_2D(inputData, positionWS, positionCS);
+				SETUP_DEBUG_DATA_2D(inputData, positionWS, positionCS);
 
-					if (CanDebugOverrideOutputColor(surfaceData, inputData, debugColor))
-					{
-						return debugColor;
-					}
-				#endif
+				if (CanDebugOverrideOutputColor(surfaceData, inputData, debugColor))
+				{
+					return debugColor;
+				}
+			#endif
 
-				Color *= IN.color * unity_SpriteColor;
+			#if ETC1_EXTERNAL_ALPHA
+				float4 alpha = SAMPLE_TEXTURE2D( _AlphaTex, sampler_AlphaTex, IN.texCoord0.xy );
+				Color.a = lerp( Color.a, alpha.r, _EnableAlphaTexture );
+			#endif
+
+			#if !defined( _DISABLE_COLOR_TINT )
+				Color *= IN.color;
+			#endif
+
 				return Color;
 			}
 
 			ENDHLSL
 		}
+
 		/*ase_pass*/
         Pass
         {
@@ -377,6 +431,8 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
             Cull Off
 
             HLSLPROGRAM
+
+			#pragma multi_compile_instancing
 
 			#pragma vertex vert
 			#pragma fragment frag
@@ -426,6 +482,7 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 				float4 positionCS : SV_POSITION;
 				/*ase_interp(0,):sp=sp*/
 				UNITY_VERTEX_INPUT_INSTANCE_ID
+				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
             int _ObjectId;
@@ -450,7 +507,7 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 				#else
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
-				float3 vertexValue = /*ase_vert_out:Vertex Offset;Float3;1;-1;_Vertex*/defaultVertexValue/*end*/;
+				float3 vertexValue = /*ase_vert_out:Vertex Offset;Float3;4;-1;_Vertex*/defaultVertexValue/*end*/;
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.positionOS = vertexValue;
 				#else
@@ -458,19 +515,26 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 				#endif
 
 				VertexPositionInputs vertexInput = GetVertexPositionInputs(v.positionOS);
-				float3 positionWS = TransformObjectToWorld(v.positionOS);
-				o.positionCS = TransformWorldToHClip(positionWS);
 
+				o.positionCS = vertexInput.positionCS;
 				return o;
 			}
 
 			half4 frag(VertexOutput IN/*ase_frag_input*/) : SV_TARGET
 			{
-				/*ase_frag_code:IN=VertexOutput*/
-				float4 Color = /*ase_frag_out:Color;Float4;0;-1;_Color*/float4( 1, 1, 1, 1 )/*end*/;
+				UNITY_SETUP_INSTANCE_ID(IN);
+				UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(IN);
 
-				half4 outColor = half4(_ObjectId, _PassValue, 1.0, 1.0);
-				return outColor;
+				/*ase_frag_code:IN=VertexOutput*/
+
+				float4 Color = /*ase_frag_out:Color;Float4;0;-1;_Color*/float4( 1, 1, 1, 1 )/*end*/;
+				float AlphaClipThreshold = /*ase_frag_out:Alpha Clip Threshold;Float;7;-1;_AlphaClip*/0.5/*end*/;
+
+				#if defined( ALPHA_CLIP_THRESHOLD )
+					clip( Color.a - AlphaClipThreshold );
+				#endif
+
+				return half4(_ObjectId, _PassValue, 1.0, 1.0);
 			}
 
             ENDHLSL
@@ -489,6 +553,8 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 			Cull Off
 
             HLSLPROGRAM
+
+			#pragma multi_compile_instancing
 
 			#pragma vertex vert
 			#pragma fragment frag
@@ -538,6 +604,7 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 				float4 positionCS : SV_POSITION;
 				/*ase_interp(0,):sp=sp*/
 				UNITY_VERTEX_INPUT_INSTANCE_ID
+				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
             float4 _SelectionID;
@@ -556,12 +623,13 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 				v.positionOS = UnityFlipSprite( v.positionOS, unity_SpriteProps.xy );
 
 				/*ase_vert_code:v=VertexInput;o=VertexOutput*/
+
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.positionOS;
 				#else
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
-				float3 vertexValue = /*ase_vert_out:Vertex Offset;Float3;1;-1;_Vertex*/defaultVertexValue/*end*/;
+				float3 vertexValue = /*ase_vert_out:Vertex Offset;Float3;4;-1;_Vertex*/defaultVertexValue/*end*/;
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.positionOS = vertexValue;
 				#else
@@ -569,18 +637,26 @@ Shader /*ase_name*/ "Hidden/Universal/2D Unlit" /*end*/
 				#endif
 
 				VertexPositionInputs vertexInput = GetVertexPositionInputs(v.positionOS);
-				float3 positionWS = TransformObjectToWorld(v.positionOS);
-				o.positionCS = TransformWorldToHClip(positionWS);
 
+				o.positionCS = vertexInput.positionCS;
 				return o;
 			}
 
 			half4 frag(VertexOutput IN /*ase_frag_input*/) : SV_TARGET
 			{
+				UNITY_SETUP_INSTANCE_ID(IN);
+				UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(IN);
+
 				/*ase_frag_code:IN=VertexOutput*/
+
 				float4 Color = /*ase_frag_out:Color;Float4;0;-1;_Color*/float4( 1, 1, 1, 1 )/*end*/;
-				half4 outColor = _SelectionID;
-				return outColor;
+				float AlphaClipThreshold = /*ase_frag_out:Alpha Clip Threshold;Float;7;-1;_AlphaClip*/0.5/*end*/;
+
+				#if defined( ALPHA_CLIP_THRESHOLD )
+					clip( Color.a - AlphaClipThreshold );
+				#endif
+
+				return unity_SelectionID;
 			}
 
             ENDHLSL

@@ -259,12 +259,12 @@ namespace AmplifyShaderEditor
 			{
 				if( Preferences.User.DisablePreviews )
 				{
-					return UIUtils.DummyRT;
+					return UIUtils.PreviewDisabledRT;
 				}
 
 				if( m_outputPreview == null )
 				{
-					m_outputPreview = new RenderTexture( Constants.PreviewSize , Constants.PreviewSize , 0 , Constants.PreviewFormat , RenderTextureReadWrite.Linear );
+					m_outputPreview = new RenderTexture( Preferences.User.PreviewSize , Preferences.User.PreviewSize , 0 , Preferences.User.PreviewFormat , RenderTextureReadWrite.Linear );
 					m_outputPreview.wrapMode = TextureWrapMode.Repeat;
 					if( OnNewPreviewRTCreatedEvent != null )
 						OnNewPreviewRTCreatedEvent();

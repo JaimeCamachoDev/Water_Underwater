@@ -200,10 +200,10 @@ namespace AmplifyShaderEditor
 			}
 		}
 		
-		public override void OnNodeLayout( DrawInfo drawInfo )
+		public override void OnNodeLayout( DrawInfo drawInfo, NodeUpdateCache cache )
 		{
 			// RUN LAYOUT CHANGES AFTER TITLES CHANGE
-			base.OnNodeLayout( drawInfo );
+			base.OnNodeLayout( drawInfo, cache );
 			m_titleClickArea = m_titlePos;
 			m_titleClickArea.height = Constants.NODE_HEADER_HEIGHT;
 		}

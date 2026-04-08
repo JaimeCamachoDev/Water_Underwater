@@ -55,6 +55,9 @@ namespace AmplifyShaderEditor
 
 		protected const string AutoUnpackNormalsStr = "Normal";
 
+		protected const string AssignKeywordInfoStr = "The material inspector will assign a {0} keyword, to the material, once the texture slot" +
+			" is assigned. To use it, you'll need a Switch node to create the keyword variants.";
+
 		[SerializeField]
 		protected Texture m_defaultValue;
 
@@ -81,6 +84,9 @@ namespace AmplifyShaderEditor
 
 		[SerializeField]
 		protected TextureType m_currentType = TextureType.Texture2D;
+
+		[SerializeField]
+		protected bool m_assignKeyword;
 
 		[SerializeField]
 		protected AutoCastType m_autocastMode = AutoCastType.Auto;
@@ -117,6 +123,7 @@ namespace AmplifyShaderEditor
 			base.CommonInit( uniqueId );
 			GlobalTypeWarningText = string.Format( GlobalTypeWarningText, "Texture" );
 			m_defaultTextureValue = TexturePropertyValues.white;
+			m_assignKeyword = false;
 			m_insideSize.Set( PreviewSizeX, PreviewSizeY + 5 );
 			AddOutputPort( WirePortDataType.SAMPLER2D, "Tex" );
 			AddOutputPort( WirePortDataType.SAMPLERSTATE, "SS" );
@@ -133,6 +140,7 @@ namespace AmplifyShaderEditor
 			m_availableAttribs.Add( new PropertyAttributes( "No Scale Offset", "[NoScaleOffset]" ) );
 			m_availableAttribs.Add( new PropertyAttributes( "Normal", "[Normal]" ) );
 			m_availableAttribs.Add( new PropertyAttributes( "Single Line Texture", "[SingleLineTexture]" ) );
+			m_availableAttribs.Add( new PropertyAttributes( "Main Texture", "[MainTexture]" ) );
 			m_showPreview = true;
 			m_drawPreviewExpander = false;
 			m_drawPreview = false;
@@ -208,7 +216,7 @@ namespace AmplifyShaderEditor
 				if( m_typeId == -1 )
 					m_typeId = Shader.PropertyToID( "_Type" );
 
-				m_previewMaterialPassId = 1; 
+				m_previewMaterialPassId = 1;
 				SetPreviewTexture( Value );
 				//if( Value is Cubemap )
 				//{
@@ -434,18 +442,28 @@ namespace AmplifyShaderEditor
 		{
 			m_defaultTextureValue = (TexturePropertyValues)EditorGUILayoutEnumPopup( DefaultTextureStr, m_defaultTextureValue );
 
-			if( !m_drawAutocast )
-				return;
-
-			AutoCastType newAutoCast = (AutoCastType)EditorGUILayoutEnumPopup( AutoCastModeStr, m_autocastMode );
-			if( newAutoCast != m_autocastMode )
+			if( m_drawAutocast )
 			{
-				m_autocastMode = newAutoCast;
-				if( m_autocastMode != AutoCastType.Auto )
+				AutoCastType newAutoCast = (AutoCastType)EditorGUILayoutEnumPopup( AutoCastModeStr, m_autocastMode );
+				if( newAutoCast != m_autocastMode )
 				{
-					ConfigTextureData( m_currentType );
-					ConfigureInputPorts();
-					ConfigureOutputPorts();
+					m_autocastMode = newAutoCast;
+					if( m_autocastMode != AutoCastType.Auto )
+					{
+						ConfigTextureData( m_currentType );
+						ConfigureInputPorts();
+						ConfigureOutputPorts();
+					}
+				}
+			}
+
+			if ( !ContainerGraph.IsSRP )
+			{
+				// @diogo: only BiRP for now
+				m_assignKeyword = EditorGUILayoutToggle( "Assign Keyword", m_assignKeyword );
+				if ( m_assignKeyword )
+				{
+					EditorGUILayout.HelpBox( string.Format( AssignKeywordInfoStr, PropertyName.ToUpper() ), MessageType.Info );
 				}
 			}
 		}
@@ -528,6 +546,12 @@ namespace AmplifyShaderEditor
 				ConfigTextureData( TextureType.Cube );
 			}
 
+			// @diogo: we now default to Tex2D as default, when cast mode is Auto and no texture is assigned
+			if ( texture == null && m_autocastMode == AutoCastType.Auto )
+			{
+				ConfigTextureData( TextureType.Texture2D );
+			}
+
 			ConfigureInputPorts();
 			ConfigureOutputPorts();
 		}
@@ -590,9 +614,9 @@ namespace AmplifyShaderEditor
 
 		}
 
-		public override void OnNodeLayout( DrawInfo drawInfo )
+		public override void OnNodeLayout( DrawInfo drawInfo, NodeUpdateCache cache )
 		{
-			base.OnNodeLayout( drawInfo );
+			base.OnNodeLayout( drawInfo, cache );
 			ConfigTextureType();
 		}
 
@@ -722,7 +746,7 @@ namespace AmplifyShaderEditor
 
 		public override void CheckIfAutoRegister( ref MasterNodeDataCollector dataCollector )
 		{
-			// Also testing inside shader function because node can be used indirectly over a custom expression and directly over a Function Output node 
+			// Also testing inside shader function because node can be used indirectly over a custom expression and directly over a Function Output node
 			// That isn't being used externaly making it to not be registered ( since m_connStatus it set to Connected by being connected to an output node
 			if( CurrentParameterType != PropertyType.Constant && m_autoRegister && ( m_connStatus != NodeConnectionStatus.Connected || InsideShaderFunction ) )
 			{
@@ -762,7 +786,12 @@ namespace AmplifyShaderEditor
 
 		public override string GenerateShaderForOutput( int outputId, ref MasterNodeDataCollector dataCollector, bool ignoreLocalVar )
 		{
-			return BaseGenerateShaderForOutput( outputId, ref dataCollector, ignoreLocalVar );
+			string code = BaseGenerateShaderForOutput( outputId, ref dataCollector, ignoreLocalVar );
+			if ( m_assignKeyword )
+			{
+				dataCollector.AddToProperties( -1, GetAssignKeywordPropertyValue(), 1000 );
+			}
+			return code;
 		}
 
 		public override void UpdateMaterial( Material mat )
@@ -853,6 +882,11 @@ namespace AmplifyShaderEditor
 				m_currentType = TextureType.Texture2D;
 			}
 
+			if( UIUtils.CurrentShaderVersion() >= 19902 )
+			{
+				m_assignKeyword = Convert.ToBoolean( GetCurrentParam( ref nodeParams ) );
+			}
+
 			ConfigTextureData( m_currentType );
 
 			//ConfigFromObject( m_defaultValue );
@@ -906,6 +940,7 @@ namespace AmplifyShaderEditor
 			IOUtils.AddFieldValueToString( ref nodeInfo, m_defaultTextureValue );
 			IOUtils.AddFieldValueToString( ref nodeInfo, m_autocastMode );
 			IOUtils.AddFieldValueToString( ref nodeInfo, m_currentType );
+			IOUtils.AddFieldValueToString( ref nodeInfo, m_assignKeyword.ToString() );
 		}
 
 		public override void WriteAdditionalClipboardData( ref string nodeInfo )
@@ -927,6 +962,11 @@ namespace AmplifyShaderEditor
 		public override string GetPropertyValStr()
 		{
 			return m_materialMode ? ( m_materialValue != null ? m_materialValue.name : IOUtils.NO_TEXTURES ) : ( m_defaultValue != null ? m_defaultValue.name : IOUtils.NO_TEXTURES );
+		}
+
+		private string GetAssignKeywordPropertyValue()
+		{
+			return "[HideInInspector] GenKey_" + PropertyName + "( \"Assign keyword " + PropertyName.ToUpper() + "\", Float ) = 1.0";
 		}
 
 		public override string GetPropertyValue()

@@ -8,7 +8,7 @@ using System;
 namespace AmplifyShaderEditor
 {
 	[Serializable]
-	[NodeAttributes( "Switch by Pipeline", "Functions", "Executes branch according to current pipeline", NodeAvailabilityFlags = (int)NodeAvailability.ShaderFunction )]
+	[NodeAttributes( "Function Switch by Pipeline", "Functions", "Executes branch according to current pipeline", NodeAvailabilityFlags = (int)NodeAvailability.ShaderFunction )]
 	public sealed class FunctionSwitchByPipeline : ParentNode
 	{
 		protected override void CommonInit( int uniqueId )
@@ -19,7 +19,7 @@ namespace AmplifyShaderEditor
 			AddInputPort( WirePortDataType.FLOAT, false, "URP", -1, MasterNodePortCategory.Fragment, 1 );
 			AddInputPort( WirePortDataType.FLOAT, false, "HDRP", -1, MasterNodePortCategory.Fragment, 2 );
 			AddOutputPort( WirePortDataType.FLOAT, Constants.EmptyPortValue );
-
+			m_previewShaderGUID = "a58e46feaa5e3d14383bfeac24d008bc";
 		}
 
 		public override void OnInputPortConnected( int portId, int otherNodeId, int otherPortId, bool activateNode = true )

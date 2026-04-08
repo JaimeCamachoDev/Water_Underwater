@@ -50,15 +50,15 @@ namespace AmplifyShaderEditor
 			{
 				if ( dataCollector.CurrentCanvasMode == NodeAvailability.TemplateShader )
 				{
-					dataCollector.AddToInput( UniqueId, SurfaceInputs.FRONT_FACING );
+					dataCollector.AddToInput( UniqueId, SurfaceInputs.FRONT_FACE );
 				}
 				else
 				{
-					dataCollector.AddToInput( UniqueId, SurfaceInputs.FRONT_FACING_VFACE );
+					dataCollector.AddToInput( UniqueId, SurfaceInputs.FRONT_FACE_VFACE );
 				}
 
 				variable = ( dataCollector.PortCategory == MasterNodePortCategory.Vertex ) ? Constants.VertexShaderOutputStr : Constants.InputVarStr;
-				variable = string.Format( "{0}.{1}", variable, Constants.IsFrontFacingVariable );
+				variable = string.Format( "{0}.{1}", variable, Constants.IsFrontFaceVariable );
 			}
 			return string.Format( "( {0} > 0 ? +1 : -1 )", variable );
 		}

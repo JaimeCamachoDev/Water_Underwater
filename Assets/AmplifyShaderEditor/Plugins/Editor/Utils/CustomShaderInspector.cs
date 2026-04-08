@@ -57,7 +57,8 @@ namespace AmplifyShaderEditor
 			"Vector: ",
 			"Float: ",
 			"Range: ",
-			"Texture: "
+			"Texture: ",
+			"Int: "
 		};
 
 		private static readonly string[] kTextureTypes = new string[]
@@ -305,7 +306,11 @@ namespace AmplifyShaderEditor
 				}
 				EditorGUILayout.LabelField( "Disable batching", label, new GUILayoutOption[ 0 ] );
 				ShowKeywords( shader );
-				srpCompatibilityCheckMaterial.SetPass( 0 );
+
+				if ( !AmplifyShaderEditorWindow.IsSavingToDisk )
+				{
+					srpCompatibilityCheckMaterial.SetPass( 0 );
+				}
 
 				int shaderActiveSubshaderIndex = ShaderUtilEx.GetShaderActiveSubshaderIndex( shader );
 				int sRPBatcherCompatibilityCode = ShaderUtilEx.GetSRPBatcherCompatibilityCode( shader, shaderActiveSubshaderIndex );

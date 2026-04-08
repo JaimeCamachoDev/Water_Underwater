@@ -130,7 +130,7 @@ namespace AmplifyShaderEditor
 			m_globalDefaultBehavior = false;
 			m_showVariableMode = true;
 		}
-		
+
 		protected override void OnUniqueIDAssigned()
 		{
 			base.OnUniqueIDAssigned();
@@ -279,7 +279,7 @@ namespace AmplifyShaderEditor
 				}
 				UpdateHeaderColor();
 			}
-			
+
 			if( m_referenceType == TexReferenceType.Object )
 			{
 				EditorGUI.BeginDisabledGroup( m_containerGraph.IsSRP );
@@ -337,7 +337,7 @@ namespace AmplifyShaderEditor
 			}
 
 #if UNITY_2021_1_OR_NEWER
-			if( ( ContainerGraph.IsLWRP || ContainerGraph.ParentWindow.IsShaderFunctionWindow ) && ASEPackageManagerHelper.CurrentHDRPBaseline >= ASESRPBaseline.ASE_SRP_11_0 )
+			if( ( ContainerGraph.IsURP || ContainerGraph.ParentWindow.IsShaderFunctionWindow ) && ASEPackageManagerHelper.CurrentHDRPBaseline >= ASESRPBaseline.ASE_SRP_11_X )
 			{
 				m_isURP2D = EditorGUILayoutToggle( "2D Renderer" , m_isURP2D);
 				if( m_isURP2D )
@@ -399,7 +399,7 @@ namespace AmplifyShaderEditor
 				valueName = FetchVarName + OutputId;
 				dataCollector.AddToDirectives( OpaqueTextureDefine, -1 , AdditionalLineType.Define);
 				string uvCoords = GetUVCoords( ref dataCollector, ignoreLocalVar, false );
-				if( dataCollector.TemplateDataCollectorInstance.IsLWRP )
+				if( dataCollector.TemplateDataCollectorInstance.IsURP )
 				{
 
 #if UNITY_2021_1_OR_NEWER
@@ -649,6 +649,17 @@ namespace AmplifyShaderEditor
 				else
 					m_normalize = false;
 			}
+		}
+
+		public override void ReconnectClipboardReferences( Clipboard clipboard )
+		{
+			// validate node first
+			int newId = clipboard.GeNewNodeId( m_referenceNodeId );
+			if ( ContainerGraph.GetNode( newId ) != null )
+			{
+				m_referenceNodeId = newId;
+			}
+			RefreshExternalReferences();
 		}
 
 		public override string PropertyName

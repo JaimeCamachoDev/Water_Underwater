@@ -147,7 +147,7 @@ namespace AmplifyShaderEditor
 
 		void InitAvailableCategories()
 		{
-			int templateCount = m_containerGraph.ParentWindow.TemplatesManagerInstance.TemplateCount;
+			int templateCount = TemplatesManager.Instance.TemplateCount;
 			m_availableCategories = new MasterNodeCategoriesData[ templateCount + 1 ];
 			m_availableCategoryLabels = new GUIContent[ templateCount + 1 ];
 
@@ -157,7 +157,7 @@ namespace AmplifyShaderEditor
 			for( int i = 0; i < templateCount; i++ )
 			{
 				int idx = i + 1;
-				TemplateDataParent templateData = m_containerGraph.ParentWindow.TemplatesManagerInstance.GetTemplate( i );
+				TemplateDataParent templateData = TemplatesManager.Instance.GetTemplate( i );
 				m_availableCategories[ idx ] = new MasterNodeCategoriesData( AvailableShaderTypes.Template, templateData.GUID );
 				m_availableCategoryLabels[ idx ] = new GUIContent( templateData.Name );
 			}
@@ -230,11 +230,44 @@ namespace AmplifyShaderEditor
 			if( m_availableCategories == null )
 				InitAvailableCategories();
 
-			int oldType = m_masterNodeCategory;
-			m_masterNodeCategory = EditorGUILayoutPopup( m_categoryLabel, m_masterNodeCategory, m_availableCategoryLabels );
-			if( oldType != m_masterNodeCategory )
+			// Handle bridge templates
+			var remapOriginalToFiltered = new int[ m_availableCategories.Length ];
+			var remapFilteredToOriginal = new List<int>();
+			var filteredLabels = new List<GUIContent>();
+
+			for ( int i = 0; i < m_availableCategoryLabels.Length; i++ )
 			{
-				m_containerGraph.ParentWindow.ReplaceMasterNode( m_availableCategories[ m_masterNodeCategory ], false );
+				if ( m_availableCategoryLabels[ i ].text.Contains( "/ASEBridgeTemplates/" ) )
+				{
+					// Bridges are invisible
+					remapOriginalToFiltered[ i ] = -1;
+					continue;
+				}
+
+				remapFilteredToOriginal.Add( i );
+				remapOriginalToFiltered[ i ] = filteredLabels.Count;
+				filteredLabels.Add( m_availableCategoryLabels[ i ] );
+			}
+
+			int filteredIndex = remapOriginalToFiltered[ m_masterNodeCategory ];
+			if ( filteredIndex >= 0 )
+			{
+				int oldType = m_masterNodeCategory;
+
+				filteredIndex = EditorGUILayoutPopup( m_categoryLabel, filteredIndex, filteredLabels.ToArray() );
+				m_masterNodeCategory = remapFilteredToOriginal[ filteredIndex ];
+
+				if( oldType != m_masterNodeCategory )
+				{
+					m_containerGraph.ParentWindow.ReplaceMasterNode( m_availableCategories[ m_masterNodeCategory ], false );
+				}
+			}
+			else
+			{
+				// Show a disabled popup => This is temporary and only happens during bridge template swaps
+				GUI.enabled = false;
+				EditorGUILayoutPopup( m_categoryLabel, 0, new GUIContent [] { new GUIContent( "Please wait..." ) } );
+				GUI.enabled = true;
 			}
 		}
 
@@ -279,7 +312,7 @@ namespace AmplifyShaderEditor
 
 					if( foundHDRP )
 					{
-						if( version >= ASESRPBaseline.ASE_SRP_11_0 )
+						if( version >= ASESRPBaseline.ASE_SRP_11_X )
 						{
 							AddMenuItem( menu , "Rendering.HighDefinition.DecalShaderGraphGUI" );
 							AddMenuItem( menu , "Rendering.HighDefinition.LightingShaderGraphGUI" );
@@ -287,14 +320,14 @@ namespace AmplifyShaderEditor
 							AddMenuItem( menu , "Rendering.HighDefinition.HDUnlitGUI" );
 						}
 						else
-						if( version >= ASESRPBaseline.ASE_SRP_10_0 )
+						if( version >= ASESRPBaseline.ASE_SRP_10_X )
 						{
 							AddMenuItem( menu , "Rendering.HighDefinition.DecalGUI" );
 							AddMenuItem( menu , "Rendering.HighDefinition.LitShaderGraphGUI" );
 							AddMenuItem( menu , "Rendering.HighDefinition.LightingShaderGraphGUI" );
 							AddMenuItem( menu , "Rendering.HighDefinition.HDUnlitGUI" );
 						}
-						else if( version >= ASESRPBaseline.ASE_SRP_12_0 )
+						else if( version >= ASESRPBaseline.ASE_SRP_12_X )
 						{
 							AddMenuItem( menu , "Rendering.HighDefinition.DecalGUI" );
 							AddMenuItem( menu , "Rendering.HighDefinition.LitShaderGraphGUI" );
@@ -309,7 +342,7 @@ namespace AmplifyShaderEditor
 
 					if( foundURP )
 					{
-						if( version >= ASESRPBaseline.ASE_SRP_12_0 )
+						if( version >= ASESRPBaseline.ASE_SRP_12_X )
 						{
 							AddMenuItem( menu , "UnityEditor.ShaderGraphLitGUI" );
 							AddMenuItem( menu , "UnityEditor.ShaderGraphUnlitGUI" );

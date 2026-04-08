@@ -261,17 +261,21 @@ namespace AmplifyShaderEditor
 					m_texCoordsHelper.ContainerGraph = ContainerGraph;
 					m_texCoordsHelper.SetBaseUniqueId( UniqueId, true );
 					m_texCoordsHelper.RegisterPropertyOnInstancing = false;
-					m_texCoordsHelper.AddGlobalToSRPBatcher = true;
+
 				}
 
-				if( m_instanced )
+				if ( m_instanced )
 				{
+					// TODO: Enable instanced graph
 					m_texCoordsHelper.CurrentParameterType = PropertyType.InstancedProperty;
 				}
 				else
 				{
+
+					m_texCoordsHelper.AddGlobalToSRPBatcher = ( m_referenceNode != null ) ? ( m_referenceNode.CurrentParameterType != PropertyType.Global ) : true;
 					m_texCoordsHelper.CurrentParameterType = PropertyType.Global;
 				}
+
 				m_texCoordsHelper.ResetOutputLocals();
 				m_texCoordsHelper.SetRawPropertyName( texTransform );
 				texTransform = m_texCoordsHelper.GenerateShaderForOutput( 0, ref dataCollector, false );
@@ -328,6 +332,17 @@ namespace AmplifyShaderEditor
 			m_referenceNode = UIUtils.GetNode( m_referenceNodeId ) as TexturePropertyNode;
 			m_referenceSamplerId = UIUtils.GetTexturePropertyNodeRegisterId( m_referenceNodeId );
 			UpdateTitle();
+		}
+
+		public override void ReconnectClipboardReferences( Clipboard clipboard )
+		{
+			// validate node first
+			int newId = clipboard.GeNewNodeId( m_referenceNodeId );
+			if ( ContainerGraph.GetNode( newId ) != null )
+			{
+				m_referenceNodeId = newId;
+			}
+			RefreshExternalReferences();
 		}
 
 		public override void ReadFromString( ref string[] nodeParams )

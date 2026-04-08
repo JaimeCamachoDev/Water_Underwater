@@ -215,7 +215,7 @@ namespace AmplifyShaderEditor
 			{
 				m_depthOphelper.CopyFrom( other.DepthOphelper, false );
 			}
-			
+
 			if( m_shaderModelHelper.ValidData && other.ShaderModelHelper.ValidData )
 			{
 				m_shaderModelHelper.CopyFrom( other.ShaderModelHelper , false);
@@ -448,7 +448,7 @@ namespace AmplifyShaderEditor
 			m_isDirty = m_isDirty ||
 						//m_additionalDefines.IsDirty ||
 						//m_additionalIncludes.IsDirty ||
-						//m_additionalPragmas.IsDirty || 
+						//m_additionalPragmas.IsDirty ||
 						m_additionalDirectives.IsDirty;
 		}
 
@@ -514,6 +514,7 @@ namespace AmplifyShaderEditor
 			if( !DepthOphelper.IndependentModule )
 			{
 				moduleBody += DepthOphelper.CurrentZWriteMode;
+				moduleBody += DepthOphelper.CurrentZClipMode;
 				moduleBody += DepthOphelper.CurrentZTestMode;
 				if( DepthOphelper.OffsetEnabled )
 					moduleBody += DepthOphelper.CurrentOffset;

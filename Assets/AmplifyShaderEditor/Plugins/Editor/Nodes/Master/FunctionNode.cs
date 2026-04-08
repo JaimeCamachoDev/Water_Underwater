@@ -77,7 +77,7 @@ namespace AmplifyShaderEditor
 		public string[] ReadOptionsHelper = new string[] { };
 
 		private bool m_lateRefresh = false;
-		
+
 		private Texture2D m_headerIcon = null;
 		public Texture2D HeaderIcon
 		{
@@ -257,7 +257,7 @@ namespace AmplifyShaderEditor
 
 		public void SetPreviewInput( InputPort input )
 		{
-			if( !HasPreviewShader || !m_initialized )
+			if( !HasPreviewShader || !m_initialized || Preferences.User.DisablePreviews )
 				return;
 
 			if( input.IsConnected && input.InputNodeHasPreview( ContainerGraph ) )
@@ -317,7 +317,7 @@ namespace AmplifyShaderEditor
 			if( m_drawPreviewAsSphere != m_mainPreviewNode.SpherePreview )
 			{
 				m_drawPreviewAsSphere = m_mainPreviewNode.SpherePreview;
-				OnNodeChange();
+				OnNodeChange( new NodeUpdateCache() );
 			}
 
 			int count = m_outputPorts.Count;
@@ -400,8 +400,8 @@ namespace AmplifyShaderEditor
 					if( !UIUtils.CurrentWindow.IsShaderFunctionWindow )
 					{
 						// This function is nested inside a shader function itself and this method
-						// was called before the main output node was created. 
-						// This is possible since all nodes RefreshExternalReferences(...) are called at the end 
+						// was called before the main output node was created.
+						// This is possible since all nodes RefreshExternalReferences(...) are called at the end
 						// of a LoadFromMeta
 						// Need to delay this setup to after all nodes are loaded to then setup the directives
 						m_lateRefresh = true;
@@ -624,7 +624,7 @@ namespace AmplifyShaderEditor
 
 			if( Function == null )
 				return;
-			
+
 			if( Function.Description.Length > 0 || m_allFunctionSwitches.Count > 0 )
 				NodeUtils.DrawPropertyGroup( ref m_parametersFoldout, "Parameters", DrawDescription );
 
@@ -738,7 +738,7 @@ namespace AmplifyShaderEditor
 
 
 
-			// Cannot GameObject.Destroy(m_directives[i]) since we would be removing them from 
+			// Cannot GameObject.Destroy(m_directives[i]) since we would be removing them from
 			// the shader function asset itself
 
 			m_directives.Clear();
@@ -832,6 +832,8 @@ namespace AmplifyShaderEditor
 		{
 			//CheckForChangesRecursively();
 
+			var nodeChangeCache = new NodeUpdateCache();
+
 			if( !m_initialGraphDraw && drawInfo.CurrentEventType == EventType.Repaint )
 			{
 				m_initialGraphDraw = true;
@@ -844,7 +846,7 @@ namespace AmplifyShaderEditor
 						ParentNode node = m_functionGraph.AllNodes[ i ];
 						if( node != null )
 						{
-							node.OnNodeLayout( drawInfo );
+							node.OnNodeLayout( drawInfo, nodeChangeCache );
 						}
 					}
 				}
@@ -1197,6 +1199,8 @@ namespace AmplifyShaderEditor
 
 		public bool HasProperties { get { return m_reordenator != null; } }
 
+		public ParentGraph OutsideGraph { get { return m_outsideGraph; } }
+
 		public ParentGraph FunctionGraph
 		{
 			get { return m_functionGraph; }
@@ -1235,7 +1239,7 @@ namespace AmplifyShaderEditor
 				m_functionGraph.AllNodes[ i ].SetContainerGraph( m_functionGraph );
 			}
 		}
-		
+
 		public override void OnMasterNodeReplaced( MasterNode newMasterNode )
 		{
 			base.OnMasterNodeReplaced( newMasterNode );

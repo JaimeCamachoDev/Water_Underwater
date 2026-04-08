@@ -428,9 +428,9 @@ namespace AmplifyShaderEditor
 			}
 		}
 
-		public override void OnNodeLayout( DrawInfo drawInfo )
+		public override void OnNodeLayout( DrawInfo drawInfo, NodeUpdateCache cache )
 		{
-			base.OnNodeLayout( drawInfo );
+			base.OnNodeLayout( drawInfo, cache );
 
 			if( m_drawPreview )
 			{
@@ -826,6 +826,17 @@ namespace AmplifyShaderEditor
 			m_referenceSampler = UIUtils.GetNode( m_referenceNodeId ) as TextureArrayNode;
 			m_referenceArrayId = UIUtils.GetTextureArrayNodeRegisterId( m_referenceNodeId );
 			OnPropertyNameChanged();
+		}
+
+		public override void ReconnectClipboardReferences( Clipboard clipboard )
+		{
+			// validate node first
+			int newId = clipboard.GeNewNodeId( m_referenceNodeId );
+			if ( ContainerGraph.GetNode( newId ) != null )
+			{
+				m_referenceNodeId = newId;
+			}
+			RefreshExternalReferences();
 		}
 
 		public override void WriteToString( ref string nodeInfo, ref string connectionsInfo )

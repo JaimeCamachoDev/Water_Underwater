@@ -30,7 +30,7 @@ namespace AmplifyShaderEditor
 
 			if( dataCollector.IsTemplate )
 			{
-				if( dataCollector.TemplateDataCollectorInstance.IsHDRP || dataCollector.TemplateDataCollectorInstance.IsLWRP )
+				if( dataCollector.TemplateDataCollectorInstance.IsHDRP || dataCollector.TemplateDataCollectorInstance.IsURP )
 					timeGlobalVar = TimeSRP;
 			}
 

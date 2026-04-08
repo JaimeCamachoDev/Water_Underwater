@@ -410,6 +410,24 @@ namespace AmplifyShaderEditor
 					}
 				}
 
+				//ZCLIP
+				{
+					int zClipOpIdx = subBody.IndexOf( "ZClip" );
+					if( zClipOpIdx > -1 )
+					{
+						int zClipEndIdx = subBody.IndexOf( TemplatesManager.TemplateNewLine, zClipOpIdx );
+						if( zClipEndIdx > 0 )
+						{
+							m_depthData.ZClipModeId = subBody.Substring( zClipOpIdx, zClipEndIdx + 1 - zClipOpIdx );
+							TemplateHelperFunctions.CreateZClipMode( m_depthData.ZClipModeId, ref m_depthData );
+							if( m_depthData.DataCheck == TemplateDataCheck.Valid )
+							{
+								AddId( m_depthData.ZClipModeId, true );
+							}
+						}
+					}
+				}
+
 				//ZTEST
 				{
 					int zTestOpIdx = subBody.IndexOf( "ZTest" );
@@ -445,9 +463,9 @@ namespace AmplifyShaderEditor
 						}
 					}
 
-					m_depthData.SetDataCheck(); 
+					m_depthData.SetDataCheck();
 				}
-				
+
 				//TAGS
 				{
 					int tagsIdx = subBody.IndexOf( "Tags" );

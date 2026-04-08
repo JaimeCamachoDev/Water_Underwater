@@ -254,6 +254,28 @@ namespace AmplifyShaderEditor
 		private List<string> m_vertexInterpDeclList;
 		private Dictionary<string, string> m_vertexInterpDeclDict;
 		private TemplateDataCollector m_templateDataCollector;
+		private Dictionary<MasterNodePortCategory, System.Collections.Generic.HashSet<ParentNode>> m_propagateNodeCache;
+
+		public bool Touch( MasterNodePortCategory category, ParentNode node )
+		{
+			if ( !m_propagateNodeCache.TryGetValue( category, out System.Collections.Generic.HashSet<ParentNode> propagateSet ) )
+			{
+				propagateSet = new System.Collections.Generic.HashSet<ParentNode>();
+				m_propagateNodeCache.Add( category, propagateSet );
+			}
+
+			if ( !propagateSet.Contains( node ) )
+			{
+				// @diogo: not touched yet; cache miss
+				propagateSet.Add( node );
+				return false;
+			}
+			else
+			{
+				// @diogo: already touched; cache hit
+				return true;
+			}
+		}
 
 		public MasterNodeDataCollector( MasterNode masterNode ) : this()
 		{
@@ -368,6 +390,8 @@ namespace AmplifyShaderEditor
 			m_vertexInterpDeclDict = new Dictionary<string, string>();
 
 			m_templateDataCollector = new TemplateDataCollector();
+
+			m_propagateNodeCache = new Dictionary<MasterNodePortCategory, System.Collections.Generic.HashSet<ParentNode>>();
 		}
 
 		public void CopyTextureChannelSizeFrom( ref MasterNodeDataCollector dataCollector )
@@ -2364,6 +2388,7 @@ namespace AmplifyShaderEditor
 		public List<string> InterpolatorList { get { return m_interpolatorsList; } }
 		public List<string> VertexInterpDeclList { get { return m_vertexInterpDeclList; } }
 		public TemplateDataCollector TemplateDataCollectorInstance { get { return m_templateDataCollector; } }
+		public MasterNode MasterNode { get { return m_masterNode; } }
 		public RenderPath CurrentRenderPath
 		{
 			get { return m_renderPath; }

@@ -63,6 +63,7 @@ namespace AmplifyShaderEditor
 			m_selectedLocation = PreviewLocation.BottomCenter;
 			m_previewShaderGUID = "6cf365ccc7ae776488ae8960d6d134c3";
 			m_srpBatcherCompatible = true;
+			m_availableAttribs.Add( new PropertyAttributes( "Main Color", "[MainColor]" ) );
 		}
 
 		void UpdateOutputPorts()
@@ -179,9 +180,9 @@ namespace AmplifyShaderEditor
 				m_requireMaterialUpdate = true;
 		}
 
-		public override void OnNodeLayout( DrawInfo drawInfo )
+		public override void OnNodeLayout( DrawInfo drawInfo, NodeUpdateCache cache )
 		{
-			base.OnNodeLayout( drawInfo );
+			base.OnNodeLayout( drawInfo, cache );
 
 			int maxWidth = 80;
 
@@ -223,7 +224,7 @@ namespace AmplifyShaderEditor
 
 			if( !m_isVisible )
 				return;
-			
+
 			if ( m_isEditingFields && m_currentParameterType != PropertyType.Global )
 			{
 				if( m_materialMode && m_currentParameterType != PropertyType.Constant )
@@ -256,7 +257,7 @@ namespace AmplifyShaderEditor
 				var value = ( m_materialMode && m_currentParameterType != PropertyType.Constant ) ? m_materialValue : m_defaultValue;
 				UIUtils.DrawColorSwatch( m_propertyDrawPos, value, m_useAlpha, m_isHDR );
 			}
-			
+
 			GUI.Label( m_frameDrawPos0, string.Empty, UIUtils.GetCustomStyle( CustomStyle.SamplerFrame ) );
 			// @diogo: to prevent gaps in frame; thanks, Unity!...
 			EditorGUI.DrawRect( m_frameDrawPos1, Color.black );
@@ -303,7 +304,7 @@ namespace AmplifyShaderEditor
 			{
 				if( m_outputPorts[ 0 ].IsLocalValue( dataCollector.PortCategory ) )
 					return GetOutputColorItem( 0, outputId, m_outputPorts[ 0 ].LocalValue(dataCollector.PortCategory) );
-				
+
 
 				Color linear = m_defaultValue.linear;
 
@@ -512,7 +513,7 @@ namespace AmplifyShaderEditor
 			{
 				return	m_materialValue.r.ToString( Constants.PropertyVectorFormatLabel ) + IOUtils.VECTOR_SEPARATOR +
 						m_materialValue.g.ToString( Constants.PropertyVectorFormatLabel ) + IOUtils.VECTOR_SEPARATOR +
-						m_materialValue.b.ToString( Constants.PropertyVectorFormatLabel ) + 
+						m_materialValue.b.ToString( Constants.PropertyVectorFormatLabel ) +
 						( m_useAlpha ? IOUtils.VECTOR_SEPARATOR + m_materialValue.a.ToString( Constants.PropertyVectorFormatLabel ) : string.Empty );
 			}
 			else

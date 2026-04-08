@@ -61,7 +61,7 @@ namespace AmplifyShaderEditor
 
 		public override string GenerateShaderForOutput( int outputId, ref MasterNodeDataCollector dataCollector, bool ignoreLocalvar )
 		{
-			if ( !dataCollector.IsSRP || !dataCollector.TemplateDataCollectorInstance.IsLWRP )
+			if ( !dataCollector.IsSRP || !dataCollector.TemplateDataCollectorInstance.IsURP )
 			{
 				UIUtils.ShowMessage( ErrorOnCompilationMsg, MessageSeverity.Error );
 				return GenerateErrorValue();
@@ -72,14 +72,19 @@ namespace AmplifyShaderEditor
 
 			if ( dataCollector.IsSRP && dataCollector.CurrentSRPType == TemplateSRPType.URP )
 			{
-				if ( ASEPackageManagerHelper.PackageSRPVersion >= ( int )ASESRPBaseline.ASE_SRP_12_0 )
+				if ( ASEPackageManagerHelper.PackageSRPVersion >= ( int )ASESRPBaseline.ASE_SRP_12_X )
 				{
 					dataCollector.AddToPragmas( UniqueId, "multi_compile_fragment _ _REFLECTION_PROBE_BLENDING" );
 					dataCollector.AddToPragmas( UniqueId, "multi_compile_fragment _ _REFLECTION_PROBE_BOX_PROJECTION" );
 
 				}
 
-				if ( ASEPackageManagerHelper.PackageSRPVersion >= ( int )ASESRPBaseline.ASE_SRP_14_0 )
+				if ( ASEPackageManagerHelper.PackageSRPVersion >= ( int )ASESRPBaseline.ASE_SRP_17_1 )
+				{
+					dataCollector.AddToPragmas( UniqueId, "multi_compile _ _CLUSTER_LIGHT_LOOP" );
+					dataCollector.AddToPragmas( UniqueId, "multi_compile_fragment _ _REFLECTION_PROBE_ATLAS" );
+				}
+				else if ( ASEPackageManagerHelper.PackageSRPVersion >= ( int )ASESRPBaseline.ASE_SRP_14_X )
 				{
 					dataCollector.AddToPragmas( UniqueId, "multi_compile _ _FORWARD_PLUS" );
 				}

@@ -160,7 +160,7 @@ namespace AmplifyShaderEditor
 				texelName = "_TexelSize";
 				UIUtils.ShowMessage( UniqueId, "Please specify a texture sample on the Texel Size node", MessageSeverity.Warning );
 			}
-			
+
 			if ( m_variableMode == VariableMode.Create )
 			{
 				dataCollector.AddToUniforms( UniqueId, "float4 " + texelName + ";", dataCollector.IsSRP );
@@ -302,6 +302,17 @@ namespace AmplifyShaderEditor
 				}
 			}
 			UpdateTitle();
+		}
+
+		public override void ReconnectClipboardReferences( Clipboard clipboard )
+		{
+			// validate node first
+			int newId = clipboard.GeNewNodeId( m_referenceNodeId );
+			if ( ContainerGraph.GetNode( newId ) != null )
+			{
+				m_referenceNodeId = newId;
+			}
+			RefreshExternalReferences();
 		}
 
 		public override void ReadFromString( ref string[] nodeParams )

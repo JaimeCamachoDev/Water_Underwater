@@ -54,7 +54,7 @@ namespace AmplifyShaderEditor
 		{
 			EditorApplication.update -= Update;
 
-			if( !EditorApplication.isPlayingOrWillChangePlaymode )
+			if( !EditorApplication.isPlayingOrWillChangePlaymode && !Application.isBatchMode )
 			{
 				Preferences.ShowOption show = Preferences.ShowOption.Never;
 				if( !EditorPrefs.HasKey( Preferences.User.Keys.StartUp ) )

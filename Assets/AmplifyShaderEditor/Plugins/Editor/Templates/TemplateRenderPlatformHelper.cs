@@ -53,18 +53,17 @@ namespace AmplifyShaderEditor
 
 		public void SetupPlatform( string platformStr , bool value )
 		{
-			try
+			if ( Enum.TryParse<RenderPlatforms>( platformStr, out RenderPlatforms platform ) )
 			{
-				RenderPlatforms platform = (RenderPlatforms)Enum.Parse( typeof( RenderPlatforms ) , platformStr );
 				int index = -1;
 				if( RenderingPlatformOpHelper.PlatformToIndex.TryGetValue( platform , out index ) )
 				{
 					m_renderingPlatforms[ index ] = value;
 				}
 			}
-			catch( Exception e )
+			else
 			{
-				Debug.LogException( e );
+				// ignore unsupported platforms
 			}
 		}
 

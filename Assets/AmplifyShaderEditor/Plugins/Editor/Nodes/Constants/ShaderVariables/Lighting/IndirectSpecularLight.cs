@@ -8,7 +8,7 @@ using UnityEditor;
 namespace AmplifyShaderEditor
 {
 	[Serializable]
-	[NodeAttributes( "Indirect Specular Light", "Lighting", "Indirect Specular Light", NodeAvailabilityFlags = (int)( NodeAvailability.CustomLighting | NodeAvailability.TemplateShader ) )]
+	[NodeAttributes( "Indirect Specular Light", "Lighting", "Indirect Specular Light" )]
 	public sealed class IndirectSpecularLight : ParentNode
 	{
 		[SerializeField]
@@ -190,7 +190,7 @@ namespace AmplifyShaderEditor
 						string tempocclusion = m_inputPorts[ 2 ].GeneratePortInstructions( ref dataCollector );
 
 						dataCollector.AddLocalVariable( UniqueId, "half3 reflectVector" + OutputId + " = reflect( -" + worldViewDir + ", " + worldNormal + " );" );
-						if ( ASEPackageManagerHelper.PackageSRPVersion >= ( int )ASESRPBaseline.ASE_SRP_14_0 )
+						if ( ASEPackageManagerHelper.PackageSRPVersion >= ( int )ASESRPBaseline.ASE_SRP_14_X )
 						{
 							if ( ASEPackageManagerHelper.PackageSRPVersion >= ( int )ASESRPBaseline.ASE_SRP_17_1 )
 							{

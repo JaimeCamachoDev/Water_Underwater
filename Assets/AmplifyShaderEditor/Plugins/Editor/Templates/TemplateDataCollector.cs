@@ -144,8 +144,100 @@ namespace AmplifyShaderEditor
 			}
 		}
 
-		public void AddHDLightInfo()
+		public void AddMainLightShadowAttenuationDependsURP( int UniqueId )
 		{
+			bool isForward = this.m_currentDataCollector.CurrentPassName.Contains( "Forward" );
+			bool isGBuffer = this.m_currentDataCollector.CurrentPassName.Contains( "GBuffer" );
+
+			// Pragmas
+			var pragmas = new List<string>();
+			if ( ASEPackageManagerHelper.CurrentSRPVersion >= 170100 )
+			{
+				if ( isForward || isGBuffer )
+				{
+					pragmas.Add( "multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN" );
+					pragmas.Add( "multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH" );
+				}
+			}
+			else if ( ASEPackageManagerHelper.CurrentSRPVersion >= 140009 )
+			{
+				if ( isForward || isGBuffer )
+				{
+					pragmas.Add( "multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN" );
+					pragmas.Add( "multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH" );
+				}
+			}
+			else if ( ASEPackageManagerHelper.CurrentURPBaseline >= ASESRPBaseline.ASE_SRP_14_X )
+			{
+				if ( isForward || isGBuffer )
+				{
+					pragmas.Add( "multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN" );
+					pragmas.Add( "multi_compile_fragment _ _SHADOWS_SOFT" );
+				}
+			}
+			else if ( ASEPackageManagerHelper.CurrentURPBaseline >= ASESRPBaseline.ASE_SRP_12_X )
+			{
+				if ( isForward || isGBuffer )
+				{
+					pragmas.Add( "multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN" );
+					pragmas.Add( "multi_compile_fragment _ _SHADOWS_SOFT" );
+				}
+			}
+			else if ( ASEPackageManagerHelper.CurrentURPBaseline >= ASESRPBaseline.ASE_SRP_11_X )
+			{
+				if ( isForward || isGBuffer )
+				{
+					pragmas.Add( "multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN" );
+					pragmas.Add( "multi_compile_fragment _ _SHADOWS_SOFT" );
+				}
+			}
+			else
+			{
+				if ( isForward || isGBuffer )
+				{
+					pragmas.Add( "multi_compile _ _MAIN_LIGHT_SHADOWS" );
+					pragmas.Add( "multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE" );
+					pragmas.Add( "multi_compile_fragment _ _SHADOWS_SOFT" );
+				}
+			}
+
+			for ( int i = 0; i < pragmas.Count; i++ )
+			{
+				m_currentDataCollector.AddToPragmas( UniqueId, pragmas[ i ] );
+			}
+		}
+
+		public void AddMainLightShadowAttenuationDependsHDRP( int UniqueId )
+		{
+			m_currentDataCollector.AddToIncludes( UniqueId, "Packages/com.unity.render-pipelines.high-definition/Runtime/Lighting/LightLoop/HDShadow.hlsl" );
+
+			if ( ASEPackageManagerHelper.CurrentHDRPBaseline >= ASESRPBaseline.ASE_SRP_16_X )
+			{
+				m_currentDataCollector.AddToDirectives(
+					"#if !defined( PUNCTUAL_SHADOW_LOW ) && !defined( PUNCTUAL_SHADOW_MEDIUM ) && !defined( PUNCTUAL_SHADOW_HIGH )\n" +
+					"\t#define PUNCTUAL_SHADOW_LOW\n" +
+					"#endif\n" );
+
+				m_currentDataCollector.AddToPragmas( UniqueId, "multi_compile_fragment DIRECTIONAL_SHADOW_LOW DIRECTIONAL_SHADOW_MEDIUM DIRECTIONAL_SHADOW_HIGH" );
+			}
+			else
+			{
+				m_currentDataCollector.AddToDirectives(
+					"#if !defined( SHADOW_LOW ) && !defined( SHADOW_MEDIUM ) && !defined( SHADOW_HIGH )\n" +
+						"\t#define SHADOW_LOW\n" +
+					"#endif\n" );
+
+				m_currentDataCollector.AddToPragmas( UniqueId, "multi_compile_fragment SHADOW_LOW SHADOW_MEDIUM SHADOW_HIGH" );
+			}
+
+			m_currentDataCollector.AddToDirectives(
+				"#if !defined( AREA_SHADOW_MEDIUM ) && !defined( AREA_SHADOW_HIGH )\n" +
+				"\t#define AREA_SHADOW_MEDIUM\n" +
+				"#endif\n" +
+
+				// @diogo: these are necessary here because HDRP defines a dummy one if these are not included earlier, causing a duplicated declaration
+				"#include \"Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl\"\n" +
+				"#include \"Packages/com.unity.render-pipelines.high-definition/Runtime/Lighting/Shadow/HDShadowContext.hlsl\"\n" );
 		}
 
 		public void AddLateDirective( AdditionalLineType type, string value )
@@ -404,12 +496,12 @@ namespace AmplifyShaderEditor
 				}
 				else
 				{
-					if( m_fragmentInputParams != null && m_fragmentInputParams.ContainsKey( TemplateSemantics.SV_IsFrontFacing ) )
-						return m_fragmentInputParams[ TemplateSemantics.SV_IsFrontFacing ].Name;
+					if( m_fragmentInputParams != null && m_fragmentInputParams.ContainsKey( TemplateSemantics.SV_IsFrontFace ) )
+						return m_fragmentInputParams[ TemplateSemantics.SV_IsFrontFace ].Name;
 
-					string custom = "bool "+ TemplateHelperFunctions.SemanticsDefaultName[ TemplateSemantics.SV_IsFrontFacing ] + " : SV_IsFrontFace";
-					RegisterFragInputParams( WirePortDataType.FLOAT, PrecisionType.Half, TemplateHelperFunctions.SemanticsDefaultName[ TemplateSemantics.SV_IsFrontFacing ], TemplateSemantics.SV_IsFrontFacing, custom );
-					return m_fragmentInputParams[ TemplateSemantics.SV_IsFrontFacing ].Name;
+					string custom = "uint "+ TemplateHelperFunctions.SemanticsDefaultName[ TemplateSemantics.SV_IsFrontFace ] + " : SV_IsFrontFace";
+					RegisterFragInputParams( WirePortDataType.FLOAT, PrecisionType.Half, TemplateHelperFunctions.SemanticsDefaultName[ TemplateSemantics.SV_IsFrontFace ], TemplateSemantics.SV_IsFrontFace, custom );
+					return m_fragmentInputParams[ TemplateSemantics.SV_IsFrontFace ].Name;
 				}
 			}
 			else
@@ -419,12 +511,12 @@ namespace AmplifyShaderEditor
 
 				//RegisterFragInputParams( WirePortDataType.FLOAT, PrecisionType.Half, TemplateHelperFunctions.SemanticsDefaultName[ TemplateSemantics.VFACE ], TemplateSemantics.VFACE );
 				//return m_fragmentInputParams[ TemplateSemantics.VFACE ].Name;
-				if( m_fragmentInputParams != null && m_fragmentInputParams.ContainsKey( TemplateSemantics.SV_IsFrontFacing ) )
-					return m_fragmentInputParams[ TemplateSemantics.SV_IsFrontFacing ].Name;
+				if( m_fragmentInputParams != null && m_fragmentInputParams.ContainsKey( TemplateSemantics.SV_IsFrontFace ) )
+					return m_fragmentInputParams[ TemplateSemantics.SV_IsFrontFace ].Name;
 
-				string custom = "bool " + TemplateHelperFunctions.SemanticsDefaultName[ TemplateSemantics.SV_IsFrontFacing ] + " : SV_IsFrontFace";
-				RegisterFragInputParams( WirePortDataType.FLOAT , PrecisionType.Half , TemplateHelperFunctions.SemanticsDefaultName[ TemplateSemantics.SV_IsFrontFacing ] , TemplateSemantics.SV_IsFrontFacing , custom );
-				return m_fragmentInputParams[ TemplateSemantics.SV_IsFrontFacing ].Name;
+				string custom = "uint " + TemplateHelperFunctions.SemanticsDefaultName[ TemplateSemantics.SV_IsFrontFace ] + " : SV_IsFrontFace";
+				RegisterFragInputParams( WirePortDataType.FLOAT , PrecisionType.Half , TemplateHelperFunctions.SemanticsDefaultName[ TemplateSemantics.SV_IsFrontFace ] , TemplateSemantics.SV_IsFrontFace , custom );
+				return m_fragmentInputParams[ TemplateSemantics.SV_IsFrontFace ].Name;
 
 			}
 		}
@@ -1211,17 +1303,39 @@ namespace AmplifyShaderEditor
 			return varName;
 		}
 
-		public string GetWorldNormal( int uniqueId, PrecisionType precisionType, string normal, string outputId )
+		public string GetWorldNormal( int uniqueId, PrecisionType precisionType, string normal, string outputId, ViewSpace normalSpace = ViewSpace.Tangent )
 		{
-			string tanToWorld0 = string.Empty;
-			string tanToWorld1 = string.Empty;
-			string tanToWorld2 = string.Empty;
+			if ( normalSpace == ViewSpace.Tangent )
+			{
+				string tanToWorld0 = string.Empty;
+				string tanToWorld1 = string.Empty;
+				string tanToWorld2 = string.Empty;
 
-			GetWorldTangentTf( precisionType, out tanToWorld0, out tanToWorld1, out tanToWorld2, true );
+				GetWorldTangentTf( precisionType, out tanToWorld0, out tanToWorld1, out tanToWorld2, true );
 
-			string tanNormal = "tanNormal" + outputId;
-			m_currentDataCollector.AddLocalVariable( uniqueId, "float3 " + tanNormal + " = " + normal + ";" );
-			return string.Format( "float3( dot( {1}, {0} ), dot( {2}, {0} ), dot( {3}, {0} ) )", tanNormal, tanToWorld0, tanToWorld1, tanToWorld2 );
+				string tanNormal = "tanNormal" + outputId;
+				m_currentDataCollector.AddLocalVariable( uniqueId, "float3 " + tanNormal + " = " + normal + ";" );
+				return string.Format( "float3( dot( {1}, {0} ), dot( {2}, {0} ), dot( {3}, {0} ) )", tanNormal, tanToWorld0, tanToWorld1, tanToWorld2 );
+			}
+			else if ( normalSpace == ViewSpace.World )
+			{
+				return normal;
+			}
+			else if ( normalSpace == ViewSpace.Object )
+			{
+				string formatStr = IsSRP ? "TransformObjectToWorldNormal( {0} )" : "UnityObjectToWorldNormal( {0} )";
+				return string.Format( formatStr, normal );
+			}
+			else if ( normalSpace == ViewSpace.View )
+			{
+				string formatStr = IsSRP ? "TransformViewToWorldNormal( {0} )" : "mul( ( float3x3 )UNITY_MATRIX_I_V, {0} )";
+				return string.Format( formatStr, normal );
+			}
+			else
+			{
+				// unsupported
+				return "float3( 0, 0, 0 )";
+			}
 		}
 
 		public string GetVertexTangent( WirePortDataType type, PrecisionType precisionType, bool useMasterNodeCategory = true, MasterNodePortCategory customCategory = MasterNodePortCategory.Fragment )
@@ -1417,14 +1531,15 @@ namespace AmplifyShaderEditor
 			//return varName;
 
 			m_currentDataCollector.AddToIncludes( uniqueId, Constants.UnityAutoLightLib );
-			m_currentDataCollector.AddToDefines( uniqueId, "ASE_SHADOWS 1" );
+			m_currentDataCollector.AddToDefines( uniqueId, "ASE_SHADOWS" );
 			RequestMacroInterpolator( "UNITY_SHADOW_COORDS" );
+			m_currentDataCollector.AddToPragmas( uniqueId, "multi_compile_fwdbase" );
 
 			//string vOutName = CurrentTemplateData.VertexFunctionData.OutVarName;
 			string fInName = CurrentTemplateData.FragmentFunctionData.InVarName;
 			string worldPos = GetWorldPos();
-			m_currentDataCollector.AddLocalVariable( uniqueId, "UNITY_LIGHT_ATTENUATION( ase_atten, " + fInName + ", " + worldPos + " )" );
-			return "ase_atten";
+			m_currentDataCollector.AddLocalVariable( uniqueId, "UNITY_LIGHT_ATTENUATION( ase_lightAtten, " + fInName + ", " + worldPos + " )" );
+			return "ase_lightAtten";
 
 		}
 
@@ -1462,8 +1577,8 @@ namespace AmplifyShaderEditor
 		public string GenerateObjectBoundsMin( ref MasterNodeDataCollector dataCollector, int uniqueId )
 		{
 			string value = string.Empty;
-			if ( m_currentSRPType != TemplateSRPType.BiRP && ( ASEPackageManagerHelper.CurrentHDRPBaseline >= ASESRPBaseline.ASE_SRP_14_0 ||
-				ASEPackageManagerHelper.CurrentURPBaseline >= ASESRPBaseline.ASE_SRP_14_0  ) )
+			if ( m_currentSRPType != TemplateSRPType.BiRP && ( ASEPackageManagerHelper.CurrentHDRPBaseline >= ASESRPBaseline.ASE_SRP_14_X ||
+				ASEPackageManagerHelper.CurrentURPBaseline >= ASESRPBaseline.ASE_SRP_14_X  ) )
 			{
 				value = "unity_RendererBounds_Min.xyz";
 			}
@@ -1478,8 +1593,8 @@ namespace AmplifyShaderEditor
 		public string GenerateObjectBoundsMax( ref MasterNodeDataCollector dataCollector, int uniqueId )
 		{
 			string value = string.Empty;
-			if ( m_currentSRPType != TemplateSRPType.BiRP && ( ASEPackageManagerHelper.CurrentHDRPBaseline >= ASESRPBaseline.ASE_SRP_14_0 ||
-				ASEPackageManagerHelper.CurrentURPBaseline >= ASESRPBaseline.ASE_SRP_14_0 ) )
+			if ( m_currentSRPType != TemplateSRPType.BiRP && ( ASEPackageManagerHelper.CurrentHDRPBaseline >= ASESRPBaseline.ASE_SRP_14_X ||
+				ASEPackageManagerHelper.CurrentURPBaseline >= ASESRPBaseline.ASE_SRP_14_X ) )
 			{
 				value = "unity_RendererBounds_Max.xyz";
 			}
@@ -1494,8 +1609,8 @@ namespace AmplifyShaderEditor
 		public string GenerateObjectBoundsSize( ref MasterNodeDataCollector dataCollector, int uniqueId )
 		{
 			string value = string.Empty;
-			if ( m_currentSRPType != TemplateSRPType.BiRP && ( ASEPackageManagerHelper.CurrentHDRPBaseline >= ASESRPBaseline.ASE_SRP_14_0 ||
-				ASEPackageManagerHelper.CurrentURPBaseline >= ASESRPBaseline.ASE_SRP_14_0 ) )
+			if ( m_currentSRPType != TemplateSRPType.BiRP && ( ASEPackageManagerHelper.CurrentHDRPBaseline >= ASESRPBaseline.ASE_SRP_14_X ||
+				ASEPackageManagerHelper.CurrentURPBaseline >= ASESRPBaseline.ASE_SRP_14_X ) )
 			{
 				value = "( unity_RendererBounds_Max.xyz - unity_RendererBounds_Min.xyz )";
 			}
@@ -1882,7 +1997,7 @@ namespace AmplifyShaderEditor
 			}
 
 			string worldPos = GetWorldPos();
-			string viewVectorWS = "( _WorldSpaceCameraPos.xyz - " + worldPos + " )";
+			string viewVectorWS = string.Format( "( ( unity_OrthoParams.w == 0 ) ? _WorldSpaceCameraPos - {0} : UNITY_MATRIX_V[ 2 ].xyz )", worldPos );
 
 			string viewVector;
 			if ( space == ViewSpace.Tangent )
@@ -2111,8 +2226,7 @@ namespace AmplifyShaderEditor
 				string lightVar;
 				if( m_currentSRPType == TemplateSRPType.HDRP )
 				{
-					AddHDLightInfo();
-					lightVar = "-" + string.Format( TemplateHelperFunctions.HDLightInfoFormat, "0", "forward" );
+					lightVar = "-" + string.Format( TemplateHelperFunctions.LightDataFormatHDRP, "0", "forward" );
 				}
 				else
 				{
@@ -2428,7 +2542,7 @@ namespace AmplifyShaderEditor
 		public int MultipassPassIdx { get { return m_multipassPassIdx; } }
 		public TemplateSRPType CurrentSRPType { get { return m_currentSRPType; } set { m_currentSRPType = value; } }
 		public bool IsHDRP { get { return m_currentSRPType == TemplateSRPType.HDRP; } }
-		public bool IsLWRP { get { return m_currentSRPType == TemplateSRPType.URP; } }
+		public bool IsURP { get { return m_currentSRPType == TemplateSRPType.URP; } }
 		public bool IsSRP { get { return ( m_currentSRPType == TemplateSRPType.URP || m_currentSRPType == TemplateSRPType.HDRP ); } }
 		public TemplateInterpData InterpData { get { return m_interpolatorData; } }
 		public List<PropertyDataCollector> LateDirectivesList { get { return m_lateDirectivesList; } }

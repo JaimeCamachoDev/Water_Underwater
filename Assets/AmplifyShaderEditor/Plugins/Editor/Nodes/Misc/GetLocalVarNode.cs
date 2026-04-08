@@ -75,7 +75,7 @@ namespace AmplifyShaderEditor
 				if( m_drawPreviewAsSphere != m_currentSelected.SpherePreview )
 				{
 					m_drawPreviewAsSphere = m_currentSelected.SpherePreview;
-					OnNodeChange();
+					OnNodeChange( new NodeUpdateCache() );
 				}
 				//CheckSpherePreview();
 

@@ -54,7 +54,7 @@ namespace AmplifyShaderEditor
 		public delegate string PortGeneration( ref MasterNodeDataCollector dataCollector, int index, ParentGraph graph );
 		public PortGeneration OnPortGeneration = null;
 
-		//Title editing 
+		//Title editing
 		[SerializeField]
 		private string m_uniqueName;
 
@@ -119,7 +119,7 @@ namespace AmplifyShaderEditor
 
 			for( int i = 0; i < OutputPorts[ 0 ].ExternalReferences.Count; i++ )
 			{
-				ContainerGraph.GetNode( OutputPorts[ 0 ].ExternalReferences[ i ].NodeId ).OnNodeChange();
+				ContainerGraph.GetNode( OutputPorts[ 0 ].ExternalReferences[ i ].NodeId ).OnNodeChange( new NodeUpdateCache() );
 			}
 
 			if( m_typeId == -1 )
@@ -152,7 +152,7 @@ namespace AmplifyShaderEditor
 					if( input.ExternalReferences.Count > 0 )
 					{
 						outNode = Fnode.ContainerGraph.GetNode( input.ExternalReferences[ 0 ].NodeId );
-					} 
+					}
 					else if( InputPorts[ i ].ExternalReferences.Count > 0 )
 					{
 						outNode = ContainerGraph.GetNode( InputPorts[ i ].ExternalReferences[ 0 ].NodeId );
@@ -194,7 +194,7 @@ namespace AmplifyShaderEditor
 			if( m_nodeAttribs != null )
 				m_uniqueName = m_nodeAttribs.Name + UniqueId;
 		}
-		
+
 		public override void Destroy()
 		{
 			base.Destroy();
@@ -282,7 +282,7 @@ namespace AmplifyShaderEditor
 
 					if( m_startEditing )
 						EditorGUI.FocusTextInControl( m_uniqueName );
-					
+
 				}
 
 				if( drawInfo.CurrentEventType == EventType.Repaint )
@@ -301,14 +301,14 @@ namespace AmplifyShaderEditor
 					}
 				}
 
-				
+
 			}
 		}
 
-		public override void OnNodeLayout( DrawInfo drawInfo )
+		public override void OnNodeLayout( DrawInfo drawInfo, NodeUpdateCache cache )
 		{
 			// RUN LAYOUT CHANGES AFTER TITLES CHANGE
-			base.OnNodeLayout( drawInfo );
+			base.OnNodeLayout( drawInfo, cache );
 			m_titleClickArea = m_titlePos;
 			m_titleClickArea.height = Constants.NODE_HEADER_HEIGHT;
 		}

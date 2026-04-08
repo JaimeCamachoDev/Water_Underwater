@@ -47,6 +47,7 @@ namespace AmplifyShaderEditor
 		private const string TooltipFormatter = "{0}\n\nName: {1}\nValue: {2}";
 		private const string InvalidAttributeFormatter = "Attribute {0} not found on node {1}. Please click on this message to select node and review its attributes section";
 		protected string GlobalTypeWarningText = "Global variables must be set via a C# script using the Shader.SetGlobal{0}(...) method.\nPlease note that setting a global variable will affect all shaders which are using it.";
+		private const string PrecisionDisabledWarningText = "Precision cannot be changed because a matching internal property is already defined as global uniform in the template.";
 		private const string HybridInstancedStr = "Hybrid Instanced";
 		private const string AutoRegisterStr = "Auto-Register";
 		private const string IgnoreVarDeclarationStr = "Variable Mode";
@@ -86,6 +87,7 @@ namespace AmplifyShaderEditor
 		[SerializeField]
 		protected string m_precisionString;
 		protected bool m_drawPrecisionUI = true;
+		protected bool m_disablePrecisionUI = false;
 
 		[SerializeField]
 		private int m_orderIndex = -1;
@@ -195,7 +197,7 @@ namespace AmplifyShaderEditor
 		[SerializeField]
 		protected List<int> m_selectedAttribs = new List<int>();
 
-		//Title editing 
+		//Title editing
 		protected bool m_isEditing;
 		protected bool m_stopEditing;
 		protected bool m_startEditing;
@@ -385,7 +387,7 @@ namespace AmplifyShaderEditor
 			if( parameterType == PropertyType.InstancedProperty )
 			{
 				//if( m_containerGraph.IsSRP )
-				//{					
+				//{
 				//	UIUtils.ShowMessage( InstancedPropertyWarning,MessageSeverity.Warning );
 				//}
 
@@ -621,7 +623,7 @@ namespace AmplifyShaderEditor
 			DrawCustomAttrAddRemoveButtons();
 			EditorGUILayout.EndHorizontal();
 		}
-		
+
 		protected void DrawHeaderAttrAddRemoveButtons()
 		{
 			// Add new port
@@ -669,7 +671,7 @@ namespace AmplifyShaderEditor
 			EditorGUILayout.EndHorizontal();
 		}
 
-		
+
 		public virtual void DrawAttributes()
 		{
 			int attribCount = m_selectedAttribs.Count;
@@ -759,6 +761,7 @@ namespace AmplifyShaderEditor
 		}
 		public virtual void DrawMainPropertyBlock()
 		{
+			EditorGUI.BeginChangeCheck();
 			EditorGUILayout.BeginVertical();
 			{
 				if( m_freeType )
@@ -808,6 +811,10 @@ namespace AmplifyShaderEditor
 				}
 			}
 			EditorGUILayout.EndVertical();
+			if ( EditorGUI.EndChangeCheck() )
+			{
+				OnDirtyProperty();
+			}
 		}
 
 		public void DrawMainPropertyBlockNoPrecision()
@@ -880,7 +887,7 @@ namespace AmplifyShaderEditor
 					if( m_customAttrCount > 0 )
 						NodeUtils.DrawPropertyGroup( ref m_visibleCustomAttrFoldout, CustomAttrStr, DrawCustomAttributes, DrawCustomAttrAddRemoveButtons );
 				}
-				
+
 				CheckPropertyFromInspector();
 			}
 		}
@@ -890,7 +897,7 @@ namespace AmplifyShaderEditor
 			if( m_drawPrecisionUI )
 			{
 				bool guiEnabled = GUI.enabled;
-				GUI.enabled = m_currentParameterType == PropertyType.Constant || m_variableMode == VariableMode.Create;
+				GUI.enabled = ( m_currentParameterType == PropertyType.Constant || m_variableMode == VariableMode.Create ) && !m_disablePrecisionUI;
 				EditorGUI.BeginChangeCheck();
 				DrawPrecisionProperty();
 				if( EditorGUI.EndChangeCheck() )
@@ -898,6 +905,10 @@ namespace AmplifyShaderEditor
 
 				GUI.enabled = guiEnabled;
 
+				if ( m_disablePrecisionUI )
+				{
+					EditorGUILayout.HelpBox( PrecisionDisabledWarningText, MessageType.Warning );
+				}
 			}
 		}
 
@@ -958,6 +969,7 @@ namespace AmplifyShaderEditor
 			m_propertyInspectorName = EditorGUILayoutTextField( PropertyInspectorStr, m_propertyInspectorName );
 			if( EditorGUI.EndChangeCheck() )
 			{
+				SetClippedTitle( m_propertyInspectorName, m_longNameSize );
 				if( m_propertyInspectorName.Length > 0 )
 				{
 					BeginPropertyFromInspectorCheck();
@@ -1119,9 +1131,9 @@ namespace AmplifyShaderEditor
 
 		}
 
-		public override void OnNodeLayout( DrawInfo drawInfo )
+		public override void OnNodeLayout( DrawInfo drawInfo, NodeUpdateCache cache )
 		{
-			//base.OnNodeLayout( drawInfo );
+			//base.OnNodeLayout( drawInfo, cache );
 			if( m_reRegisterName )
 			{
 				m_reRegisterName = false;
@@ -1166,7 +1178,7 @@ namespace AmplifyShaderEditor
 			CheckPropertyFromInspector();
 			CheckDuplicateProperty();
 			// RUN LAYOUT CHANGES AFTER TITLES CHANGE
-			base.OnNodeLayout( drawInfo );
+			base.OnNodeLayout( drawInfo, cache );
 
 			m_titleClickArea = m_titlePos;
 			m_titleClickArea.height = Constants.NODE_HEADER_HEIGHT;
@@ -1295,7 +1307,7 @@ namespace AmplifyShaderEditor
 
 		public virtual void CheckIfAutoRegister( ref MasterNodeDataCollector dataCollector )
 		{
-			// Also testing inside shader function because node can be used indirectly over a custom expression and directly over a Function Output node 
+			// Also testing inside shader function because node can be used indirectly over a custom expression and directly over a Function Output node
 			// That isn't being used externaly making it to not be registered ( since m_connStatus it set to Connected by being connected to an output node
 			if( CurrentParameterType != PropertyType.Constant && m_autoRegister && ( m_connStatus != NodeConnectionStatus.Connected || InsideShaderFunction ) )
 			{
@@ -1486,12 +1498,34 @@ namespace AmplifyShaderEditor
 			}
 		}
 
-		public virtual void OnDirtyProperty() { }
+		public virtual void OnDirtyProperty()
+		{
+			// @diogo: Look for an existing global property hard coded into the template. If found,
+			//         disable precision control and force a precision type matching the template.
+
+			m_disablePrecisionUI = false;
+
+			if ( m_currentParameterType != PropertyType.Constant )
+			{
+				var templateMasterNode = ContainerGraph.CurrentMasterNode as TemplateMultiPassMasterNode;
+				if ( templateMasterNode != null && templateMasterNode.CurrentTemplate != null )
+				{
+					var data = templateMasterNode.CurrentTemplate.GetGlobalShaderPropertyData( m_propertyName );
+					if ( data != null )
+					{
+						m_currentPrecisionType = data.PrecisionType;
+						m_disablePrecisionUI = true;
+					}
+				}
+			}
+		}
+
 		public virtual void OnPropertyNameChanged() { UIUtils.UpdatePropertyDataNode( UniqueId, PropertyInspectorName ); }
 		public virtual void DrawSubProperties() { }
 		public virtual void DrawMaterialProperties() { }
 
 		public virtual string GetPropertyValue() { return string.Empty; }
+		public virtual string GetDefaultValue() { return string.Empty; }
 
 		public string GetInstancedUniformValue( bool isTemplate, bool isSRP )
 		{
@@ -1613,7 +1647,7 @@ namespace AmplifyShaderEditor
 			int attribCount = m_availableAttribs.Count;
 			for( int i = 0; i < attribCount; i++ )
 			{
-				if( m_availableAttribs[ i ].Attribute.Equals( name ) || 
+				if( m_availableAttribs[ i ].Attribute.Equals( name ) ||
 					(m_availableAttribs[ i ].HasDeprecatedValue && m_availableAttribs[ i ].DeprecatedValue.Equals( name ) ) )
 					return i;
 			}
@@ -1760,14 +1794,14 @@ namespace AmplifyShaderEditor
 			}
 
 			ReleaseRansomedProperty();
-			
+
 		}
 
 		public virtual void ReleaseRansomedProperty()
 		{
 			if( m_variableMode == VariableMode.Fetch/* && m_autoGlobalName */)
 			{
-				//Fooling setter to have a different value 
+				//Fooling setter to have a different value
 				m_variableMode = VariableMode.Create;
 				CurrentVariableMode = VariableMode.Fetch;
 			}
@@ -1875,7 +1909,7 @@ namespace AmplifyShaderEditor
 				}
 			}
 		}
-		
+
 		public string PropertyData( MasterNodePortCategory portCategory )
 		{
 			return ( m_currentParameterType == PropertyType.InstancedProperty ) ? m_outputPorts[ 0 ].LocalValue( portCategory ) : m_propertyName;

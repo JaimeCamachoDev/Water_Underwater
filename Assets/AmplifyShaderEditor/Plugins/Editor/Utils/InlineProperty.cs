@@ -218,7 +218,14 @@ namespace AmplifyShaderEditor
 				PropertyNode node = GetPropertyNode();
 				if( node != null )
 				{
-					return parentesis ? "[" + node.PropertyName + "]" : node.PropertyName;
+					if ( node.CurrentParameterType == PropertyType.Constant )
+					{
+						return node.GetDefaultValue();
+					}
+					else
+					{
+						return parentesis ? "[" + node.PropertyName + "]" : node.PropertyName;
+					}
 				}
 				else if ( !string.IsNullOrEmpty( m_nodePropertyName ) )
 				{
@@ -244,7 +251,14 @@ namespace AmplifyShaderEditor
 				PropertyNode node = GetPropertyNode();
 				if( node != null )
 				{
-					return parentesis ? "[" + node.PropertyName + "]" : node.PropertyName;
+					if ( node.CurrentParameterType == PropertyType.Constant )
+					{
+						return node.GetDefaultValue();
+					}
+					else
+					{
+						return parentesis ? "[" + node.PropertyName + "]" : node.PropertyName;
+					}
 				}
 				else if ( !string.IsNullOrEmpty( m_nodePropertyName ) )
 				{
@@ -300,7 +314,7 @@ namespace AmplifyShaderEditor
 					m_nodePropertyName = param;
 					m_nodeId = UIUtils.GetFloatIntNodeIdByName( m_nodePropertyName );
 				}
-			}			
+			}
 		}
 
 		public void ReadFromString( ref uint index , ref string[] nodeParams , bool isInt = true )

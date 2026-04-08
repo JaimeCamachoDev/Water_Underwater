@@ -517,6 +517,16 @@ namespace AmplifyShaderEditor
 			return newValue;
 		}
 
+		public int EditorGUIIntField( Rect position, int value, [UnityEngine.Internal.DefaultValue( "EditorStyles.numberField" )] GUIStyle style )
+		{
+			int newValue = EditorGUI.IntField( position, value, style );
+			if( newValue != value )
+			{
+				UndoRecordObject( string.Format( MessageFormat, "EditorGUIIntField", ( ( m_nodeAttribs != null ) ? m_nodeAttribs.Name : GetType().ToString() ) ) );
+			}
+			return newValue;
+		}
+
 		public float EditorGUIFloatField( Rect position, string label, float value )
 		{
 			float newValue = EditorGUI.FloatField( position, label, value );

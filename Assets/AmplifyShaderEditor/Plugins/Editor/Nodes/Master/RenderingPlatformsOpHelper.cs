@@ -36,6 +36,10 @@ namespace AmplifyShaderEditor
 		vulkan,
 		nomrt,
 		ps5,        // @diogo: added in 19100
+	#if UNITY_6000_0_OR_NEWER
+		switch2,        // @diogo: added in 19905
+		webgpu,         // @diogo: added in 19905
+	#endif
 		all
 	}
 
@@ -57,6 +61,10 @@ namespace AmplifyShaderEditor
 			new RenderPlatformInfo(){Label = " PlayStation 4", Value = RenderPlatforms.ps4},
 			new RenderPlatformInfo(){Label = " PlayStation 5", Value = RenderPlatforms.ps5},
 			new RenderPlatformInfo(){Label = " Nintendo Switch", Value = RenderPlatforms.@switch},
+		#if UNITY_6000_0_OR_NEWER
+			new RenderPlatformInfo(){Label = " Nintendo Switch 2", Value = RenderPlatforms.switch2},
+			new RenderPlatformInfo(){Label = " WebGPU", Value = RenderPlatforms.webgpu},
+		#endif
 		};
 
 		// Values from this dictionary must be the indices corresponding from the list above
@@ -74,9 +82,13 @@ namespace AmplifyShaderEditor
 			{RenderPlatforms.ps4,			9},
 			{RenderPlatforms.ps5,			10},
 			{RenderPlatforms.@switch,		11},
+		#if UNITY_6000_0_OR_NEWER
+			{RenderPlatforms.switch2,		12},
+			{RenderPlatforms.webgpu,		13},
+		#endif
 		};
 
-		
+
 		public static readonly List<RenderPlatforms> LegacyIndexToPlatform = new List<RenderPlatforms>()
 		{
 			RenderPlatforms.d3d9,
@@ -139,9 +151,9 @@ namespace AmplifyShaderEditor
 			int checkedPlatforms = 0;
 			int uncheckedPlatforms = 0;
 
-			for( int i = 0 ; i < m_renderingPlatformValues.Length ; i++ )
+			for ( int i = 0; i < m_renderingPlatformValues.Length; i++ )
 			{
-				if( m_renderingPlatformValues[ i ] )
+				if ( m_renderingPlatformValues[ i ] )
 				{
 					checkedPlatforms += 1;
 				}
@@ -151,38 +163,67 @@ namespace AmplifyShaderEditor
 				}
 			}
 
-			if( checkedPlatforms > 0 && checkedPlatforms < m_renderingPlatformValues.Length )
+			if ( checkedPlatforms > 0 && checkedPlatforms < m_renderingPlatformValues.Length )
 			{
+			#if UNITY_6000_0_OR_NEWER
+				// @diogo: thanks, Unity...
+				int unityVersion = TemplateHelperFunctions.GetUnityVersion();
+				bool supportsSwitch2 = ( unityVersion < 60010000 && unityVersion >= 60000059 ) || ( unityVersion >= 60030000 );
+			#endif
+
 				string result = string.Empty;
-				if( checkedPlatforms < uncheckedPlatforms )
+
+				if ( checkedPlatforms < uncheckedPlatforms )
 				{
-					result = "only_renderers ";
-					for( int i = 0 ; i < m_renderingPlatformValues.Length ; i++ )
+					for ( int i = 0; i < m_renderingPlatformValues.Length; i++ )
 					{
-						if( m_renderingPlatformValues[ i ] )
+						if ( m_renderingPlatformValues[ i ] )
 						{
-							result += (RenderPlatforms)RenderingPlatformsInfo[ i ].Value + " ";
+						#if UNITY_6000_0_OR_NEWER
+							if ( RenderingPlatformsInfo[ i ].Value == RenderPlatforms.switch2 && !supportsSwitch2 )
+							{
+								continue;
+							}
+						#endif
+
+							if ( string.IsNullOrEmpty( result ) )
+							{
+								result = "only_renderers ";
+							}
+
+							result += ( RenderPlatforms )RenderingPlatformsInfo[ i ].Value + " ";
 						}
 					}
 				}
 				else
 				{
-					result = "exclude_renderers ";
-					for( int i = 0 ; i < m_renderingPlatformValues.Length ; i++ )
+					for ( int i = 0; i < m_renderingPlatformValues.Length; i++ )
 					{
-						if( !m_renderingPlatformValues[ i ] )
+						if ( !m_renderingPlatformValues[ i ] )
 						{
-							result += (RenderPlatforms)RenderingPlatformsInfo[ i ].Value + " ";
+						#if UNITY_6000_0_OR_NEWER
+							if ( RenderingPlatformsInfo[ i ].Value == RenderPlatforms.switch2 && !supportsSwitch2 )
+							{
+								continue;
+							}
+						#endif
+
+							if ( string.IsNullOrEmpty( result ) )
+							{
+								result = "exclude_renderers ";
+							}
+
+							result += ( RenderPlatforms )RenderingPlatformsInfo[ i ].Value + " ";
 						}
 					}
 				}
-				if( addPragmaPrefix )
+
+				if ( !string.IsNullOrEmpty( result ) && addPragmaPrefix )
 				{
 					result = "#pragma " + result;
 				}
 				return result;
 			}
-
 			return string.Empty;
 		}
 
@@ -252,6 +293,13 @@ namespace AmplifyShaderEditor
 						{
 							m_renderingPlatformValues[ PlatformToIndex[ RenderPlatforms.ps5 ] ] = true;
 						}
+						if ( UIUtils.CurrentShaderVersion() < 19905 )
+						{
+						#if UNITY_6000_0_OR_NEWER
+							m_renderingPlatformValues[ PlatformToIndex[ RenderPlatforms.switch2 ] ] = true;
+							m_renderingPlatformValues[ PlatformToIndex[ RenderPlatforms.webgpu ] ] = true;
+						#endif
+						}
 
 						for( int i = 0; i < count; i++ )
 						{
@@ -291,13 +339,13 @@ namespace AmplifyShaderEditor
 			}
 
 		}
-		
+
 		public void Destroy()
 		{
 			m_renderingPlatformValues = null;
 		}
 
-		//TEMPLATE SPECIFIC 
+		//TEMPLATE SPECIFIC
 		[SerializeField]
 		private bool m_loadedFromTemplate = false;
 
@@ -306,7 +354,7 @@ namespace AmplifyShaderEditor
 		public void SetupFromTemplate( TemplateRenderPlatformHelper template )
 		{
 			if( m_loadedFromTemplate )
-				return; 
+				return;
 
 			if( m_renderingPlatformValues.Length != template.RenderingPlatforms.Length )
 			{

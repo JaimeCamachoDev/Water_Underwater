@@ -480,6 +480,11 @@ namespace AmplifyShaderEditor
 
 		public override string GenerateShaderForOutput( int outputId, ref MasterNodeDataCollector dataCollector, bool ignoreLocalvar )
 		{
+			if( m_outputPorts[ 0 ].IsLocalValue( dataCollector.PortCategory ) )
+			{
+				return m_outputPorts[ 0 ].LocalValue( dataCollector.PortCategory );
+			}
+
 			string result = BuildResults( outputId, ref dataCollector, ignoreLocalvar );
 			return CreateOutputLocalVariable( 0, result, ref dataCollector );
 		}

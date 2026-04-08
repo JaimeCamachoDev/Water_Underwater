@@ -81,95 +81,96 @@ namespace AmplifyShaderEditor
 	}
 
 	[Serializable]
-	public class NodeCache
-	{
-		public int TargetNodeId = -1;
-		public int TargetPortId = -1;
-
-		public NodeCache( int targetNodeId, int targetPortId )
-		{
-			SetData( targetNodeId, targetPortId );
-		}
-
-		public void SetData( int targetNodeId, int targetPortId )
-		{
-			TargetNodeId = targetNodeId;
-			TargetPortId = targetPortId;
-		}
-
-		public void Invalidate()
-		{
-			TargetNodeId = -1;
-			TargetPortId = -1;
-		}
-
-		public bool IsValid
-		{
-			get { return ( TargetNodeId >= 0 ); }
-		}
-
-		public override string ToString()
-		{
-			return "TargetNodeId " + TargetNodeId + " TargetPortId " + TargetPortId;
-		}
-	}
-
-	[Serializable]
-	public class CacheNodeConnections
-	{
-		public Dictionary<string, List<NodeCache>> NodeCacheArray;
-
-		public CacheNodeConnections()
-		{
-			NodeCacheArray = new Dictionary<string, List<NodeCache>>();
-		}
-
-		public void Add( string key, NodeCache value )
-		{
-			if( NodeCacheArray.ContainsKey( key ) )
-			{
-				NodeCacheArray[ key ].Add( value );
-			}
-			else
-			{
-				NodeCacheArray.Add( key, new List<NodeCache>() );
-				NodeCacheArray[ key ].Add( value );
-			}
-		}
-
-		public NodeCache Get( string key, int idx = 0 )
-		{
-			if( NodeCacheArray.ContainsKey( key ) )
-			{
-				if( idx < NodeCacheArray[ key ].Count )
-					return NodeCacheArray[ key ][ idx ];
-			}
-			return null;
-		}
-
-		public List<NodeCache> GetList( string key )
-		{
-			if( NodeCacheArray.ContainsKey( key ) )
-			{
-				return NodeCacheArray[ key ];
-			}
-			return null;
-		}
-
-		public void Clear()
-		{
-			foreach( KeyValuePair<string, List<NodeCache>> kvp in NodeCacheArray )
-			{
-				kvp.Value.Clear();
-			}
-			NodeCacheArray.Clear();
-		}
-	}
-
-	[Serializable]
 	[NodeAttributes( "Standard Surface Output", "Master", "Surface shader generator output", null, KeyCode.None, false )]
 	public sealed class StandardSurfaceOutputNode : MasterNode, ISerializationCallbackReceiver
 	{
+
+		[Serializable]
+		public class NodeCache
+		{
+			public int TargetNodeId = -1;
+			public int TargetPortId = -1;
+
+			public NodeCache( int targetNodeId, int targetPortId )
+			{
+				SetData( targetNodeId, targetPortId );
+			}
+
+			public void SetData( int targetNodeId, int targetPortId )
+			{
+				TargetNodeId = targetNodeId;
+				TargetPortId = targetPortId;
+			}
+
+			public void Invalidate()
+			{
+				TargetNodeId = -1;
+				TargetPortId = -1;
+			}
+
+			public bool IsValid
+			{
+				get { return ( TargetNodeId >= 0 ); }
+			}
+
+			public override string ToString()
+			{
+				return "TargetNodeId " + TargetNodeId + " TargetPortId " + TargetPortId;
+			}
+		}
+
+		[Serializable]
+		public class CacheNodeConnections
+		{
+			public Dictionary<string, List<NodeCache>> NodeCacheArray;
+
+			public CacheNodeConnections()
+			{
+				NodeCacheArray = new Dictionary<string, List<NodeCache>>();
+			}
+
+			public void Add( string key, NodeCache value )
+			{
+				if( NodeCacheArray.ContainsKey( key ) )
+				{
+					NodeCacheArray[ key ].Add( value );
+				}
+				else
+				{
+					NodeCacheArray.Add( key, new List<NodeCache>() );
+					NodeCacheArray[ key ].Add( value );
+				}
+			}
+
+			public NodeCache Get( string key, int idx = 0 )
+			{
+				if( NodeCacheArray.ContainsKey( key ) )
+				{
+					if( idx < NodeCacheArray[ key ].Count )
+						return NodeCacheArray[ key ][ idx ];
+				}
+				return null;
+			}
+
+			public List<NodeCache> GetList( string key )
+			{
+				if( NodeCacheArray.ContainsKey( key ) )
+				{
+					return NodeCacheArray[ key ];
+				}
+				return null;
+			}
+
+			public void Clear()
+			{
+				foreach( KeyValuePair<string, List<NodeCache>> kvp in NodeCacheArray )
+				{
+					kvp.Value.Clear();
+				}
+				NodeCacheArray.Clear();
+			}
+		}
+
 		private readonly static string[] VertexLitFunc = { "\t\tinline half4 LightingUnlit( SurfaceOutput s, half3 lightDir, half atten )",
 													"\t\t{",
 													"\t\t\treturn half4 ( 0, 0, 0, s.Alpha );",
@@ -554,7 +555,7 @@ namespace AmplifyShaderEditor
 			m_inputPorts[ m_inputPorts.Count - 1 ].Locked = ( m_alphaMode != AlphaMode.Masked && m_alphaMode != AlphaMode.Custom );
 			m_discardPortId = m_inputPorts.Count - 1;
 
-			// This is done to take the index + 2 from refraction port into account and not overlap indexes 
+			// This is done to take the index + 2 from refraction port into account and not overlap indexes
 			index++;
 
 			AddInputPort( WirePortDataType.FLOAT3, false, CustomLightingStr, index++, MasterNodePortCategory.Fragment, 13 );
@@ -563,7 +564,7 @@ namespace AmplifyShaderEditor
 			m_customLightingPortId = m_inputPorts.Count - 1;
 
 			////////////////////////////////////////////////////////////////////////////////////////////////
-			// Vertex functions - Adding ordex index in order to force these to be the last ones 
+			// Vertex functions - Adding ordex index in order to force these to be the last ones
 			// Well now they have been moved to be the first ones so operations on vertex are to be taken into account
 			// by dither, screen position and similar nodes
 			////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1286,7 +1287,7 @@ namespace AmplifyShaderEditor
 				m_currentDataCollector.DirtyNormal = true;
 				m_currentDataCollector.ForceNormal = false;
 			}
-			
+
 			m_currentDataCollector.AddInstructions( addCustomDelimiters ? customDelimiterIn : ( "\t\t\t" + portName + " = " ) );
 			m_currentDataCollector.AddInstructions( newInstruction );
 			m_currentDataCollector.AddInstructions( addCustomDelimiters ? customDelimiterOut :((isDebugPort)?" + 1E-5;\n":";\n") );
@@ -1352,7 +1353,7 @@ namespace AmplifyShaderEditor
 
 			string aboveUsePasses = string.Empty;
 			string bellowUsePasses = string.Empty;
-			
+
 
 			m_currentDataCollector.TesselationActive = m_tessOpHelper.EnableTesselation;
 			#if UNITY_IOS
@@ -1807,8 +1808,8 @@ namespace AmplifyShaderEditor
 			}
 
 			m_customShadowCaster = CustomShadowCaster;
-			
-			//if( !m_renderingOptionsOpHelper.UseDefaultShadowCaster && 
+
+			//if( !m_renderingOptionsOpHelper.UseDefaultShadowCaster &&
 			//	( ( m_castShadows && ( m_alphaToCoverage || m_inlineAlphaToCoverage.Active ) ) ||
 			//	( m_castShadows && hasOpacity ) ||
 			//	( m_castShadows && ( m_currentDataCollector.UsingWorldNormal || m_currentDataCollector.UsingWorldReflection || m_currentDataCollector.UsingViewDirection ) ) ||
@@ -1905,7 +1906,7 @@ namespace AmplifyShaderEditor
 					if( m_outlineHelper.EnableOutline || ( m_currentDataCollector.UsingCustomOutlineColor || m_currentDataCollector.CustomOutlineSelectedAlpha > 0 || m_currentDataCollector.UsingCustomOutlineWidth ) )
 					{
 						if( !usingDebugPort )
-							AddMultilineBody( ref ShaderBody, m_outlineHelper.OutlineFunctionBody( ref m_currentDataCollector, isInstancedShader, m_customShadowCaster, UIUtils.RemoveInvalidCharacters( ShaderName ), ( m_billboardOpHelper.IsBillboard && !usingDebugPort ? m_billboardOpHelper.GetInternalMultilineInstructions() : null ), ref m_tessOpHelper, ShaderModelTypeArr[ m_shaderModelIdx ], CurrentPrecisionType ) );
+							AddMultilineBody( ref ShaderBody, m_outlineHelper.OutlineFunctionBody( ref m_currentDataCollector, isInstancedShader, m_customShadowCaster, UIUtils.RemoveInvalidCharacters( ShaderName ), ( m_billboardOpHelper.IsBillboard && !usingDebugPort ? m_billboardOpHelper.GetInternalMultilineInstructions() : null ), ref m_tessOpHelper, ShaderModelTypeArr[ m_shaderModelIdx ], CurrentPrecisionType, m_stencilBufferHelper, this ) );
 					}
 
 					//Add SubShader tags
@@ -1927,9 +1928,9 @@ namespace AmplifyShaderEditor
 					AddShaderLOD( ref ShaderBody, ShaderLOD );
 					AddRenderState( ref ShaderBody, "Cull", m_inlineCullMode.GetValueOrProperty( m_cullMode.ToString() ) );
 					m_customBlendAvailable = ( m_alphaMode == AlphaMode.Custom || m_alphaMode == AlphaMode.Opaque );
-					if( ( m_zBufferHelper.IsActive && m_customBlendAvailable ) || m_outlineHelper.UsingZWrite || m_outlineHelper.UsingZTest )
+					if( ( m_zBufferHelper.IsActive && m_customBlendAvailable ) || m_outlineHelper.UsingZWrite || m_outlineHelper.UsingZClip || m_outlineHelper.UsingZTest )
 					{
-						ShaderBody += m_zBufferHelper.CreateDepthInfo( m_outlineHelper.UsingZWrite, m_outlineHelper.UsingZTest );
+						ShaderBody += m_zBufferHelper.CreateDepthInfo( m_outlineHelper.UsingZWrite, m_outlineHelper.UsingZClip, m_outlineHelper.UsingZTest );
 					}
 					if( m_stencilBufferHelper.Active )
 					{
@@ -2634,9 +2635,9 @@ namespace AmplifyShaderEditor
 				{
 					ShaderBody += m_fallbackHelper.TabbedFallbackShader;
 				}
-				else if( m_castShadows || m_receiveShadows )
+				else
 				{
-					AddShaderProperty( ref ShaderBody, "Fallback", "Diffuse" );
+					ShaderBody += m_fallbackHelper.TabbedFallbackShaderOff;
 				}
 
 				if( !string.IsNullOrEmpty( m_customInspectorName ) )
@@ -2674,7 +2675,7 @@ namespace AmplifyShaderEditor
 			}
 			//else
 			//{
-			//	// need to always get asset datapath because a user can change and asset location from the project window 
+			//	// need to always get asset datapath because a user can change and asset location from the project window
 			//	AssetDatabase.ImportAsset( AssetDatabase.GetAssetPath( m_currentShader ) );
 			//	//ShaderUtil.UpdateShaderAsset( m_currentShader, ShaderBody );
 			//}
@@ -2870,7 +2871,7 @@ namespace AmplifyShaderEditor
 
 			portId = newPort;
 
-			//removed custom lighting port 
+			//removed custom lighting port
 			//if ( UIUtils.CurrentShaderVersion() < 10003 ) //runs everytime because this system is only used after 5000 version
 			{
 				switch( m_currentLightModel )
@@ -3311,7 +3312,7 @@ namespace AmplifyShaderEditor
 			get
 			{
 				bool hasOpacity = m_inputPorts[ m_opacityPortId ].IsConnected;
-				return 
+				return
 					( !m_renderingOptionsOpHelper.UseDefaultShadowCaster &&
 					( ( m_castShadows && ( m_alphaToCoverage || m_inlineAlphaToCoverage.Active ) ) ||
 					( m_castShadows && hasOpacity ) ||

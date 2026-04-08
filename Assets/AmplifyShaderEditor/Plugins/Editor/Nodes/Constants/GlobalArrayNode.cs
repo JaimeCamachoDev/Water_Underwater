@@ -234,9 +234,9 @@ namespace AmplifyShaderEditor
 			m_autoRangeCheck = EditorGUILayoutToggle( AutoRangeCheckStr , m_autoRangeCheck );
 		}
 
-		public override void OnNodeLayout( DrawInfo drawInfo )
+		public override void OnNodeLayout( DrawInfo drawInfo, NodeUpdateCache cache )
 		{
-			base.OnNodeLayout( drawInfo );
+			base.OnNodeLayout( drawInfo, cache );
 			m_updated = false;
 			if( m_referenceType == TexReferenceType.Instance )
 			{
@@ -478,6 +478,18 @@ namespace AmplifyShaderEditor
 				}
 			}
 		}
+
+		public override void ReconnectClipboardReferences( Clipboard clipboard )
+		{
+			// validate node first
+			int newId = clipboard.GeNewNodeId( m_referenceNodeId );
+			if ( ContainerGraph.GetNode( newId ) != null )
+			{
+				m_referenceNodeId = newId;
+			}
+			RefreshExternalReferences();
+		}
+
 		public int ArrayLengthX { get { return ( m_referenceNode != null ) ? m_referenceNode.ArrayLengthX : m_arrayLengthX; } }
 		public int ArrayLengthY { get { return ( m_referenceNode != null ) ? m_referenceNode.ArrayLengthY : m_arrayLengthY; } }
 

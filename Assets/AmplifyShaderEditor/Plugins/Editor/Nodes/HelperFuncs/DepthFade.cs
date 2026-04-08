@@ -21,7 +21,7 @@ namespace AmplifyShaderEditor
 		private bool m_saturate = false;
 
 		[SerializeField]
-		private bool m_mirror = true;
+		private bool m_mirror = false;
 
 		protected override void CommonInit( int uniqueId )
 		{

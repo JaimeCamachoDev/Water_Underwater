@@ -9,7 +9,7 @@ using UnityEngine;
 namespace AmplifyShaderEditor
 {
 	/*ase_pass_options OLDEST
-	DefineOnConnected:portId:definevalue	
+	DefineOnConnected:portId:definevalue
 	DefineOnUnconnected:portId:definevalue
 	Options:name:defaultOption:opt0:opt1:opt2
 	SetVisible:PortId:OptionName:OptionValue
@@ -87,6 +87,7 @@ namespace AmplifyShaderEditor
 		ColorMask2,
 		ColorMask3,
 		ZWrite,
+		ZClip,
 		ZTest,
 		ZOffsetFactor,
 		ZOffsetUnits,
@@ -234,6 +235,7 @@ namespace AmplifyShaderEditor
 
 		//DEPTH
 		public ZWriteMode ActionZWrite;
+		public ZClipMode ActionZClip;
 		public ZTestMode ActionZTest;
 		public float ActionZOffsetFactor;
 		public float ActionZOffsetUnits;
@@ -267,7 +269,7 @@ namespace AmplifyShaderEditor
 		public AvailableBlendOps ActionBlendOpRGB3;
 		public AvailableBlendOps ActionBlendOpAlpha3;
 
-		//STENCIL 
+		//STENCIL
 		public int ActionStencilReference;
 		public int ActionStencilReadMask;
 		public int ActionStencilWriteMask;
@@ -636,7 +638,7 @@ namespace AmplifyShaderEditor
 											currentOption.Setup = AseOptionItemSetupDict[ optionItemSetup[ 1 ] ];
 									}
 
-									currentOption.Id = itemIds.Length > 1 ? itemIds[ 1 ] : optionItems[ 1 ];
+									currentOption.Id = itemIds.Length > 1 ? itemIds[ 1 ] : currentOption.Name;
 									currentOption.DisplayOptions = optionItems[ 2 ].Split( OptionsDataSeparator );
 									currentOption.DisableIdx = currentOption.DisplayOptions.Length;
 									optionItems[ 2 ] += ",disable";
@@ -719,7 +721,7 @@ namespace AmplifyShaderEditor
 									optionItemToIndex.Clear();
 									currentOption = new TemplateOptionsItem();
 									currentOption.Type = AseOptionsType.Field;
-									
+
 									currentOption.Id = optionItems[ 1 ];
 									currentOption.Name = optionItems[ 1 ];
 
@@ -924,7 +926,7 @@ namespace AmplifyShaderEditor
 						{
 							if ( !int.TryParse( arr[ 0 ], out actionItem.ActionDataIdx ) )
 								actionItem.ActionDataIdx = -1;
-						
+
 							actionItem.ActionData = arr[ 0 ];
 							actionItem.ActionData2 = arr[ 1 ];
 						}
@@ -1023,6 +1025,12 @@ namespace AmplifyShaderEditor
 								{
 									if( arr.Length > 1 )
 										actionItem.ActionZWrite = (ZWriteMode)Enum.Parse( typeof( ZWriteMode ), arr[ 1 ] );
+								}
+								break;
+								case PropertyActionsEnum.ZClip:
+								{
+									if( arr.Length > 1 )
+										actionItem.ActionZClip = (ZClipMode)Enum.Parse( typeof( ZClipMode ), arr[ 1 ] );
 								}
 								break;
 								case PropertyActionsEnum.ZTest:

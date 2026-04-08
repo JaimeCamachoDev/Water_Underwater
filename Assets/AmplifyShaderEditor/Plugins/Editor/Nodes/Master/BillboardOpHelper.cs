@@ -45,8 +45,8 @@ namespace AmplifyShaderEditor
 		public static readonly string[] BillboardRotIndependent = { "{0}.x *= length( unity_ObjectToWorld._m00_m10_m20 )",
 																	"{0}.y *= length( unity_ObjectToWorld._m01_m11_m21 )",
 																	"{0}.z *= length( unity_ObjectToWorld._m02_m12_m22 )",
-																	"{0} = mul( {0}, rotationCamMatrix )",
-																	"{0} = mul( unity_WorldToObject, float4( {0}.xyz, 0 ) )"};
+																	"{0}.xyz = mul( float4( {0}.xyz, 0 ), rotationCamMatrix ).xyz",
+																	"{0}.xyz = mul( unity_WorldToObject, float4( {0}.xyz, 0 ) ).xyz"};
 
 
 
@@ -60,8 +60,8 @@ namespace AmplifyShaderEditor
 		public static readonly string[] BillboardSRPRotIndependent = { "{0}.x *= length( GetObjectToWorldMatrix()._m00_m10_m20 )",
 																	"{0}.y *= length( GetObjectToWorldMatrix()._m01_m11_m21 )",
 																	"{0}.z *= length( GetObjectToWorldMatrix()._m02_m12_m22 )",
-																	"{0} = mul( {0}, rotationCamMatrix )",
-																	"{0} = mul( GetWorldToObjectMatrix(), float4( {0}.xyz, 0 ) )"};
+																	"{0}.xyz = mul( float4( {0}.xyz, 0 ), rotationCamMatrix ).xyz",
+																	"{0}.xyz = mul( GetWorldToObjectMatrix(), float4( {0}.xyz, 0 ) ).xyz"};
 
 
 		[SerializeField]

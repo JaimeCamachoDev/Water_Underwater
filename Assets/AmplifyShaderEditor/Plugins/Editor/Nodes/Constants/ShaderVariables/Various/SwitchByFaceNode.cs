@@ -21,7 +21,7 @@ namespace AmplifyShaderEditor
 			m_previewShaderGUID = "f4edf6febb54dc743b25bd5b56facea8";
 		}
 
-		
+
 
 		public override string GenerateShaderForOutput( int outputId, ref MasterNodeDataCollector dataCollector, bool ignoreLocalvar )
 		{
@@ -63,11 +63,11 @@ namespace AmplifyShaderEditor
 
 			if ( dataCollector.CurrentCanvasMode == NodeAvailability.TemplateShader )
 			{
-				dataCollector.AddToInput( UniqueId, SurfaceInputs.FRONT_FACING );
+				dataCollector.AddToInput( UniqueId, SurfaceInputs.FRONT_FACE );
 			}
 			else
 			{
-				dataCollector.AddToInput( UniqueId, SurfaceInputs.FRONT_FACING_VFACE );
+				dataCollector.AddToInput( UniqueId, SurfaceInputs.FRONT_FACE_VFACE );
 			}
 
 			string variable = string.Empty;
@@ -77,7 +77,7 @@ namespace AmplifyShaderEditor
 			}
 			else
 			{
-				variable = ( ( dataCollector.PortCategory == MasterNodePortCategory.Vertex ) ? Constants.VertexShaderOutputStr : Constants.InputVarStr ) + "." + Constants.IsFrontFacingVariable;
+				variable = ( ( dataCollector.PortCategory == MasterNodePortCategory.Vertex ) ? Constants.VertexShaderOutputStr : Constants.InputVarStr ) + "." + Constants.IsFrontFaceVariable;
 			}
 
 			string value = string.Format( SwitchOp, variable, front, back );

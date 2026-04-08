@@ -27,7 +27,6 @@ namespace AmplifyShaderEditor
 			"{\n",
 			"\tfloat2 g = floor( UV * CellDensity );\n",
 			"\tfloat2 f = frac( UV * CellDensity );\n",
-			"\tfloat t = 8.0;\n",
 			"\tfloat3 res = float3( 8.0, 0.0, 0.0 );\n",
 			"\n",
 			"\tfor( int y = -1; y <= 1; y++ )\n",

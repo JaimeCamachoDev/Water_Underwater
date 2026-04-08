@@ -11,9 +11,26 @@ namespace AmplifyShaderEditor
 	[NodeAttributes( "Toggle Switch", "Logical Operators", "Switch between any of its input ports" )]
 	public class ToggleSwitchNode : PropertyNode
 	{
+		public enum ToggleSwitchVariableMode
+		{
+			Create = 0,
+			Reference = 1
+		}
+
+		private float InstanceIconWidth = 19;
+		private float InstanceIconHeight = 19;
+		private readonly Color ReferenceHeaderColor = new Color( 0f, 0.5f, 0.585f, 1.0f );
+
+		private const string ToggleSwitchStr = "Toggle Switch";
+		private const string ModeStr = "Mode";
+
 		private const string InputPortName = "In ";
 		private const string CurrSelectedStr = "Toggle Value";
-		private const string GenerateKeywordStr = "Generate Keyword"; 
+
+		private const string AssignKeywordStr = "Assign Keyword";
+		private const string AssignKeywordInfoStr = "The material inspector will assign a {0}_ON keyword when the toggle is turned ON. " +
+			"To use it, you'll need a Switch node to create the keyword variants";
+
 		//private const string LerpOp = "lerp({0},{1},{2})";
 		private const string LerpOp = "(( {2} )?( {1} ):( {0} ))";
 
@@ -30,7 +47,23 @@ namespace AmplifyShaderEditor
 		private WirePortDataType m_mainDataType = WirePortDataType.FLOAT;
 
 		[SerializeField]
-		private bool m_generateKeyword = true;
+		private bool m_assignKeyword = true;
+
+		[SerializeField]
+		private ToggleSwitchVariableMode m_toggleSwitchVarMode = ToggleSwitchVariableMode.Create;
+
+		[SerializeField]
+		private ToggleSwitchNode m_reference = null;
+
+		[SerializeField]
+		private int m_referenceArrayId = -1;
+
+		[SerializeField]
+		private int m_referenceNodeId = -1;
+
+		private bool m_isToggleSwitchDirty = false;
+
+		private Rect m_iconPos;
 
 		private int m_cachedPropertyId = -1;
 
@@ -61,6 +94,7 @@ namespace AmplifyShaderEditor
 			m_drawAttributes = false;
 			m_freeType = false;
 			m_useVarSubtitle = true;
+			m_showTitleWhenNotEditing = false;
 			m_useInternalPortData = true;
 			m_previewShaderGUID = "beeb138daeb592a4887454f81dba2b3f";
 
@@ -74,8 +108,42 @@ namespace AmplifyShaderEditor
 		{
 			base.OnUniqueIDAssigned();
 			UIUtils.RegisterPropertyNode( this );
+
+			if( CurrentVarMode != ToggleSwitchVariableMode.Reference )
+			{
+				ContainerGraph.ToggleSwitchNodes.AddNode( this );
+			}
+
+			if( UniqueId > -1 )
+			{
+				ContainerGraph.ToggleSwitchNodes.OnReorderEventComplete += OnReorderEventComplete;
+			}
 		}
-		
+
+		public override void Destroy()
+		{
+			base.Destroy();
+			UIUtils.UnregisterPropertyNode( this );
+			if( CurrentVarMode != ToggleSwitchVariableMode.Reference )
+			{
+				ContainerGraph.ToggleSwitchNodes.RemoveNode( this );
+			}
+
+			if( UniqueId > -1 )
+				ContainerGraph.ToggleSwitchNodes.OnReorderEventComplete -= OnReorderEventComplete;
+		}
+
+		void OnReorderEventComplete()
+		{
+			if( CurrentVarMode == ToggleSwitchVariableMode.Reference )
+			{
+				if( m_reference != null )
+				{
+					m_referenceArrayId = ContainerGraph.ToggleSwitchNodes.GetNodeRegisterIdx( m_reference.UniqueId );
+				}
+			}
+		}
+
 		public override void SetPreviewInputs()
 		{
 			base.SetPreviewInputs();
@@ -83,7 +151,9 @@ namespace AmplifyShaderEditor
 			if ( m_cachedPropertyId == -1 )
 				m_cachedPropertyId = Shader.PropertyToID( "_Current" );
 
-			PreviewMaterial.SetInt( m_cachedPropertyId, m_currentSelectedInput );
+			ToggleSwitchNode node = ( m_toggleSwitchVarMode == ToggleSwitchVariableMode.Reference && m_reference != null ) ? m_reference : this;
+
+			PreviewMaterial.SetInt( m_cachedPropertyId, node.m_currentSelectedInput );
 		}
 
 		public override void OnConnectedOutputNodeChanges( int portId, int otherNodeId, int otherPortId, string name, WirePortDataType type )
@@ -124,9 +194,9 @@ namespace AmplifyShaderEditor
 			m_outputPorts[ 0 ].ChangeType( m_mainDataType, false );
 		}
 
-		public override void OnNodeLayout( DrawInfo drawInfo )
+		public override void OnNodeLayout( DrawInfo drawInfo, NodeUpdateCache cache )
 		{
-			base.OnNodeLayout( drawInfo );
+			base.OnNodeLayout( drawInfo, cache );
 
 			m_varRect = m_remainingBox;
 			m_varRect.width = 50 * drawInfo.InvertedZoom;
@@ -138,7 +208,50 @@ namespace AmplifyShaderEditor
 			m_imgRect.x = m_varRect.xMax - 16 * drawInfo.InvertedZoom;
 			m_imgRect.width = 16 * drawInfo.InvertedZoom;
 			m_imgRect.height = m_imgRect.width;
+
+			CheckReferenceValues( false );
+
+			if ( m_toggleSwitchVarMode == ToggleSwitchVariableMode.Reference )
+			{
+				m_iconPos = m_globalPosition;
+				m_iconPos.width = InstanceIconWidth * drawInfo.InvertedZoom;
+				m_iconPos.height = InstanceIconHeight * drawInfo.InvertedZoom;
+
+				m_iconPos.y += 10 * drawInfo.InvertedZoom;
+				m_iconPos.x += /*m_globalPosition.width - m_iconPos.width - */5 * drawInfo.InvertedZoom;
+			}
 		}
+
+		void CheckReferenceValues( bool forceUpdate )
+		{
+			if ( m_toggleSwitchVarMode == ToggleSwitchVariableMode.Reference )
+			{
+				if ( m_reference == null && m_referenceNodeId > 0 )
+				{
+					m_reference = ContainerGraph.GetNode( m_referenceNodeId ) as ToggleSwitchNode;
+					m_referenceArrayId = ContainerGraph.ToggleSwitchNodes.GetNodeRegisterIdx( m_referenceNodeId );
+				}
+
+				if ( m_reference != null )
+				{
+					if ( forceUpdate || m_reference.IsToggleSwitchDirty )
+					{
+						int count = m_inputPorts.Count;
+						for ( int i = 0; i < count; i++ )
+						{
+							m_inputPorts[ i ].Name = m_reference.InputPorts[ i ].Name;
+							m_inputPorts[ i ].Visible = m_reference.InputPorts[ i ].Visible;
+						}
+						m_sizeIsDirty = true;
+					}
+				}
+			}
+			else
+			{
+				m_isToggleSwitchDirty = false;
+			}
+		}
+
 
 		public override void DrawGUIControls( DrawInfo drawInfo )
 		{
@@ -161,7 +274,10 @@ namespace AmplifyShaderEditor
 		{
 			base.Draw( drawInfo );
 
-			if( m_editing )
+			if ( m_toggleSwitchVarMode == ToggleSwitchVariableMode.Reference )
+				return;
+
+			if ( m_editing )
 			{
 				EditorGUI.BeginChangeCheck();
 				m_currentSelectedInput = EditorGUIIntPopup( m_varRect, m_currentSelectedInput, AvailableInputsLabels, AvailableInputsValues, UIUtils.SwitchNodePopUp );
@@ -182,10 +298,23 @@ namespace AmplifyShaderEditor
 			if ( !m_isVisible )
 				return;
 
-			if ( !m_editing && ContainerGraph.LodLevel <= ParentGraph.NodeLOD.LOD4 )
+			if ( m_toggleSwitchVarMode == ToggleSwitchVariableMode.Reference )
 			{
-				GUI.Label( m_varRect, AvailableInputsLabels[ m_currentSelectedInput ], UIUtils.GraphDropDown );
+				GUI.Label( m_iconPos, string.Empty, UIUtils.GetCustomStyle( CustomStyle.SamplerTextureIcon ) );
+				GUI.enabled = false;
+			}
+
+			if ( !m_editing && ContainerGraph.LodLevel <= ParentGraph.NodeLOD.LOD2 )
+			{
+				ToggleSwitchNode node = ( m_toggleSwitchVarMode == ToggleSwitchVariableMode.Reference && m_reference != null ) ? m_reference : this;
+
+				GUI.Label( m_varRect, node.AvailableInputsLabels[ node.m_currentSelectedInput ], UIUtils.GraphDropDown );
 				GUI.Label( m_imgRect, m_popContent, UIUtils.GraphButtonIcon );
+			}
+
+			if ( m_toggleSwitchVarMode == ToggleSwitchVariableMode.Reference )
+			{
+				GUI.enabled = true;
 			}
 		}
 
@@ -199,7 +328,11 @@ namespace AmplifyShaderEditor
 				ShowHybridInstanced();
 				ShowAutoRegister();
 				ShowPrecision();
-				m_generateKeyword = EditorGUILayoutToggle( GenerateKeywordStr, m_generateKeyword );
+				m_assignKeyword = EditorGUILayoutToggle( AssignKeywordStr, m_assignKeyword );
+				if ( m_assignKeyword )
+				{
+					EditorGUILayout.HelpBox( string.Format( AssignKeywordInfoStr, PropertyName.ToUpper() ), MessageType.Info );
+				}
 				ShowToolbar();
 			}
 			EditorGUILayout.EndVertical();
@@ -214,9 +347,83 @@ namespace AmplifyShaderEditor
 			}
 		}
 
+		void PropertyGroup()
+		{
+			EditorGUI.BeginChangeCheck();
+			var prevVarMode = CurrentVarMode;
+			CurrentVarMode = (ToggleSwitchVariableMode)EditorGUILayoutEnumPopup( ModeStr, CurrentVarMode );
+			if( EditorGUI.EndChangeCheck() )
+			{
+				if( CurrentVarMode == ToggleSwitchVariableMode.Reference )
+				{
+					UIUtils.UnregisterPropertyNode( this );
+				}
+				else
+				{
+					UIUtils.RegisterPropertyNode( this );
+				}
+			}
+
+			if( CurrentVarMode == ToggleSwitchVariableMode.Reference )
+			{
+				string[] arr = ContainerGraph.ToggleSwitchNodes.NodesArr;
+				bool guiEnabledBuffer = GUI.enabled;
+				if( arr != null && arr.Length > 0 )
+				{
+					GUI.enabled = true;
+				}
+				else
+				{
+					m_referenceArrayId = -1;
+					GUI.enabled = false;
+				}
+
+				EditorGUI.BeginChangeCheck();
+				m_referenceArrayId = EditorGUILayoutPopup( Constants.AvailableReferenceStr, m_referenceArrayId, arr );
+				if( EditorGUI.EndChangeCheck() )
+				{
+					m_reference = ContainerGraph.ToggleSwitchNodes.GetNode( m_referenceArrayId );
+					if( m_reference != null )
+					{
+						m_referenceNodeId = m_reference.UniqueId;
+						CheckReferenceValues( true );
+					}
+					else
+					{
+						m_referenceArrayId = -1;
+						m_referenceNodeId = -1;
+					}
+				}
+				GUI.enabled = guiEnabledBuffer;
+
+				return;
+			}
+
+			DrawMainPropertyBlock();
+		}
+
+		public override void CheckPropertyFromInspector( bool forceUpdate = false )
+		{
+			if( m_propertyFromInspector )
+			{
+				if( forceUpdate || ( EditorApplication.timeSinceStartup - m_propertyFromInspectorTimestamp ) > MaxTimestamp )
+				{
+					m_propertyFromInspector = false;
+					RegisterPropertyName( true, m_propertyInspectorName, m_autoGlobalName, m_underscoredGlobal );
+					m_propertyNameIsDirty = true;
+
+					if( CurrentVarMode != ToggleSwitchVariableMode.Reference )
+					{
+						ContainerGraph.ToggleSwitchNodes.UpdateDataOnNode( UniqueId, DataToArray );
+					}
+				}
+			}
+		}
+
 		public override void DrawProperties()
 		{
-			base.DrawProperties();
+			//base.DrawProperties();
+			NodeUtils.DrawPropertyGroup( ref m_propertiesFoldout, Constants.ParameterLabelStr, PropertyGroup );
 			NodeUtils.DrawPropertyGroup( ref m_visibleCustomAttrFoldout, CustomAttrStr, DrawCustomAttributes, DrawCustomAttrAddRemoveButtons );
 		}
 
@@ -225,9 +432,12 @@ namespace AmplifyShaderEditor
 			base.GenerateShaderForOutput( outputId, ref dataCollector, ignoreLocalvar );
 			m_precisionString = UIUtils.PrecisionWirePortToCgType( CurrentPrecisionType, m_outputPorts[ 0 ].DataType );
 
+
+			ToggleSwitchNode node = ( m_toggleSwitchVarMode == ToggleSwitchVariableMode.Reference && m_reference != null ) ? m_reference : this;
+
 			string resultA = m_inputPorts[ 0 ].GenerateShaderForOutput( ref dataCollector, m_mainDataType, ignoreLocalvar, true );
 			string resultB = m_inputPorts[ 1 ].GenerateShaderForOutput( ref dataCollector, m_mainDataType, ignoreLocalvar, true );
-			return string.Format( LerpOp, resultA, resultB, m_propertyName );
+			return string.Format( LerpOp, resultA, resultB, node.m_propertyName );
 		}
 
 		public override void ReadFromString( ref string[] nodeParams )
@@ -236,7 +446,20 @@ namespace AmplifyShaderEditor
 			m_currentSelectedInput = Convert.ToInt32( GetCurrentParam( ref nodeParams ) );
 			if( UIUtils.CurrentShaderVersion() > 18806 )
 			{
-				m_generateKeyword = Convert.ToBoolean( GetCurrentParam( ref nodeParams ) );
+				m_assignKeyword = Convert.ToBoolean( GetCurrentParam( ref nodeParams ) );
+			}
+			if( UIUtils.CurrentShaderVersion() >= 19902 )
+			{
+				string currentVarMode = GetCurrentParam( ref nodeParams );
+				CurrentVarMode = (  ToggleSwitchVariableMode )Enum.Parse( typeof( ToggleSwitchVariableMode ), currentVarMode );
+				if ( CurrentVarMode == ToggleSwitchVariableMode.Reference )
+				{
+					m_referenceNodeId = Convert.ToInt32( GetCurrentParam( ref nodeParams ) );
+				}
+			}
+			else
+			{
+				CurrentVarMode = ToggleSwitchVariableMode.Create;
 			}
 		}
 
@@ -244,7 +467,13 @@ namespace AmplifyShaderEditor
 		{
 			base.WriteToString( ref nodeInfo, ref connectionsInfo );
 			IOUtils.AddFieldValueToString( ref nodeInfo, m_currentSelectedInput );
-			IOUtils.AddFieldValueToString( ref nodeInfo, m_generateKeyword );
+			IOUtils.AddFieldValueToString( ref nodeInfo, m_assignKeyword );
+			IOUtils.AddFieldValueToString( ref nodeInfo, CurrentVarMode );
+			if ( CurrentVarMode == ToggleSwitchVariableMode.Reference )
+			{
+				int referenceId = ( m_reference != null ) ? m_reference.UniqueId : -1;
+				IOUtils.AddFieldValueToString( ref nodeInfo, referenceId );
+			}
 		}
 
 		public override void RefreshExternalReferences()
@@ -253,9 +482,21 @@ namespace AmplifyShaderEditor
 			m_selectedAttribs.Clear();
 			UpdateConnection();
 		}
+
+		public override void ReconnectClipboardReferences( Clipboard clipboard )
+		{
+			// validate node first
+			int newId = clipboard.GeNewNodeId( m_referenceNodeId );
+			if ( ContainerGraph.GetNode( newId ) != null )
+			{
+				m_referenceNodeId = newId;
+			}
+			RefreshExternalReferences();
+		}
+
 		public override string GetPropertyValue()
 		{
-			string toggleAttribute = ( m_generateKeyword ) ? "[Toggle]":"[ToggleUI]";
+			string toggleAttribute = ( m_assignKeyword ) ? "[Toggle]":"[ToggleUI]";
 			return PropertyAttributes + toggleAttribute + " " + m_propertyName + "( \"" + m_propertyInspectorName + "\", Float ) = " + m_currentSelectedInput;
 		}
 
@@ -270,6 +511,37 @@ namespace AmplifyShaderEditor
 			dataType = UIUtils.PrecisionWirePortToCgType( CurrentPrecisionType, WirePortDataType.FLOAT );
 			dataName = m_propertyName;
 			return true;
+		}
+
+		public override void DrawTitle( Rect titlePos )
+		{
+			bool referenceMode = m_toggleSwitchVarMode == ToggleSwitchVariableMode.Reference && m_reference != null;
+			string subTitle = string.Empty;
+			string subTitleFormat = string.Empty;
+			if( referenceMode )
+			{
+				subTitle = m_reference.GetPropertyValStr();
+				subTitleFormat = Constants.SubTitleRefNameFormatStr;
+			}
+			else
+			{
+				subTitle = GetPropertyValStr();
+				subTitleFormat = GetSubTitleVarNameFormatStr();
+			}
+
+			SetAdditonalTitleTextOnCallback( subTitle, subTitleFormat, ( instance, newSubTitle ) => instance.AdditonalTitleContent.text = string.Format( subTitleFormat, newSubTitle ) );
+
+			if( !m_isEditing && ContainerGraph.LodLevel <= ParentGraph.NodeLOD.LOD3 )
+			{
+				if ( CurrentVarMode == ToggleSwitchVariableMode.Create )
+				{
+					GUI.Label( titlePos, PropertyInspectorName, UIUtils.GetCustomStyle( CustomStyle.NodeTitle ) );
+				}
+				else
+				{
+					GUI.Label( titlePos, ToggleSwitchStr, UIUtils.GetCustomStyle( CustomStyle.NodeTitle ) );
+				}
+			}
 		}
 
 		public override void UpdateMaterial( Material mat )
@@ -302,6 +574,32 @@ namespace AmplifyShaderEditor
 		public override string GetPropertyValStr()
 		{
 			return PropertyName;			//return m_currentSelectedInput.ToString();
+		}
+
+		public bool IsToggleSwitchDirty { get { return m_isToggleSwitchDirty; } }
+		ToggleSwitchVariableMode CurrentVarMode
+		{
+			get { return m_toggleSwitchVarMode; }
+			set
+			{
+				if ( m_toggleSwitchVarMode != value )
+				{
+					if ( value == ToggleSwitchVariableMode.Reference )
+					{
+						ContainerGraph.ToggleSwitchNodes.RemoveNode( this );
+						m_referenceArrayId = -1;
+						m_referenceNodeId = -1;
+						m_reference = null;
+						m_headerColorModifier = ReferenceHeaderColor;
+					}
+					else
+					{
+						m_headerColorModifier = Color.white;
+						ContainerGraph.ToggleSwitchNodes.AddNode( this );
+					}
+				}
+				m_toggleSwitchVarMode = value;
+			}
 		}
 	}
 }

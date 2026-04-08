@@ -56,21 +56,20 @@ namespace AmplifyShaderEditor
 				dataCollector.AddToIncludes( -1, Constants.UnityLightingLib );
 
 			base.GenerateShaderForOutput( outputId, ref dataCollector, ignoreLocalvar );
-			
+
 			if ( dataCollector.IsTemplate && dataCollector.IsSRP )
 			{
 				string constantVar;
 				if ( dataCollector.TemplateDataCollectorInstance.CurrentSRPType == TemplateSRPType.HDRP )
 				{
-					dataCollector.TemplateDataCollectorInstance.AddHDLightInfo();
-					constantVar = string.Format( TemplateHelperFunctions.HDLightInfoFormat, "0", "color" ); ;
+					constantVar = string.Format( TemplateHelperFunctions.LightDataFormatHDRP, "0", "color" ); ;
 				}
 				else
 				{
 					constantVar = "_MainLightColor";
 				}
 
-				dataCollector.AddLocalVariable( UniqueId, CurrentPrecisionType, WirePortDataType.FLOAT, m_localIntensityVar, 
+				dataCollector.AddLocalVariable( UniqueId, CurrentPrecisionType, WirePortDataType.FLOAT, m_localIntensityVar,
 					string.Format( "max( max( {0}.r, {0}.g ), {0}.b ) + 1e-7", constantVar ) );
 
 				dataCollector.AddLocalVariable( UniqueId, CurrentPrecisionType, WirePortDataType.FLOAT4, m_localColorVar,

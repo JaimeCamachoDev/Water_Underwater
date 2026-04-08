@@ -114,7 +114,7 @@ namespace AmplifyShaderEditor
 		private List<InputPort> m_sortedInputPorts = new List<InputPort>();
 
 		[SerializeField]
-		protected List<OutputPort> m_outputPorts = new List<OutputPort>();		
+		protected List<OutputPort> m_outputPorts = new List<OutputPort>();
 		protected Dictionary<int, OutputPort> m_outputPortsDict = new Dictionary<int, OutputPort>();
 
 		[SerializeField]
@@ -172,7 +172,7 @@ namespace AmplifyShaderEditor
 
 		[SerializeField]
 		protected int m_previewMaterialPassId = -1;
-		
+
 		protected bool m_useSquareNodeTitle = false;
 
 		[SerializeField]
@@ -252,6 +252,7 @@ namespace AmplifyShaderEditor
 		protected bool m_canExpand = true;
 
 		protected bool m_firstDraw = true;
+		protected bool m_firstDrawTouch = false;
 
 		protected int m_matrixId = -1;
 
@@ -365,14 +366,14 @@ namespace AmplifyShaderEditor
 
 			m_tooltipTimestamp = Time.realtimeSinceStartup;
 			hideFlags = HideFlags.DontSave;
-		}		
+		}
 
 		public void RefreshUIHeaderColor()
 		{
 			// @diogo: handle special shader function case; this will have to do for now...
 			var functionNode = this as FunctionNode;
 			if ( functionNode != null && functionNode.Function != null )
-			{				
+			{
 				if ( functionNode.Function.Header == AmplifyShaderFunction.HeaderStyle.Custom )
 				{
 					m_headerColor = functionNode.Function.HeaderColor;
@@ -689,7 +690,7 @@ namespace AmplifyShaderEditor
 			}
 		}
 
-		// Manually add Ports 
+		// Manually add Ports
 		public InputPort AddInputPort( WirePortDataType type, bool typeLocked, string name, int orderId = -1, MasterNodePortCategory category = MasterNodePortCategory.Fragment, int uniquePortId = -1 )
 		{
 			InputPort port = new InputPort( m_uniqueId, ( uniquePortId < 0 ? m_inputPorts.Count : uniquePortId ), type, name, typeLocked, ( orderId >= 0 ? orderId : m_inputPorts.Count ), category );
@@ -1072,15 +1073,22 @@ namespace AmplifyShaderEditor
 			}
 
 			PreviewIsDirty = true;
-			OnNodeChange();
+			OnNodeChange( new NodeUpdateCache() );
 			SetSaveIsDirty();
 		}
 
-		public virtual void OnInputPortDisconnected( int portId ) { PreviewIsDirty = true; OnNodeChange(); }
+		public virtual void OnInputPortDisconnected( int portId ) { PreviewIsDirty = true; OnNodeChange( new NodeUpdateCache() ); }
 		public virtual void OnOutputPortDisconnected( int portId ) { }
 
-		public virtual void OnNodeChange()
+		public virtual void OnNodeChange( NodeUpdateCache cache )
 		{
+			if ( cache.Touch( this ) )
+			{
+				return;
+			}
+
+			//Debug.Log( "Visited " + this.UniqueId + ", Cache: " + ( cache != null ) );
+
 			CheckSpherePreview();
 			int count = m_outputPorts.Count;
 			for( int i = 0; i < count; i++ )
@@ -1089,7 +1097,7 @@ namespace AmplifyShaderEditor
 				{
 					for( int f = 0; f < m_outputPorts[ i ].ExternalReferences.Count; f++ )
 					{
-						ContainerGraph.GetNode( m_outputPorts[ i ].ExternalReferences[ f ].NodeId ).OnNodeChange();
+						ContainerGraph.GetNode( m_outputPorts[ i ].ExternalReferences[ f ].NodeId ).OnNodeChange( cache );
 					}
 				}
 			}
@@ -1368,7 +1376,7 @@ namespace AmplifyShaderEditor
 
 		public virtual void FireTimedUpdate() { }
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="drawInfo"></param>
 		public virtual void OnNodeLogicUpdate( DrawInfo drawInfo )
@@ -1425,16 +1433,15 @@ namespace AmplifyShaderEditor
 			{
 				m_sortedOutputPorts = m_outputPorts;
 			}
-			
+
 		}
 
 		/// <summary>
 		/// This method should only be called to calculate layouts of elements to be draw later, only runs once per frame and before wires are drawn
 		/// </summary>
 		/// <param name="drawInfo"></param>
-		public virtual void OnNodeLayout( DrawInfo drawInfo )
+		public virtual void OnNodeLayout( DrawInfo drawInfo, NodeUpdateCache cache = null )
 		{
-
 			if( ContainerGraph.ChangedLightingModel )
 			{
 				m_sizeIsDirty = true;
@@ -1445,7 +1452,7 @@ namespace AmplifyShaderEditor
 			{
 				m_firstDraw = false;
 				AfterCommonInit();
-				OnNodeChange();
+				OnNodeChange( cache );
 			}
 
 			if( m_previousErrorMessage != m_showErrorMessage )
@@ -1851,7 +1858,7 @@ namespace AmplifyShaderEditor
 			{
 				float scaledSize = FunctionNode.HeaderIconSize * drawInfo.InvertedZoom;
 				GUI.DrawTexture( new Rect( m_globalPosition.x, m_globalPosition.y, scaledSize, scaledSize ), functionNode.HeaderIcon, ScaleMode.ScaleAndCrop, true );
-			}			
+			}
 
 			// Title
 			DrawTitle( m_titlePos );
@@ -1972,7 +1979,7 @@ namespace AmplifyShaderEditor
 				DrawPreview( drawInfo, m_previewRect );
 
 			// Error and Warning bottom message
-			if( m_showErrorMessage )
+			if( m_showErrorMessage && ContainerGraph.LodLevel <= ParentGraph.NodeLOD.LOD3 )
 			{
 				GUI.color = new Color( 0.0f, 0.0f, 0.0f, 0.5f );
 				GUI.Label( m_errorBox, string.Empty, UIUtils.Separator );
@@ -2205,7 +2212,7 @@ namespace AmplifyShaderEditor
 
 		public virtual void SetPreviewInputs()
 		{
-			if( !HasPreviewShader || !m_initialized )
+			if( !HasPreviewShader || !m_initialized || Preferences.User.DisablePreviews )
 				return;
 
 			int count = m_inputPorts.Count;
@@ -2648,7 +2655,7 @@ namespace AmplifyShaderEditor
 				switch( dataCollector.CurrentSRPType )
 				{
 					case TemplateSRPType.HDRP: if(OnHDAction!=null) OnHDAction( outputId, ref dataCollector ); break;
-					case TemplateSRPType.URP:if(OnLightweightAction != null) OnLightweightAction( outputId, ref dataCollector ); break;	
+					case TemplateSRPType.URP:if(OnLightweightAction != null) OnLightweightAction( outputId, ref dataCollector ); break;
 				}
 			}
 			return string.Empty;
@@ -2683,7 +2690,7 @@ namespace AmplifyShaderEditor
 				return dataName;
 			}
 
-			//SURFACE 
+			//SURFACE
 			{
 				if( dataCollector.TesselationActive )
 				{
@@ -2754,7 +2761,7 @@ namespace AmplifyShaderEditor
 				return varName;
 			}
 
-			//SURFACE 
+			//SURFACE
 			{
 				if( dataCollector.TesselationActive )
 				{
@@ -3235,7 +3242,7 @@ namespace AmplifyShaderEditor
 					{
 						port.DataType = dataType;
 					}
-					
+
 				}
 				catch( Exception e )
 				{
@@ -3245,6 +3252,8 @@ namespace AmplifyShaderEditor
 		}
 
 		public virtual void ReadAdditionalClipboardData( ref string[] nodeParams ) { }
+
+		public virtual void ReconnectClipboardReferences( Clipboard clipboard ) { }
 
 		protected string GetCurrentParam( ref string[] nodeParams )
 		{
@@ -3364,22 +3373,28 @@ namespace AmplifyShaderEditor
 
 		public virtual void PropagateNodeData( NodeData nodeData, ref MasterNodeDataCollector dataCollector )
 		{
-			UIUtils.SetCategoryInBitArray( ref m_category, nodeData.Category );
-			nodeData.GraphDepth += 1;
-			if( nodeData.GraphDepth > m_graphDepth )
+			if ( !dataCollector.Touch(nodeData.Category, this) )
 			{
-				m_graphDepth = nodeData.GraphDepth;
-			}
-			int count = m_inputPorts.Count;
-			for( int i = 0; i < count; i++ )
-			{
-				if( m_inputPorts[ i ].IsConnected )
+				// @diogo: first time touching this node during PropagateNodeData
+				UIUtils.SetCategoryInBitArray( ref m_category, nodeData.Category );
+				nodeData.GraphDepth += 1;
+				if( nodeData.GraphDepth > m_graphDepth )
 				{
-					m_inputPorts[ i ].GetOutputNode().PropagateNodeData( nodeData, ref dataCollector );
+					m_graphDepth = nodeData.GraphDepth;
+				}
+				int count = m_inputPorts.Count;
+				for( int i = 0; i < count; i++ )
+				{
+					if( m_inputPorts[ i ].IsConnected )
+					{
+						m_inputPorts[ i ].GetOutputNode().PropagateNodeData( nodeData, ref dataCollector );
+					}
 				}
 			}
+
+
 		}
-		
+
 		public void SetTitleTextOnCallback( string compareTitle, Action<ParentNode, string> callback )
 		{
 			if( !m_previousTitle.Equals( compareTitle ) )
@@ -3416,7 +3431,7 @@ namespace AmplifyShaderEditor
 			m_content.text = GenerateClippedTitle( newText,maxSize,endString );
 			m_sizeIsDirty = true;
 		}
-		
+
 		public virtual void SetClippedAdditionalTitle( string newText, int maxSize = 170, string endString = "..." )
 		{
 			m_additionalContent.text = GenerateClippedTitle( newText, maxSize, endString );
@@ -3558,7 +3573,7 @@ namespace AmplifyShaderEditor
 					}
 				}
 			}
-			
+
 			bool needsUpdate = PreviewIsDirty;
 			RenderNodePreview();
 			if( !duplicatesDict.ContainsKey( OutputId ) )
@@ -3598,7 +3613,7 @@ namespace AmplifyShaderEditor
 			if (!Preferences.User.DisablePreviews)
 			{
 				RenderTexture temp = RenderTexture.active;
-				RenderTexture beforeMask = RenderTexture.GetTemporary(Constants.PreviewSize, Constants.PreviewSize, 0, Constants.PreviewFormat, RenderTextureReadWrite.Linear);
+				RenderTexture beforeMask = RenderTexture.GetTemporary(Preferences.User.PreviewSize, Preferences.User.PreviewSize, 0, Preferences.User.PreviewFormat, RenderTextureReadWrite.Linear);
 
 				int count = m_outputPorts.Count;
 				for( int i = 0; i < count; i++ )

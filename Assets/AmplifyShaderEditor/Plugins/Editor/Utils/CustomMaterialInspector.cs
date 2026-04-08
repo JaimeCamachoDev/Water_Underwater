@@ -402,10 +402,55 @@ namespace AmplifyShaderEditor
 				UIUtils.CopyValuesFromMaterial( mat );
 			}
 
-			if( materialEditor.RequiresConstantRepaint() && m_lastRenderedTime + 0.032999999821186066 < EditorApplication.timeSinceStartup )
+			// @diogo: set useful texture keywords in case someone wants to use them
+			SetTextureKeywords( mat );
+
+			if( materialEditor.RequiresConstantRepaint() && m_lastRenderedTime + ( 1.0f / 30.0f ) < EditorApplication.timeSinceStartup )
 			{
 				this.m_lastRenderedTime = EditorApplication.timeSinceStartup;
 				materialEditor.Repaint();
+			}
+		}
+
+		static void EnsureKeywordState( Material mat, string keyword, bool state )
+		{
+			if ( state && !mat.IsKeywordEnabled( keyword ) )
+			{
+				mat.EnableKeyword( keyword );
+			}
+			else if ( !state && mat.IsKeywordEnabled( keyword ) )
+			{
+				mat.DisableKeyword( keyword );
+			}
+		}
+
+		private bool FindGenKeyForTextureProperty( Material mat, string propertyName )
+		{
+			int propertyCount = mat.shader.GetPropertyCount();
+			for ( int i = 0; i < propertyCount; i++ )
+			{
+				if ( mat.shader.GetPropertyType( i ) == UnityEngine.Rendering.ShaderPropertyType.Float &&
+					 mat.shader.GetPropertyName( i ).StartsWith( "GenKey_" + propertyName ) )
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private void SetTextureKeywords( Material mat )
+		{
+			int propertyCount = mat.shader.GetPropertyCount();
+			for ( int i = 0; i < propertyCount; i++ )
+			{
+				if ( mat.shader.GetPropertyType( i ) == UnityEngine.Rendering.ShaderPropertyType.Texture )
+				{
+					string name = mat.shader.GetPropertyName( i );
+					if ( !name.StartsWith( "GenKey_" ) && FindGenKeyForTextureProperty( mat, name ) )
+					{
+						EnsureKeywordState( mat, name.ToUpper(), mat.HasProperty( name ) && ( mat.GetTexture( name ) != null ) );
+					}
+				}
 			}
 		}
 

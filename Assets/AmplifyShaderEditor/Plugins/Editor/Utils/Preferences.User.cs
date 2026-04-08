@@ -28,6 +28,7 @@ namespace AmplifyShaderEditor
 				public static readonly GUIContent LogBatchCompile               = new GUIContent( "Log Batch Compile", "Log message to console when a batch compilation is finished." );
 				public static readonly GUIContent UpdateOnSceneSave             = new GUIContent( "Update on Scene save (Ctrl+S)", "ASE is aware of Ctrl+S and will use it to save shader." );
 				public static readonly GUIContent PreviewUpdateFrequency        = new GUIContent( "Preview Update Frequency", "Frequency limit, in Hz/FPS, at which we allow previews to refresh." );
+				public static readonly GUIContent PreviewQuality                = new GUIContent( "Preview Quality", "Adjusts size and precision of preview textures to save VRAM: Low, Medium, High (default)" );
 				public static readonly GUIContent DisablePreviews               = new GUIContent( "Disable Node Previews", "Disable preview on nodes from being updated to boost up performance on large graphs." );
 				public static readonly GUIContent DisableMaterialMode           = new GUIContent( "Disable Material Mode", "Disable enter Material Mode graph when double-clicking on material asset." );
 				public static readonly GUIContent ForceTemplateMinShaderModel   = new GUIContent( "Force Template Min. Shader Model", "If active, when loading a shader its shader model will be replaced by the one specified in template if what is loaded is below the one set over the template." );
@@ -44,9 +45,10 @@ namespace AmplifyShaderEditor
 				public const bool LogBatchCompile               = false;
 				public const bool UpdateOnSceneSave             = true;
 				public const int  PreviewUpdateFrequency        = 60;
+				public const int  PreviewQuality                = 1;
 				public const bool DisablePreviews               = false;
 				public const bool DisableMaterialMode           = false;
-				public const bool ForceTemplateMinShaderModel   = true;
+				public const bool ForceTemplateMinShaderModel   = false;
 				public const bool ForceTemplateInlineProperties = false;
 			}
 
@@ -61,6 +63,7 @@ namespace AmplifyShaderEditor
 				public static string LogBatchCompile               = "ASELogBatchCompile";
 				public static string UpdateOnSceneSave             = "ASEUpdateOnSceneSave";
 				public static string PreviewUpdateFrequency        = "ASEPreviewUpdateFrequency";
+				public static string PreviewQuality                = "ASEPreviewQuality";
 				public static string DisablePreviews               = "ASEActivatePreviews";
 				public static string DisableMaterialMode           = "ASEDisableMaterialMode";
 				public static string ForceTemplateMinShaderModel   = "ASEForceTemplateMinShaderModel";
@@ -75,6 +78,7 @@ namespace AmplifyShaderEditor
 			public static bool LogBatchCompile               = Defaults.LogBatchCompile;
 			public static bool UpdateOnSceneSave             = Defaults.UpdateOnSceneSave;
 			public static int  PreviewUpdateFrequency        = Defaults.PreviewUpdateFrequency;
+			public static int  PreviewQuality                = Defaults.PreviewQuality;
 			public static bool DisablePreviews               = Defaults.DisablePreviews;
 			public static bool DisableMaterialMode           = Defaults.DisableMaterialMode;
 			public static bool ForceTemplateMinShaderModel   = Defaults.ForceTemplateMinShaderModel;
@@ -90,6 +94,7 @@ namespace AmplifyShaderEditor
 				EditorPrefs.DeleteKey( Keys.LogBatchCompile );
 				EditorPrefs.DeleteKey( Keys.UpdateOnSceneSave );
 				EditorPrefs.DeleteKey( Keys.PreviewUpdateFrequency );
+				EditorPrefs.DeleteKey( Keys.PreviewQuality );
 				EditorPrefs.DeleteKey( Keys.DisablePreviews );
 				EditorPrefs.DeleteKey( Keys.DisableMaterialMode );
 				EditorPrefs.DeleteKey( Keys.ForceTemplateMinShaderModel );
@@ -103,6 +108,7 @@ namespace AmplifyShaderEditor
 				LogBatchCompile               = Defaults.LogBatchCompile;
 				UpdateOnSceneSave             = Defaults.UpdateOnSceneSave;
 				PreviewUpdateFrequency        = Defaults.PreviewUpdateFrequency;
+				PreviewQuality                = Defaults.PreviewQuality;
 				DisablePreviews               = Defaults.DisablePreviews;
 				DisableMaterialMode           = Defaults.DisableMaterialMode;
 				ForceTemplateMinShaderModel   = Defaults.ForceTemplateMinShaderModel;
@@ -119,6 +125,7 @@ namespace AmplifyShaderEditor
 				LogBatchCompile               = EditorPrefs.GetBool( Keys.LogBatchCompile, Defaults.LogBatchCompile );
 				UpdateOnSceneSave             = EditorPrefs.GetBool( Keys.UpdateOnSceneSave, Defaults.UpdateOnSceneSave );
 				PreviewUpdateFrequency        = EditorPrefs.GetInt(  Keys.PreviewUpdateFrequency, Defaults.PreviewUpdateFrequency );
+				PreviewQuality                = EditorPrefs.GetInt(  Keys.PreviewQuality, Defaults.PreviewQuality );
 				DisablePreviews               = EditorPrefs.GetBool( Keys.DisablePreviews, Defaults.DisablePreviews );
 				DisableMaterialMode           = EditorPrefs.GetBool( Keys.DisableMaterialMode, Defaults.DisableMaterialMode );
 				ForceTemplateMinShaderModel   = EditorPrefs.GetBool( Keys.ForceTemplateMinShaderModel, Defaults.ForceTemplateMinShaderModel );
@@ -140,7 +147,8 @@ namespace AmplifyShaderEditor
 				EditorPrefs.SetBool( Keys.LogShaderCompile, LogShaderCompile );
 				EditorPrefs.SetBool( Keys.LogBatchCompile, LogBatchCompile );
 				EditorPrefs.SetBool( Keys.UpdateOnSceneSave, UpdateOnSceneSave );
-				EditorPrefs.SetInt(  Keys.PreviewUpdateFrequency, Defaults.PreviewUpdateFrequency );
+				EditorPrefs.SetInt(  Keys.PreviewUpdateFrequency, PreviewUpdateFrequency );
+				EditorPrefs.SetInt(  Keys.PreviewQuality, PreviewQuality );
 				EditorPrefs.SetBool( Keys.DisablePreviews, DisablePreviews );
 				EditorPrefs.SetBool( Keys.DisableMaterialMode, DisableMaterialMode );
 				EditorPrefs.SetBool( Keys.ForceTemplateMinShaderModel, ForceTemplateMinShaderModel );
@@ -158,6 +166,11 @@ namespace AmplifyShaderEditor
 				{ FrequencyOptionsIndexToValue[ 4 ], 4 }
 			};
 
+			static readonly string[] PreviewQualityOptions = { "Low", "Medium", "High" };
+
+			public static int PreviewSize { get { return ( PreviewQuality < 2 ) ? 64 : 128; } }
+			public static RenderTextureFormat PreviewFormat { get { return ( PreviewQuality < 1 ) ? RenderTextureFormat.ARGBHalf : RenderTextureFormat.ARGBFloat; } }
+
 			public static void InspectorLayout()
 			{
 				StartUp                       = ( ShowOption )EditorGUILayout.EnumPopup( Styles.StartUp, StartUp );
@@ -168,6 +181,7 @@ namespace AmplifyShaderEditor
 				LogBatchCompile               = EditorGUILayout.Toggle( Styles.LogBatchCompile, LogBatchCompile );
 				UpdateOnSceneSave             = EditorGUILayout.Toggle( Styles.UpdateOnSceneSave, UpdateOnSceneSave );
 				PreviewUpdateFrequency        = FrequencyOptionsIndexToValue[ EditorGUILayout.Popup( Styles.PreviewUpdateFrequency, FrequencyOptionsValueToIndex[ PreviewUpdateFrequency ], FrequencyOptions ) ];
+				PreviewQuality                = ( int )EditorGUILayout.Popup( Styles.PreviewQuality, PreviewQuality, PreviewQualityOptions );
 				DisablePreviews               = EditorGUILayout.Toggle( Styles.DisablePreviews, DisablePreviews );
 				DisableMaterialMode           = EditorGUILayout.Toggle( Styles.DisableMaterialMode, DisableMaterialMode );
 				ForceTemplateMinShaderModel   = EditorGUILayout.Toggle( Styles.ForceTemplateMinShaderModel, ForceTemplateMinShaderModel );

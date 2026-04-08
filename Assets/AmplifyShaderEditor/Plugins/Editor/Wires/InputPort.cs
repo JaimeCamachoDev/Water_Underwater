@@ -450,7 +450,7 @@ namespace AmplifyShaderEditor
 		private string SamplerWrappedData( ref MasterNodeDataCollector dataCollector )
 		{
 			m_internalData = "_Sampler" + PortId + UIUtils.GetNode( m_nodeId ).OutputId;
-			
+
 			dataCollector.AddToUniforms( m_nodeId, GeneratorUtils.GetPropertyDeclaraction( m_internalData, TextureType.Texture2D, ";" ) );
 
 			return m_internalData;
@@ -575,11 +575,31 @@ namespace AmplifyShaderEditor
 			if( connID < m_externalReferences.Count )
 			{
 				ParentNode node = UIUtils.GetNode( m_externalReferences[ connID ].NodeId );
-				if( node is WireNode || node is RelayNode || node is FunctionInput )
+				if( node is WireNode || node is RelayNode || node is FunctionInput || node is GetLocalVarNode || node is RegisterLocalVarNode )
 				{
-					return node.InputPorts[ 0 ].GetOutputNodeWhichIsNotRelay( connID );
+					bool skipResolve = false;
+					if ( node is FunctionInput )
+					{
+						// @diogo: Function Inputs need to connect to outside graph in order to fully resolve connections
+						var functionInputNode = node as FunctionInput;
+						var functionNode = functionInputNode.Fnode;
+						if ( functionNode != null )
+						{
+							var functionInputPort = functionNode.GetInputPortByUniqueId( functionInputNode.UniqueId );
+							ParentGraph cachedGraph = functionNode.ContainerGraph.ParentWindow.CustomGraph;
+							{
+								functionNode.ContainerGraph.ParentWindow.CustomGraph = functionNode.OutsideGraph;
+								node = functionInputPort.GetOutputNodeWhichIsNotRelay( connID );
+								skipResolve = true;
+							}
+							functionNode.ContainerGraph.ParentWindow.CustomGraph = cachedGraph;
+						}
+					}
+					if ( !skipResolve )
+					{
+						node = node.InputPorts[ 0 ].GetOutputNodeWhichIsNotRelay( connID );
+					}
 				}
-
 				return node;
 			}
 			return null;
@@ -796,7 +816,14 @@ namespace AmplifyShaderEditor
 				break;
 				case WirePortDataType.COLOR:
 				{
-					ColorInternalData = owner.EditorGUILayoutColorField( label, ColorInternalData );
+					if ( owner is DynamicTypeNode )
+					{
+						ColorInternalData = owner.EditorGUILayoutVector4Field( label, ColorInternalData );
+					}
+					else
+					{
+						ColorInternalData = owner.EditorGUILayoutColorField( label, ColorInternalData );
+					}
 				}
 				break;
 				case WirePortDataType.INT:
@@ -812,7 +839,7 @@ namespace AmplifyShaderEditor
 			{
 				switch( m_dataType )
 				{
-					
+
 					case WirePortDataType.FLOAT: return Mathf.Abs(m_previewInternalFloat) < 0.001f;
 					case WirePortDataType.UINT:
 					case WirePortDataType.INT: return m_previewInternalInt == 0;
@@ -1269,7 +1296,7 @@ namespace AmplifyShaderEditor
 		{
 			if( m_inputPreviewTexture == null )
 			{
-				m_inputPreviewTexture = new RenderTexture( Constants.PreviewSize , Constants.PreviewSize , 0, Constants.PreviewFormat , RenderTextureReadWrite.Linear );
+				m_inputPreviewTexture = new RenderTexture( Preferences.User.PreviewSize , Preferences.User.PreviewSize , 0, Preferences.User.PreviewFormat , RenderTextureReadWrite.Linear );
 				m_inputPreviewTexture.wrapMode = TextureWrapMode.Repeat;
 			}
 
@@ -1390,7 +1417,7 @@ namespace AmplifyShaderEditor
 
 			PortId = newPortId;
 		}
-		
+
 		public override void Destroy()
 		{
 			base.Destroy();

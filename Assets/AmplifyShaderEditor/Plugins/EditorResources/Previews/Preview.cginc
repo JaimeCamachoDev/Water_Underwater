@@ -5,10 +5,18 @@
 #include "UnityCG.cginc"
 
 float3 preview_WorldSpaceCameraPos;
+
 float4x4 preview_WorldToObject;
 float4x4 preview_ObjectToWorld;
 float4x4 preview_MatrixV;
 float4x4 preview_MatrixInvV;
+
+float3 preview_EditorLightDirection;
+float3 preview_EditorLightColor;
+float preview_EditorLightIntensity;
+
+float preview_EditorTime;
+float preview_EditorDeltaTime;
 
 inline float3 PreviewFragmentPositionOS( float2 uv )
 {

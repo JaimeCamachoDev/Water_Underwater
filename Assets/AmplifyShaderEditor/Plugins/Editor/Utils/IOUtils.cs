@@ -38,7 +38,7 @@ namespace AmplifyShaderEditor
 					lock( locker )
 					{
 						IOUtils.SaveInThreadShaderBody = string.Format( IOUtils.ShaderCopywriteMessage, VersionInfo.StaticToString() ) + IOUtils.SaveInThreadShaderBody;
-						// Add checksum 
+						// Add checksum
 						string checksum = IOUtils.CreateChecksum( IOUtils.SaveInThreadShaderBody );
 						IOUtils.SaveInThreadShaderBody += IOUtils.CHECKSUM + IOUtils.VALUE_SEPARATOR + checksum;
 
@@ -90,14 +90,14 @@ namespace AmplifyShaderEditor
 
 		public static readonly string DotsInstancedPropertiesData = "\tUNITY_DOTS_INSTANCED_PROP({0}, {1})";
 		public static string DotsInstancedDefinesData
-		{ 
+		{
 			get
 			{
-				if ( ASEPackageManagerHelper.PackageSRPVersion >= ( int )ASESRPBaseline.ASE_SRP_13_0 )
+				if ( ASEPackageManagerHelper.PackageSRPVersion >= ( int )ASESRPBaseline.ASE_SRP_13_X )
 				{
 					return "#define {1} UNITY_ACCESS_DOTS_INSTANCED_PROP_WITH_DEFAULT({0} , {1})";
 				}
-				else if ( ASEPackageManagerHelper.PackageSRPVersion >= ( int )ASESRPBaseline.ASE_SRP_12_0 )
+				else if ( ASEPackageManagerHelper.PackageSRPVersion >= ( int )ASESRPBaseline.ASE_SRP_12_X )
 				{
 					return "#define {1} UNITY_ACCESS_DOTS_INSTANCED_PROP_FROM_MACRO({0} , Metadata{1})";
 				}
@@ -176,7 +176,7 @@ namespace AmplifyShaderEditor
 
 		public static int DefaultASEDirtyCheckId;
 
-		// this is to be used in combination with AssetDatabase.GetAssetPath, both of these include the Assets/ path so we need to remove from one of them 
+		// this is to be used in combination with AssetDatabase.GetAssetPath, both of these include the Assets/ path so we need to remove from one of them
 		public static string dataPath;
 
 
@@ -427,8 +427,8 @@ namespace AmplifyShaderEditor
 				currData = currData.Replace( AmplifyShaderEditorDefineSymbol + ";" , "" );
 				currData = currData.Replace( ";" + AmplifyShaderEditorDefineSymbol , "" );
 				currData = currData.Replace( AmplifyShaderEditorDefineSymbol , "" );
-				
-			#if UNITY_2021_2_OR_NEWER			
+
+			#if UNITY_2021_2_OR_NEWER
 				PlayerSettings.SetScriptingDefineSymbols( namedBuildTarget, currData );
 			#else
 				PlayerSettings.SetScriptingDefineSymbolsForGroup( targetGroup, currData );
@@ -436,7 +436,7 @@ namespace AmplifyShaderEditor
 			}
 		}
 
-		//Adding this attribute so scripting defining symbol can be registered right away so custom nodes using ASE ( under that symbol ) can be caught 
+		//Adding this attribute so scripting defining symbol can be registered right away so custom nodes using ASE ( under that symbol ) can be caught
 		// the first time ASE opens
 		[InitializeOnLoadMethod]
 		public static void Init()
@@ -446,47 +446,16 @@ namespace AmplifyShaderEditor
 				Initialized = true;
 				Preferences.Initialize();
 				if ( Preferences.Project.DefineSymbol )
+				{
 					SetAmplifyDefineSymbolOnBuildTargetGroup( EditorUserBuildSettings.selectedBuildTargetGroup );
-				//Array BuildTargetGroupValues = Enum.GetValues( typeof(  BuildTargetGroup ));
-				//for ( int i = 0; i < BuildTargetGroupValues.Length; i++ )
-				//{
-				//	if( i != 0 && i != 15 && i != 16 )
-				//		SetAmplifyDefineSymbolOnBuildTargetGroup( ( BuildTargetGroup ) BuildTargetGroupValues.GetValue( i ) );
-				//}
+				}
 
 				DefaultASEDirtyCheckId = Shader.PropertyToID( DefaultASEDirtyCheckName );
 				dataPath = Application.dataPath.Remove( Application.dataPath.Length - 6 );
 
-
-				//ASEFolderPath = AssetDatabase.GUIDToAssetPath( ASEFolderGUID );
-				//ASEResourcesPath = ASEFolderPath + ASEResourcesPath;
-			}
-		}
-
-
-		public static void DumpTemplateManagers()
-		{
-			for( int i = 0 ; i < AllOpenedWindows.Count ; i++ )
-			{
-				if( AllOpenedWindows[ i ].TemplatesManagerInstance != null )
-				{
-					Debug.Log( AllOpenedWindows[ i ].titleContent.text + ": " + AllOpenedWindows[ i ].TemplatesManagerInstance.GetInstanceID() );
-				}
-			}
-		}
-
-		public static TemplatesManager FirstValidTemplatesManager
-		{
-			get
-			{
-				for( int i = 0 ; i < AllOpenedWindows.Count ; i++ )
-				{
-					if( AllOpenedWindows[ i ].TemplatesManagerInstance != null )
-					{
-						return AllOpenedWindows[ i ].TemplatesManagerInstance;
-					}
-				}
-				return null;
+				ASEPackageManagerHelper.Initialize();
+				TemplatesManager.CheckCreateInstance();
+				TemplateTracker.Initialize();
 			}
 		}
 
@@ -555,7 +524,7 @@ namespace AmplifyShaderEditor
 				string[] subStr = shaderName.Split( '/' );
 				if( subStr.Length > 0 )
 				{
-					shaderName = subStr[ subStr.Length - 1 ]; // Remove pathname 
+					shaderName = subStr[ subStr.Length - 1 ]; // Remove pathname
 				}
 			}
 			else
@@ -599,25 +568,14 @@ namespace AmplifyShaderEditor
 			if( addAdditionalInfo )
 			{
 				shaderBody = string.Format( ShaderCopywriteMessage, VersionInfo.StaticToString() ) + shaderBody;
-				// Add checksum 
+				// Add checksum
 				string checksum = CreateChecksum( shaderBody );
 				shaderBody += CHECKSUM + VALUE_SEPARATOR + checksum;
 			}
 
+
 			// Write to disk
-			StreamWriter fileWriter = new StreamWriter( pathName );
-			try
-			{
-				fileWriter.Write( shaderBody );
-			}
-			catch( Exception e )
-			{
-				Debug.LogException( e );
-			}
-			finally
-			{
-				fileWriter.Close();
-			}
+			File.WriteAllText( pathName, shaderBody );
 		}
 
 		public static string AddAdditionalInfo( string shaderBody )

@@ -18,6 +18,7 @@ namespace AmplifyShaderEditor
 		{
 			base.CommonInit( uniqueId );
 			AddInputPort( WirePortDataType.OBJECT, false, string.Empty );
+			m_inputPorts[ 0 ].SetFreeForAll();
 			AddOutputPort( WirePortDataType.OBJECT, Constants.EmptyPortValue );
 			m_tooltipText = string.Empty;
 			m_drawPreview = false;
@@ -132,13 +133,13 @@ namespace AmplifyShaderEditor
 			base.DrawProperties();
 		}
 
-		public override void OnNodeLayout( DrawInfo drawInfo )
+		public override void OnNodeLayout( DrawInfo drawInfo, NodeUpdateCache cache )
 		{
 			if( m_firstDraw )
 			{
 				m_firstDraw = false;
 				AfterCommonInit();
-				OnNodeChange();
+				OnNodeChange( cache );
 			}
 
 			if( m_forceVisualDataUpdate )
