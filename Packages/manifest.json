@@ -2,9 +2,11 @@
   "dependencies": {
     "com.unity.recorder": "5.1.6",
     "com.unity.render-pipelines.universal": "17.3.0",
+    "com.unity.shadergraph": "17.3.0",
     "com.unity.visualeffectgraph": "17.3.0",
     "com.unity.modules.adaptiveperformance": "1.0.0",
     "com.unity.modules.particlesystem": "1.0.0",
+    "com.unity.modules.terrainphysics": "1.0.0",
     "com.unity.modules.vectorgraphics": "1.0.0"
   },
   "scopedRegistries": [

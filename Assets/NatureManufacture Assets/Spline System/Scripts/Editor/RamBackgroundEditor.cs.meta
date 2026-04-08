@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 736a8865237bf9548877b172cac4b5bd
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 145937
+  packageName: R.A.M 2019 - River Auto Material 2019
+  packageVersion: 1.8.1
+  assetPath: Assets/NatureManufacture Assets/Spline System/Scripts/Editor/RamBackgroundEditor.cs
+  uploadId: 663477

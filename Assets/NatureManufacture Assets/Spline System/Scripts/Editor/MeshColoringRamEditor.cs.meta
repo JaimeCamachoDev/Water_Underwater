@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: d7f83b8fbc24fe64fa18c3d9061768a1
+timeCreated: 1528704555
+licenseType: Store
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 145937
+  packageName: R.A.M 2019 - River Auto Material 2019
+  packageVersion: 1.8.1
+  assetPath: Assets/NatureManufacture Assets/Spline System/Scripts/Editor/MeshColoringRamEditor.cs
+  uploadId: 663477

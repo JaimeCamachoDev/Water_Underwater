@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 4a3c278328939cd48b5a99286a2f10ec
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 145937
+  packageName: R.A.M 2019 - River Auto Material 2019
+  packageVersion: 1.8.1
+  assetPath: Assets/NatureManufacture Assets/Object Shaders/Standard_Metalic_Cover_Wet.shader
+  uploadId: 663477

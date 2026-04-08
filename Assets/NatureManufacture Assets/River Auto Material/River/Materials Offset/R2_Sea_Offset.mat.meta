@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: db48a2936b24e4845b0032995d2a7d0c
+timeCreated: 1517560073
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: -1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 145937
+  packageName: R.A.M 2019 - River Auto Material 2019
+  packageVersion: 1.8.1
+  assetPath: Assets/NatureManufacture Assets/River Auto Material/River/Materials
+    Offset/R2_Sea_Offset.mat
+  uploadId: 663477

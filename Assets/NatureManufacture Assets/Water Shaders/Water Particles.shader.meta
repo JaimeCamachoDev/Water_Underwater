@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 67fd57f591ea3554494173cb2f22ef07
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 145937
+  packageName: R.A.M 2019 - River Auto Material 2019
+  packageVersion: 1.8.1
+  assetPath: Assets/NatureManufacture Assets/Water Shaders/Water Particles.shader
+  uploadId: 663477

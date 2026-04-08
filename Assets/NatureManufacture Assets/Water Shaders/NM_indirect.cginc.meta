@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 6c783dcd52929574bbc7873513d1d092
+timeCreated: 1526370176
+licenseType: Store
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 145937
+  packageName: R.A.M 2019 - River Auto Material 2019
+  packageVersion: 1.8.1
+  assetPath: Assets/NatureManufacture Assets/Water Shaders/NM_indirect.cginc
+  uploadId: 663477

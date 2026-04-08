@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 0282d47bd0679174d88d4485e62b220a
+timeCreated: 1513943304
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 145937
+  packageName: R.A.M 2019 - River Auto Material 2019
+  packageVersion: 1.8.1
+  assetPath: Assets/NatureManufacture Assets/River Auto Material/Assets/Particles
+    (for gamma rendering please adjust colors and opacity)/NON_PBR/Materials/Waterfall_Top.mat
+  uploadId: 663477

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: a716fd4cd868e434895e7f5aa06f48b7
+timeCreated: 1531473172
+licenseType: Store
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 145937
+  packageName: R.A.M 2019 - River Auto Material 2019
+  packageVersion: 1.8.1
+  assetPath: Assets/NatureManufacture Assets/Object Shaders/Standard_Metalic_UV_Free_Faces.shader
+  uploadId: 663477

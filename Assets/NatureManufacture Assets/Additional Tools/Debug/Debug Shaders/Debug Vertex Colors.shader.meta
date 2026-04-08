@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 72c0a629836daf4429369a33e0b14e3e
+timeCreated: 1519639167
+licenseType: Store
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 145937
+  packageName: R.A.M 2019 - River Auto Material 2019
+  packageVersion: 1.8.1
+  assetPath: Assets/NatureManufacture Assets/Additional Tools/Debug/Debug Shaders/Debug
+    Vertex Colors.shader
+  uploadId: 663477

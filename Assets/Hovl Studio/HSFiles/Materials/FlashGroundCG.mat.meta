@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 81c3a08e126deeb43bbf37b7b02e4012
+timeCreated: 1523528882
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 181700
+  packageName: Realistic water splash
+  packageVersion: 2.0
+  assetPath: Assets/Hovl Studio/HSFiles/Materials/FlashGroundCG.mat
+  uploadId: 865400

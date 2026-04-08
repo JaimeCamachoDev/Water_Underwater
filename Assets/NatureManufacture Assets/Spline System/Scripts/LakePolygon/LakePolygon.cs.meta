@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 972fcd29bf9fe274087ba3a700bac4d2
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 145937
+  packageName: R.A.M 2019 - River Auto Material 2019
+  packageVersion: 1.8.1
+  assetPath: Assets/NatureManufacture Assets/Spline System/Scripts/LakePolygon/LakePolygon.cs
+  uploadId: 663477

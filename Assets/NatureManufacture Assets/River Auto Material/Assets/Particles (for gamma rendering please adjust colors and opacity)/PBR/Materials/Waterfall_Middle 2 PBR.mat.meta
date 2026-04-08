@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 8142b5d7c45067b47aa1f1480930eba2
+timeCreated: 1513943304
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 145937
+  packageName: R.A.M 2019 - River Auto Material 2019
+  packageVersion: 1.8.1
+  assetPath: Assets/NatureManufacture Assets/River Auto Material/Assets/Particles
+    (for gamma rendering please adjust colors and opacity)/PBR/Materials/Waterfall_Middle
+    2 PBR.mat
+  uploadId: 663477

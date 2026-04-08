@@ -1,0 +1,3 @@
+Please import SRP packs only if your project is using HD or URP.
+If you import this to standard project you will get errors.
+Import proper rp compatibility pack to proper engine version like for Unity 6 URP 17 please use our URP 17 unity 6 compatibility pack.

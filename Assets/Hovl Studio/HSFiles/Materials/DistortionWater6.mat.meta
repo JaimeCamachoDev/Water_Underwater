@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ebc5ead5c15f72d47bbb5df8c85abf72
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 181700
+  packageName: Realistic water splash
+  packageVersion: 2.0
+  assetPath: Assets/Hovl Studio/HSFiles/Materials/DistortionWater6.mat
+  uploadId: 865400

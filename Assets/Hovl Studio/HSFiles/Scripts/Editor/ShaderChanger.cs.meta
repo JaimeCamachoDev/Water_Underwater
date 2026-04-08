@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: f76f4e3a0234d194da27af11ef7f4bdf
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 181700
+  packageName: Realistic water splash
+  packageVersion: 2.0
+  assetPath: Assets/Hovl Studio/HSFiles/Scripts/Editor/ShaderChanger.cs
+  uploadId: 865400

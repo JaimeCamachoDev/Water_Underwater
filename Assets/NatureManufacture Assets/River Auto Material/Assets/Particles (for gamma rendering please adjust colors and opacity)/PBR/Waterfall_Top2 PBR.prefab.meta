@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 5ad64166d95027e4c91a764f24a2c14d
+timeCreated: 1514984435
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 145937
+  packageName: R.A.M 2019 - River Auto Material 2019
+  packageVersion: 1.8.1
+  assetPath: Assets/NatureManufacture Assets/River Auto Material/Assets/Particles
+    (for gamma rendering please adjust colors and opacity)/PBR/Waterfall_Top2 PBR.prefab
+  uploadId: 663477

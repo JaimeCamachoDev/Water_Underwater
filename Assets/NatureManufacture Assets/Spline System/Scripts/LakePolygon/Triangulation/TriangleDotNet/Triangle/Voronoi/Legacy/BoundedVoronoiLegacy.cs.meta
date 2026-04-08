@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: f6b2d16d9096d46469ee24d52cddc469
+timeCreated: 1487036984
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 145937
+  packageName: R.A.M 2019 - River Auto Material 2019
+  packageVersion: 1.8.1
+  assetPath: Assets/NatureManufacture Assets/Spline System/Scripts/LakePolygon/Triangulation/TriangleDotNet/Triangle/Voronoi/Legacy/BoundedVoronoiLegacy.cs
+  uploadId: 663477

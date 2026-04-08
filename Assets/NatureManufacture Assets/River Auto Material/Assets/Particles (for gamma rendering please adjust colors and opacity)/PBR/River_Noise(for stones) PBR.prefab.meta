@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 34fc1dbf56ba1824a9a28a8a072d8ba2
+timeCreated: 1514544804
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 145937
+  packageName: R.A.M 2019 - River Auto Material 2019
+  packageVersion: 1.8.1
+  assetPath: Assets/NatureManufacture Assets/River Auto Material/Assets/Particles
+    (for gamma rendering please adjust colors and opacity)/PBR/River_Noise(for stones)
+    PBR.prefab
+  uploadId: 663477

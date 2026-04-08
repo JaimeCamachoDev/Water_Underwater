@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 6ffa45d71023eb948ab27428365546aa
+timeCreated: 1519824558
+licenseType: Store
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 145937
+  packageName: R.A.M 2019 - River Auto Material 2019
+  packageVersion: 1.8.1
+  assetPath: Assets/NatureManufacture Assets/Additional Tools/Debug/Debug Shaders/Debug
+    Flowmap UV4.shader
+  uploadId: 663477
