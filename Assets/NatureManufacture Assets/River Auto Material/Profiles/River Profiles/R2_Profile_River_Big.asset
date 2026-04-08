@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d559ec07676f794ea460d4324322121, type: 3}
   m_Name: R2_Profile_River_Big
   m_EditorClassIdentifier: 
-  splineMaterial: {fileID: 2100000, guid: de477b84fdef577428d5e35a3e152ff5, type: 2}
+  splineMaterial: {fileID: 2100000, guid: 15d2a26616e1fd74997001c4a042e33f, type: 2}
   meshCurve:
     serializedVersion: 2
     m_Curve:

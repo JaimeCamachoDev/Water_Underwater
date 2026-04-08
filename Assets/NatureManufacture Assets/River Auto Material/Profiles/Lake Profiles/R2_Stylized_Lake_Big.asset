@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c062f1f622ac5144094df00784f8efb8, type: 3}
   m_Name: R2_Stylized_Lake_Big
   m_EditorClassIdentifier: 
-  lakeMaterial: {fileID: 2100000, guid: cf184339ffb9578478afe50326b41aa6, type: 2}
+  lakeMaterial: {fileID: 2100000, guid: 8cb0d0e2d163ed24e92120e4ac1e75f0, type: 2}
   distSmooth: 3
   uvScale: 2
   maximumTriangleSize: 20

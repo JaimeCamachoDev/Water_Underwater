@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d559ec07676f794ea460d4324322121, type: 3}
   m_Name: R2_Profile_River_Swamp_Leaves
   m_EditorClassIdentifier: 
-  splineMaterial: {fileID: 2100000, guid: 2a9c62469791f2c44b53012ae8b58eb1, type: 2}
+  splineMaterial: {fileID: 2100000, guid: 31d4d6d5ddceb3c428921f74b1d1cbf0, type: 2}
   meshCurve:
     serializedVersion: 2
     m_Curve:

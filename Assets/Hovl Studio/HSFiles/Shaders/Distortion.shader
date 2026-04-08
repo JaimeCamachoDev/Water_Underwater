@@ -23,7 +23,7 @@ Shader "Hovl/Particles/Distortion"
 			ZWrite Off
 			ZTest LEqual
 			Fog { Mode Off}
-			GrabPass{ }
+			// URP compatibility: sample scene color from _CameraOpaqueTexture instead of legacy GrabPass.
 
 			Pass {
 			
@@ -84,7 +84,7 @@ Shader "Hovl/Particles/Distortion"
 				// uniform sampler2D_float _CameraDepthTexture;
 
 				uniform float _InvFade;
-				ASE_DECLARE_SCREENSPACE_TEXTURE( _GrabTexture )
+				ASE_DECLARE_SCREENSPACE_TEXTURE( _CameraOpaqueTexture )
 				uniform sampler2D _NormalMap;
 				uniform float4 _NormalMap_ST;
 				uniform float _Distortionpower;
@@ -142,7 +142,7 @@ Shader "Hovl/Particles/Distortion"
 					float4 ase_grabScreenPosNorm = ase_grabScreenPos / ase_grabScreenPos.w;
 					float2 uv_NormalMap = i.texcoord.xy * _NormalMap_ST.xy + _NormalMap_ST.zw;
 					float3 tex2DNode29 = UnpackNormal( tex2D( _NormalMap, uv_NormalMap ) );
-					float4 screenColor8 = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_GrabTexture,( (ase_grabScreenPosNorm).xy - (( tex2DNode29 * ( (0.0 + (_Distortionpower - 0.0) * (1.0 - 0.0) / (10000.0 - 0.0)) * (( _Enablesimpleopacity )?( 1.0 ):( i.color.a )) ) )).xy ));
+					float4 screenColor8 = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_CameraOpaqueTexture,( (ase_grabScreenPosNorm).xy - (( tex2DNode29 * ( (0.0 + (_Distortionpower - 0.0) * (1.0 - 0.0) / (10000.0 - 0.0)) * (( _Enablesimpleopacity )?( 1.0 ):( i.color.a )) ) )).xy ));
 					float4 appendResult55 = (float4(saturate( screenColor8 )));
 					float4 appendResult56 = (float4(1.0 , 1.0 , 1.0 , ( saturate( ( ( ( abs( tex2DNode29.r ) + abs( tex2DNode29.g ) ) * 30.0 ) - 0.3 ) ) * (( _Enablesimpleopacity )?( i.color.a ):( 1.0 )) )));
 					fixed4 col = ( appendResult55 * appendResult56 );
