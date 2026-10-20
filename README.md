@@ -15,28 +15,35 @@ _**Sistema visual de agua y entorno submarino para URP. Incluye efectos inmersiv
 
 ![424083638-fe05910e-adba-4284-b983-47e5e67e62de](https://github.com/user-attachments/assets/3a870b16-a769-482a-8fd6-0b7ff25ed632)
 
-
-
 _**Particle System and Shader in Unity 6 URP**_
 
 Reference: https://www.reddit.com/r/Unity3D/comments/1ioel31/you_can_simulate_a_water_pipe_by_using_polar/
 
-
 # ShaderGraph_Water
-
-
-
-
 
 _Shader Unity 6 URP, Waters, Water Reverse and Underwater God Rays_
 
-
-
-
-
 </header>
-   
-<footer>
-   
 
-</footer>
+## Requisitos
+
+* Unity **6000.3.10f1**
+* Render Pipeline: Universal Render Pipeline (URP)
+* Paquetes: Visual Effect Graph, Shader Graph
+* Assets de terceros incluidos (no redistribuibles): AmplifyShaderEditor, Bitgem, Hovl Studio, NatureManufacture Assets, Tazo_2D
+
+## Contenido
+
+* **VFX Graph:** `WaterEffect`, `WaterEffect-Chacal`
+* **Shader Graph:** `PlayerHelmet`, `PlayerHelmet_Original`, `Puddle`, `Refraction`, `RefractionPonce_SHADER`, `Ripples`, `Ripples V2`, `Ripples V3`, `SplashShader`, `VZ_MAS_Caustic` y 22 más
+* **Sub Graphs:** `BumpOlas`, `Caustic`, `Frecuencia`, `GerstnelWave`, `GerstnerDisplacement`, `MascaraNormales`, `MascaraVoronoiEspuma`, `NewNormal`, `Olas_Gerstnel`, `Ondas Agua` y 6 más
+* **Shaders HLSL:** `Add_CenterGlow`, `Blend_CenterGlow`, `BloodPoolShader`, `Hex Dissolve_Hologram`, `Mascara`, `Particle_ChanelPacked`, `TextureProyection`, `Water Oasis_Water`, `WaterCanalFlow`, `WaterCascadeFlow` y 4 más
+* **Scripts:** `DestroyAnimCallback`, `Fullscreen`, `OndaAgua`, `UpdateShaderPosition`, `WaterBall`, `WaterBallControll`, `WaterCanalSurface`, `WaterCascade`, `WaterFountain`, `WaterSimulation` y 1 más
+* **Prefabs:** `B3M1_Water_Prefab`, `Big_Water Explosion`, `GodRays`, `HelmetAnim`, `Mascara Agua`, `Particles Splas Water`, `Particles Splas Water_2`, `RememerWater`, `Ripples`, `Ripples 1` y 26 más
+* **Escenas:** `Assets/3-Scenes/Guiller.unity`, `Assets/3-Scenes/Main.unity`
+
+## Uso
+
+1. Clona el repositorio y añádelo en Unity Hub (*Add project from disk*).
+2. Ábrelo con Unity **6000.3.10f1**.
+3. Abre la escena `Assets/3-Scenes/Guiller.unity` y pulsa **Play**.
