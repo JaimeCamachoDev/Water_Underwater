@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: M_WaterFountainCurtain
+  m_Shader: {fileID: 4800000, guid: f3432cf62c01d0848afa8e94e73ed3a1, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _SCENE_DEPTH
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _FoamMap:
+        m_Texture: {fileID: 2800000, guid: 5d15a98fc0e7b4b4cb50bf0fd6279ee3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: 53b00ac4b7ee2fb4681d46ce396bde98, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Acceleration: 0.7
+    - _AerationEnd: 0.9
+    - _AerationMax: 0.6
+    - _AerationStart: 0.2
+    - _ContactFade: 0.02
+    - _ContactFoam: 0.08
+    - _DetailTiling: 2
+    - _EdgeBreakup: 0.5
+    - _EdgeOpacity: 0.6
+    - _EdgeSoftness: 0.3
+    - _FoamTiling: 2
+    - _FoamTimeTiling: 1.3
+    - _FrontFoam: 0.12
+    - _FrontTime: 100000
+    - _LipFoam: 0
+    - _NormalStrength: 0.7
+    - _NormalTiling: 3
+    - _RefSpeed: 1.2
+    - _ReflectionStrength: 1.257
+    - _SheetOpacity: 0.42
+    - _Smoothness: 0.92
+    - _SpecularStrength: 1.2
+    - _StartFade: 0.03
+    - _Streaks: 0.4
+    - _TailTime: -100000
+    - _TimeTiling: 2.2
+    - _Translucency: 1.6
+    - _UseSceneDepth: 1
+    - _WobbleAmplitude: 0.004
+    - _WobbleFrequency: 3
+    m_Colors:
+    - _DeepColor: {r: 0.3, g: 0.55, b: 0.56, a: 1}
+    - _FoamColor: {r: 0.93, g: 0.96, b: 0.95, a: 1}
+    - _WaterColor: {r: 0.55, g: 0.78, b: 0.76, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
