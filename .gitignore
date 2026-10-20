@@ -1,20 +1,76 @@
-Thumbs.db
-Desktop.ini
-.DS_Store
-*.swp
+# ===============================================================
+# .gitignore estándar para proyectos Unity - JaimeCamachoDev
+# ===============================================================
 
-/Library
-/Logs
-/Recordings
-/Temp
-/UIElementsSchema
-/UserSettings
+# --- Carpetas generadas por Unity (solo en la raíz del proyecto) ---
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+/[Pp]rofilerCaptures/
+/UIElementsSchema/
 
+# Asset meta data should only be ignored when the corresponding asset is also ignored
+!/[Aa]ssets/**/*.meta
+
+# Archivos temporales / crash de Unity
 /.utmp
 /mono_crash.*.json
-/Xcode
+/[Aa]ssets/_Recovery/
+/[Aa]ssets/_Recovery.meta
+sysinfo.txt
+crashlytics-build.properties
+*.log
 
-/*.app
-/*.exe
-/*.apk
-/*_DoNotShip
+# Proyectos generados (iOS / Android)
+/Xcode/
+/[Aa]ssets/[Pp]lugins/[Aa]ndroid/gradleOut*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+
+# IDEs (Visual Studio, Rider, VS Code)
+.vs/
+.vscode/
+.idea/
+.consulo/
+ExportedObj/
+*.csproj
+*.unityproj
+*.sln
+*.slnx
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+TempAssembly.dll
+
+# Builds y artefactos (súbelos como assets de una Release, no al repo)
+*.apk
+*.aab
+*.app
+*.exe
+*_DoNotShip*
+
+# Copias de seguridad locales
+_Backup_*/
+*.bak
+*.orig

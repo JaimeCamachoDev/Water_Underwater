@@ -14,22 +14,15 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
+      # Crea la Release y, si existen, adjunta los archivos de la carpeta release/
       - name: Crear Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           name: Release ${{ github.ref_name }}
           tag_name: ${{ github.ref_name }}
           body: |
             🎉 Nueva versión: ${{ github.ref_name }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # (Opcional) Sube archivos si los colocas en la carpeta release/
-      - name: Subir archivos como assets (opcional)
-        uses: softprops/action-gh-release@v1
-        with:
           files: release/*.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          fail_on_unmatched_files: false
