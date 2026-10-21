@@ -34,13 +34,21 @@ _Shader Unity 6 URP, Waters, Water Reverse and Underwater God Rays_
 
 ## Contenido
 
-* **VFX Graph:** `WaterEffect`, `WaterEffect-Chacal`
-* **Shader Graph:** `PlayerHelmet`, `PlayerHelmet_Original`, `Puddle`, `Refraction`, `RefractionPonce_SHADER`, `Ripples`, `Ripples V2`, `Ripples V3`, `SplashShader`, `VZ_MAS_Caustic` y 22 más
-* **Sub Graphs:** `BumpOlas`, `Caustic`, `Frecuencia`, `GerstnelWave`, `GerstnerDisplacement`, `MascaraNormales`, `MascaraVoronoiEspuma`, `NewNormal`, `Olas_Gerstnel`, `Ondas Agua` y 6 más
-* **Shaders HLSL:** `Add_CenterGlow`, `Blend_CenterGlow`, `BloodPoolShader`, `Hex Dissolve_Hologram`, `Mascara`, `Particle_ChanelPacked`, `TextureProyection`, `Water Oasis_Water`, `WaterCanalFlow`, `WaterCascadeFlow` y 4 más
-* **Scripts:** `DestroyAnimCallback`, `Fullscreen`, `OndaAgua`, `UpdateShaderPosition`, `WaterBall`, `WaterBallControll`, `WaterCanalSurface`, `WaterCascade`, `WaterFountain`, `WaterSimulation` y 1 más
-* **Prefabs:** `B3M1_Water_Prefab`, `Big_Water Explosion`, `GodRays`, `HelmetAnim`, `Mascara Agua`, `Particles Splas Water`, `Particles Splas Water_2`, `RememerWater`, `Ripples`, `Ripples 1` y 26 más
-* **Escenas:** `Assets/3-Scenes/Guiller.unity`, `Assets/3-Scenes/Main.unity`
+Efectos en `Assets/2-Art/2-VFX/`:
+
+| Efecto | VFX | Shader Graph | Shaders | Scripts | Prefabs | Materiales |
+|---|---|---|---|---|---|---|
+| **Caustics** | — | 2 | 1 | — | — | 1 |
+| **Dissolve** | — | — | 1 | — | — | — |
+| **Fullscreen** | — | 4 | — | 1 | 1 | 3 |
+| **GodRays** | — | — | — | — | 1 | 1 |
+| **Refraccion** | — | 1 | — | — | — | 1 |
+| **Ripples** | — | 3 | 1 | — | 4 | 5 |
+| **Vase-Water** | 1 | 1 | — | — | 1 | — |
+| **Water** | 1 | 38 | 11 | 9 | 30 | 45 |
+| **Waterfall** | — | — | — | 1 | 1 | 11 |
+
+**Escenas de demostración:** `Assets/3-Scenes/Guiller.unity`, `Assets/3-Scenes/Main.unity`
 
 ## Uso
 
